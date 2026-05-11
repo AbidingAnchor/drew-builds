@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drew Builds | Web Design - Northeast Philadelphia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #080c14;
+            --electric-blue: #4fc3f7;
+            --text-white: #ffffff;
+            --text-gray: #a0aec0;
+            --card-bg: #0f141d;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(8, 12, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(79, 195, 247, 0.1);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--electric-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--electric-blue);
+        }
+
+        .hire-btn {
+            background: var(--electric-blue);
+            color: var(--bg-dark);
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.4);
+        }
+
+        .hire-btn:hover {
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero h1 {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid var(--electric-blue);
+            animation: blink 0.75s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent }
+            50% { border-color: var(--electric-blue) }
+        }
+
+        /* Scroll Animations */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Badges */
+        .floating-badges {
+            position: absolute;
+            top: 200px;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: rgba(79, 195, 247, 0.1);
+            border: 1px solid var(--electric-blue);
+            color: var(--electric-blue);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.4);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-badge:nth-child(1) {
+            top: 0;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-badge:nth-child(2) {
+            top: 50px;
+            right: 5%;
+            animation-delay: 1.5s;
+        }
+
+        .floating-badge:nth-child(3) {
+            top: 100px;
+            left: 15%;
+            animation-delay: 3s;
+        }
+
+        .floating-badge:nth-child(4) {
+            top: 150px;
+            right: 15%;
+            animation-delay: 4.5s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(79, 195, 247, 0.1);
+            border: 1px solid var(--electric-blue);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--electric-blue);
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--electric-blue);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--electric-blue);
+            color: var(--bg-dark);
+            padding: 16px 36px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--electric-blue);
+            padding: 16px 36px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid var(--electric-blue);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(79, 195, 247, 0.1);
+            box-shadow: 0 0 15px rgba(79, 195, 247, 0.3);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+        }
+
+        .section-title span {
+            color: var(--electric-blue);
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--electric-blue);
+        }
+
+        .card p {
+            color: var(--text-gray);
+        }
+
+        /* Portfolio Section */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .portfolio-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+        }
+
+        .portfolio-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--electric-blue);
+        }
+
+        .portfolio-card p {
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(79, 195, 247, 0.1);
+            color: var(--electric-blue);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .coming-soon {
+            opacity: 0.7;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            background: rgba(79, 195, 247, 0.2);
+            color: var(--electric-blue);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* About Me Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-photo {
+            display: flex;
+            justify-content: center;
+        }
+
+        .about-photo img {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 3px solid var(--electric-blue);
+            transition: all 0.3s ease;
+        }
+
+        .about-photo img:hover {
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+            transform: scale(1.05);
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--electric-blue);
+        }
+
+        .about-subheading {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .about-bio {
+            font-size: 1rem;
+            color: var(--text-white);
+            line-height: 1.8;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            text-align: center;
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--electric-blue), rgba(79, 195, 247, 0.3), var(--electric-blue));
+            z-index: 0;
+        }
+
+        .step {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+            padding: 0 15px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-dark);
+            border: 3px solid var(--electric-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--electric-blue);
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-number {
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+            transform: scale(1.1);
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            color: var(--electric-blue);
+        }
+
+        .step p {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+        }
+
+        .pricing-card.featured {
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+            border: 2px solid var(--electric-blue);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .featured-badge {
+            background: var(--electric-blue);
+            color: var(--bg-dark);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--electric-blue);
+            margin-bottom: 5px;
+        }
+
+        .price-period {
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: var(--text-gray);
+            border-bottom: 1px solid rgba(79, 195, 247, 0.1);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+        }
+
+        .contact-item {
+            margin-bottom: 30px;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-label {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .contact-value {
+            font-size: 1.25rem;
+            color: var(--electric-blue);
+            font-weight: 600;
+        }
+
+        .contact-value a {
+            color: var(--electric-blue);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-value a:hover {
+            opacity: 0.8;
+        }
+
+        /* Client Intake Form Section */
+        .form-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--electric-blue);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--bg-dark);
+            border: 2px solid rgba(79, 195, 247, 0.3);
+            border-radius: 8px;
+            color: var(--text-white);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.4);
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: var(--bg-dark);
+            color: var(--text-white);
+        }
+
+        .form-submit {
+            background: var(--electric-blue);
+            color: var(--bg-dark);
+            padding: 16px 36px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.4);
+            width: 100%;
+        }
+
+        .form-submit:hover {
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: var(--electric-blue);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        .form-content.hide {
+            display: none;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(79, 195, 247, 0.1);
+            color: var(--text-gray);
+        }
+
+        .footer p {
+            font-size: 0.875rem;
+        }
+
+        /* Chat Widget */
+        .chat-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--electric-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            font-size: 1.5rem;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 500px;
+            background: var(--bg-dark);
+            border-radius: 16px;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .chat-window.open {
+            display: flex;
+        }
+
+        .chat-header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            color: var(--electric-blue);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .chat-close:hover {
+            color: var(--electric-blue);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--electric-blue);
+            border-radius: 3px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .message.user {
+            background: var(--electric-blue);
+            color: var(--bg-dark);
+            align-self: flex-end;
+        }
+
+        .message.assistant {
+            background: var(--card-bg);
+            color: var(--text-white);
+            align-self: flex-start;
+            border: 1px solid rgba(79, 195, 247, 0.2);
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: var(--card-bg);
+            border-top: 1px solid rgba(79, 195, 247, 0.2);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--bg-dark);
+            border: 1px solid rgba(79, 195, 247, 0.3);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-white);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--electric-blue);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-gray);
+        }
+
+        .chat-send {
+            background: var(--electric-blue);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: var(--bg-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.4);
+        }
+
+        .chat-send:hover {
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .chat-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            align-self: flex-start;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--electric-blue);
+            border-radius: 50%;
+            animation: loading 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes loading {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                font-size: 0.875rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .chat-window {
+                width: calc(100% - 40px);
+                right: 20px;
+                bottom: 100px;
+                height: 400px;
+            }
+
+            .chat-bubble {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .about-photo img {
+                width: 250px;
+                height: 250px;
+            }
+
+            .about-text h2 {
+                font-size: 2rem;
+            }
+
+            .steps-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+            }
+
+            .steps-container::before {
+                display: none;
+            }
+
+            .step {
+                text-align: center;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container navbar-content">
+            <a href="#" class="logo">Drew Builds</a>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#portfolio">Work</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#start-project">Start Project</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#contact" class="hire-btn">Hire me</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="floating-badges">
+                <span class="floating-badge">Fast delivery</span>
+                <span class="floating-badge">Affordable</span>
+                <span class="floating-badge">Philadelphia based</span>
+                <span class="floating-badge">You own your site</span>
+            </div>
+            <span class="badge">Northeast Philadelphia, PA</span>
+            <h1 id="heroHeadline">I build websites that <span>grow your business</span></h1>
+            <p>Professional web design services tailored for local businesses. Stand out online with a custom website that converts visitors into customers.</p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn-primary">Get a free mockup</a>
+                <a href="#portfolio" class="btn-secondary">See my work</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="fade-in-section">
+        <div class="container">
+            <h2 class="section-title">My <span>Services</span></h2>
+            <div class="services-grid">
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h3>Custom Websites</h3>
+                    <p>Unique, responsive websites built from scratch to match your brand and business needs.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📅</div>
+                    <h3>Online Booking</h3>
+                    <p>Integrated booking systems that let customers schedule appointments 24/7.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h3>SEO Ready</h3>
+                    <p>Websites optimized for search engines to help customers find you online.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔧</div>
+                    <h3>Maintenance</h3>
+                    <p>Ongoing support and updates to keep your website running smoothly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="fade-in-section">
+        <div class="container">
+            <h2 class="section-title">My <span>Work</span></h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-card coming-soon">
+                    <span class="coming-soon-badge">Coming Soon</span>
+                    <h3>First project dropping soon</h3>
+                </div>
+                <div class="portfolio-card coming-soon">
+                    <span class="coming-soon-badge">Coming Soon</span>
+                    <h3>First project dropping soon</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="fade-in-section">
+        <div class="container">
+            <h2 class="section-title"><span>About</span> Me</h2>
+            <div class="about-content">
+                <div class="about-photo">
+                    <img src="profile.jpg" alt="Drew Negron">
+                </div>
+                <div class="about-text">
+                    <h2>Meet Drew</h2>
+                    <p class="about-subheading">Web Designer · Philadelphia, PA</p>
+                    <p class="about-bio">I'm Drew Negron, a self-taught developer from Philadelphia with a passion for building things that matter. I built Abiding Anchor — a free Bible study app now available in 12 languages on Google Play — completely solo. Now I bring that same dedication to helping local businesses get the professional online presence they deserve. When I build your site, I'm not just writing code — I'm investing in your success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="fade-in-section">
+        <div class="container">
+            <h2 class="section-title">How It <span>Works</span></h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Free Mockup</h3>
+                    <p>I build a custom mockup of your site before you pay a single dollar.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Deposit</h3>
+                    <p>You love it, we move forward. 50% upfront so I can get to work.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Build & Review</h3>
+                    <p>I build your full site and keep you updated every step of the way.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Launch</h3>
+                    <p>Your site goes live. You own everything — domain, files, and hosting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="fade-in-section">
+        <div class="container">
+            <h2 class="section-title"><span>Pricing</span></h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Basic</h3>
+                    <div class="price">$400</div>
+                    <div class="price-period">one-time</div>
+                    <ul class="pricing-features">
+                        <li>Single page website</li>
+                        <li>Mobile friendly</li>
+                        <li>Hours/location/contact</li>
+                        <li>Live within 1 week</li>
+                    </ul>
+                    <a href="#contact" class="btn-secondary">Get started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <span class="featured-badge">Most Popular</span>
+                    <h3>Standard</h3>
+                    <div class="price">$800</div>
+                    <div class="price-period">one-time</div>
+                    <ul class="pricing-features">
+                        <li>Up to 5 pages</li>
+                        <li>Custom brand design</li>
+                        <li>Photo gallery + SEO</li>
+                        <li>Social links + revisions</li>
+                        <li>Live within 2 weeks</li>
+                    </ul>
+                    <a href="#contact" class="btn-primary">Get started</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Premium</h3>
+                    <div class="price">$1,500</div>
+                    <div class="price-period">one-time</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Standard</li>
+                        <li>Google Business setup</li>
+                        <li>Full local SEO</li>
+                        <li>Online menu/ordering</li>
+                        <li>Priority turnaround</li>
+                    </ul>
+                    <a href="#contact" class="btn-secondary">Get started</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Monthly Maintenance</h3>
+                    <div class="price">$75</div>
+                    <div class="price-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>Updates</li>
+                        <li>Edits</li>
+                        <li>Backups & support</li>
+                    </ul>
+                    <a href="#contact" class="btn-secondary">Get started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Start Your Project Section -->
+    <section id="start-project" class="fade-in-section">
+        <div class="container">
+            <h2 class="section-title">Start Your <span>Project</span></h2>
+            <div class="form-section">
+                <div class="form-content" id="formContent">
+                    <form id="projectForm" action="https://formspree.io/f/mzdoyenz" method="POST">
+                        <div class="form-group">
+                            <label for="name">Your name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="business">Business name</label>
+                            <input type="text" id="business" name="business" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="businessType">Type of business</label>
+                            <input type="text" id="businessType" name="businessType" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceNeeded">What do you need?</label>
+                            <select id="serviceNeeded" name="serviceNeeded" required>
+                                <option value="">Select an option</option>
+                                <option value="basic">Basic site</option>
+                                <option value="standard">Standard site</option>
+                                <option value="premium">Premium site</option>
+                                <option value="not-sure">Not sure yet</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="referral">How did you hear about us?</label>
+                            <input type="text" id="referral" name="referral" required>
+                        </div>
+                        <button type="submit" class="form-submit">Get my free mockup</button>
+                    </form>
+                </div>
+                <div class="form-success" id="formSuccess">
+                    Thanks! Drew will reach out to you shortly.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="fade-in-section">
+        <div class="container">
+            <h2 class="section-title">Get in <span>Touch</span></h2>
+            <div class="contact-content">
+                <div class="contact-card">
+                    <div class="contact-item">
+                        <div class="contact-label">Instagram</div>
+                        <div class="contact-value">
+                            <a href="https://instagram.com/devdrewneg" target="_blank">@devdrewneg</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">
+                            <a href="mailto:DrewNegron95@gmail.com">DrewNegron95@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-label">Location</div>
+                        <div class="contact-value">Philadelphia, PA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Built by Drew Builds · Northeast Philadelphia · 2026</p>
+        </div>
+    </footer>
+
+    <!-- Chat Widget -->
+    <div class="chat-bubble" id="chatBubble">💬</div>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>Drew Builds Assistant</h3>
+            <button class="chat-close" id="chatClose">×</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">Hi! I'm the Drew Builds Assistant. How can I help you today?</div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+            <button class="chat-send" id="chatSend">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(8, 12, 20, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(8, 12, 20, 0.95)';
+            }
+        });
+
+        // Typewriter animation for hero headline
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.textContent = '';
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize typewriter when page loads
+        window.addEventListener('load', () => {
+            const heroHeadline = document.getElementById('heroHeadline');
+            if (heroHeadline) {
+                const originalText = heroHeadline.innerHTML;
+                // Remove the span for typing, then add it back
+                const plainText = 'I build websites that grow your business';
+                typeWriter(heroHeadline, plainText, 60);
+                setTimeout(() => {
+                    heroHeadline.innerHTML = originalText;
+                    heroHeadline.style.borderRight = 'none';
+                    heroHeadline.style.animation = 'none';
+                }, plainText.length * 60 + 500);
+            }
+        });
+
+        // Scroll animations using Intersection Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Client intake form submission
+        const projectForm = document.getElementById('projectForm');
+        const formContent = document.getElementById('formContent');
+        const formSuccess = document.getElementById('formSuccess');
+
+        if (projectForm) {
+            projectForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                formContent.classList.add('hide');
+                formSuccess.classList.add('show');
+            });
+        }
+
+        // Chat Widget Functionality
+        const chatBubble = document.getElementById('chatBubble');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatClose = document.getElementById('chatClose');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatMessages = document.getElementById('chatMessages');
+
+        const API_KEY = 'YOUR_GROQ_API_KEY';
+        const SYSTEM_PROMPT = 'You are a helpful assistant for Drew Builds, a web design business based in Northeast Philadelphia. You help potential clients learn about services and pricing. Services include custom websites, online booking, SEO, and maintenance. Pricing: Starter $400, Business $800, Maintenance $75/month. Contact via Instagram @devdrewneg. Keep answers short and friendly.';
+
+        let conversationHistory = [
+            { role: 'system', content: SYSTEM_PROMPT }
+        ];
+
+        // Toggle chat window
+        chatBubble.addEventListener('click', () => {
+            chatWindow.classList.toggle('open');
+        });
+
+        chatClose.addEventListener('click', () => {
+            chatWindow.classList.remove('open');
+        });
+
+        // Send message function
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage(message, 'user');
+            conversationHistory.push({ role: 'user', content: message });
+            chatInput.value = '';
+
+            // Disable send button and show loading
+            chatSend.disabled = true;
+            const loadingIndicator = addLoadingIndicator();
+
+            try {
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: 'llama-3.3-70b-versatile',
+                        messages: conversationHistory,
+                        temperature: 0.7,
+                        max_tokens: 500
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Remove loading indicator
+                loadingIndicator.remove();
+
+                if (!response.ok) {
+                    console.error('API Error:', data);
+                    addMessage(`Error: ${data.error?.message || 'Unknown error'}`, 'assistant');
+                    return;
+                }
+
+                if (data.choices && data.choices[0]) {
+                    const assistantMessage = data.choices[0].message.content;
+                    addMessage(assistantMessage, 'assistant');
+                    conversationHistory.push({ role: 'assistant', content: assistantMessage });
+                } else {
+                    addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                loadingIndicator.remove();
+                addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
+            }
+
+            // Re-enable send button
+            chatSend.disabled = false;
+        }
+
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Add loading indicator
+        function addLoadingIndicator() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading-indicator';
+            loadingDiv.innerHTML = '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
+            chatMessages.appendChild(loadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return loadingDiv;
+        }
+
+        // Event listeners for send
+        chatSend.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
