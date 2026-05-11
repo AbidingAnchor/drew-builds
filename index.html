@@ -668,23 +668,6 @@
             transform: translateY(-2px);
         }
 
-        .form-success {
-            display: none;
-            text-align: center;
-            padding: 40px;
-            color: var(--electric-blue);
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .form-success.show {
-            display: block;
-        }
-
-        .form-content.hide {
-            display: none;
-        }
-
         /* Footer */
         .footer {
             padding: 40px 0;
@@ -1164,40 +1147,35 @@
         <div class="container">
             <h2 class="section-title">Start Your <span>Project</span></h2>
             <div class="form-section">
-                <div class="form-content" id="formContent">
-                    <form id="projectForm" action="https://formspree.io/f/mzdoyenz" method="POST">
-                        <div class="form-group">
-                            <label for="name">Your name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="business">Business name</label>
-                            <input type="text" id="business" name="business" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="businessType">Type of business</label>
-                            <input type="text" id="businessType" name="businessType" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="serviceNeeded">What do you need?</label>
-                            <select id="serviceNeeded" name="serviceNeeded" required>
-                                <option value="">Select an option</option>
-                                <option value="basic">Basic site</option>
-                                <option value="standard">Standard site</option>
-                                <option value="premium">Premium site</option>
-                                <option value="not-sure">Not sure yet</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="referral">How did you hear about us?</label>
-                            <input type="text" id="referral" name="referral" required>
-                        </div>
-                        <button type="submit" class="form-submit">Get my free mockup</button>
-                    </form>
-                </div>
-                <div class="form-success" id="formSuccess">
-                    Thanks! Drew will reach out to you shortly.
-                </div>
+                <form id="projectForm" action="https://formspree.io/f/mzdoyenz" method="POST">
+                    <div class="form-group">
+                        <label for="name">Your name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="business">Business name</label>
+                        <input type="text" id="business" name="business" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="businessType">Type of business</label>
+                        <input type="text" id="businessType" name="businessType" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceNeeded">What do you need?</label>
+                        <select id="serviceNeeded" name="serviceNeeded" required>
+                            <option value="">Select an option</option>
+                            <option value="basic">Basic site</option>
+                            <option value="standard">Standard site</option>
+                            <option value="premium">Premium site</option>
+                            <option value="not-sure">Not sure yet</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="referral">How did you hear about us?</label>
+                        <input type="text" id="referral" name="referral" required>
+                    </div>
+                    <button type="submit" class="form-submit">Get my free mockup</button>
+                </form>
             </div>
         </div>
     </section>
@@ -1325,19 +1303,6 @@
         document.querySelectorAll('.fade-in-section').forEach(section => {
             observer.observe(section);
         });
-
-        // Client intake form submission
-        const projectForm = document.getElementById('projectForm');
-        const formContent = document.getElementById('formContent');
-        const formSuccess = document.getElementById('formSuccess');
-
-        if (projectForm) {
-            projectForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                formContent.classList.add('hide');
-                formSuccess.classList.add('show');
-            });
-        }
 
         // Chat Widget Functionality
         const chatBubble = document.getElementById('chatBubble');
