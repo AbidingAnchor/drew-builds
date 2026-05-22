@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noir Lounge | Philadelphia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #080808;
+            --crimson: #9b1d20;
+            --silver: #c0c0c0;
+            --crimson-glow: rgba(155, 29, 32, 0.3);
+            --crimson-shadow: rgba(155, 29, 32, 0.15);
+            --silver-glow: rgba(192, 192, 192, 0.2);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background-color: var(--black);
+            color: var(--silver);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(8, 8, 8, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(155, 29, 32, 0.2);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--crimson);
+            text-decoration: none;
+            text-shadow: 0 0 20px var(--crimson-glow);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--silver);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--crimson);
+            text-shadow: 0 0 10px var(--crimson-glow);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--crimson);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(135deg, var(--black) 0%, #121212 50%, var(--black) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 30% 70%, rgba(155, 29, 32, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 30%, rgba(155, 29, 32, 0.08) 0%, transparent 50%);
+            animation: haze 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes haze {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--silver);
+            text-shadow: 0 0 40px var(--crimson-glow);
+            letter-spacing: 1px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: var(--crimson);
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            color: rgba(192, 192, 192, 0.8);
+            letter-spacing: 1px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background-color: var(--crimson);
+            color: var(--silver);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--crimson-shadow), 0 0 30px var(--crimson-glow);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px var(--crimson-shadow), 0 0 50px var(--crimson-glow);
+            background-color: #b32427;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--silver);
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--crimson);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        /* About Section */
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: rgba(192, 192, 192, 0.85);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .about-image {
+            position: relative;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(155, 29, 32, 0.25) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .about-image::after {
+            content: '🍸';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            opacity: 0.3;
+        }
+
+        /* Cocktail Menu Section */
+        .cocktail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .cocktail-card {
+            background: linear-gradient(145deg, #121212 0%, #080808 100%);
+            border: 1px solid rgba(155, 29, 32, 0.15);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cocktail-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(192, 192, 192, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cocktail-card:hover::before {
+            left: 100%;
+        }
+
+        .cocktail-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--crimson);
+            box-shadow: 0 8px 30px var(--crimson-shadow), 0 0 20px var(--crimson-glow);
+        }
+
+        .cocktail-card h3 {
+            font-size: 1.4rem;
+            color: var(--silver);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .cocktail-card p {
+            color: rgba(192, 192, 192, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .cocktail-card .price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--crimson);
+            letter-spacing: 1px;
+        }
+
+        /* Events Section */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .event-card {
+            background: linear-gradient(145deg, #121212 0%, #080808 100%);
+            border: 1px solid rgba(155, 29, 32, 0.15);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--crimson);
+            box-shadow: 0 8px 30px var(--crimson-shadow), 0 0 20px var(--crimson-glow);
+        }
+
+        .event-date {
+            font-size: 0.9rem;
+            color: var(--crimson);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .event-card h3 {
+            font-size: 1.4rem;
+            color: var(--silver);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .event-card .tickets-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--crimson);
+            color: var(--silver);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--crimson-shadow), 0 0 20px var(--crimson-glow);
+        }
+
+        .event-card .tickets-btn:hover {
+            transform: translateY(-2px);
+            background-color: #b32427;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            padding: 6rem 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: linear-gradient(145deg, #121212 0%, #080808 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(155, 29, 32, 0.15) 0%, transparent 70%);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            opacity: 0.2;
+        }
+
+        .gallery-item:nth-child(1)::after { content: '🍸'; }
+        .gallery-item:nth-child(2)::after { content: '🥃'; }
+        .gallery-item:nth-child(3)::after { content: '🎵'; }
+        .gallery-item:nth-child(4)::after { content: '✨'; }
+        .gallery-item:nth-child(5)::after { content: '🌙'; }
+        .gallery-item:nth-child(6)::after { content: '🎭'; }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px var(--crimson-shadow), 0 0 25px var(--crimson-glow);
+        }
+
+        .gallery-item:hover::before {
+            background: linear-gradient(135deg, rgba(155, 29, 32, 0.4) 0%, transparent 60%);
+        }
+
+        /* Reservations & Hours Section */
+        .reservations-hours {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .hours-info, .reservation-form {
+            background: linear-gradient(145deg, #121212 0%, #080808 100%);
+            border: 1px solid rgba(155, 29, 32, 0.15);
+            border-radius: 8px;
+            padding: 2.5rem;
+        }
+
+        .hours-info h3, .reservation-form h3 {
+            font-size: 1.75rem;
+            color: var(--crimson);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .hours-list {
+            list-style: none;
+        }
+
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(192, 192, 192, 0.1);
+            color: rgba(192, 192, 192, 0.85);
+        }
+
+        .hours-list li:last-child {
+            border-bottom: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--silver);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background-color: #080808;
+            border: 1px solid rgba(155, 29, 32, 0.3);
+            border-radius: 4px;
+            color: var(--silver);
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--crimson);
+            box-shadow: 0 0 10px var(--crimson-glow);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--crimson);
+            color: var(--silver);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--crimson-shadow), 0 0 30px var(--crimson-glow);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            background-color: #b32427;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #050505;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(155, 29, 32, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--crimson);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px var(--crimson-glow);
+            letter-spacing: 2px;
+        }
+
+        .footer-phone {
+            color: var(--silver);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(145deg, #121212 0%, #080808 100%);
+            border: 1px solid rgba(155, 29, 32, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--crimson);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px var(--crimson-shadow), 0 0 15px var(--crimson-glow);
+            border-color: var(--crimson);
+            color: var(--silver);
+        }
+
+        .footer-copy {
+            color: rgba(192, 192, 192, 0.5);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .about {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .reservations-hours {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: rgba(8, 8, 8, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .cocktail-grid,
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .social-icons {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="nav-logo">Noir Lounge</a>
+        <button class="mobile-menu-btn" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#cocktails">Cocktails</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#reservations">Reservations</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Where the <span>Night</span> Comes Alive</h1>
+            <p>Craft cocktails, live music & good vibes in Northeast Philadelphia</p>
+            <a href="#reservations" class="cta-btn">Reserve Your Table</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">About Noir</h2>
+        <p class="section-subtitle">The Experience</p>
+        <div class="about">
+            <div class="about-text">
+                <p>Noir Lounge is Philadelphia's premier destination for those who seek sophistication, mystery, and unforgettable nights. Tucked away in the heart of Northeast Philadelphia, our speakeasy-inspired lounge offers an escape from the ordinary—a place where time slows down and the night truly comes alive.</p>
+                <p>Our expert mixologists craft signature cocktails that push the boundaries of traditional mixology, while our curated playlist sets the perfect mood for conversation and connection. Whether you're celebrating a special occasion or simply unwinding after a long day, Noir Lounge provides an atmosphere that is both intimate and electric.</p>
+                <p>From the moment you step through our doors, you'll understand why Noir Lounge has become the go-to spot for those who appreciate the finer things in life. Welcome to the night.</p>
+            </div>
+            <div class="about-image"></div>
+        </div>
+    </section>
+
+    <!-- Cocktail Menu Section -->
+    <section id="cocktails">
+        <h2 class="section-title">Signature Cocktails</h2>
+        <p class="section-subtitle">Crafted with Precision</p>
+        <div class="cocktail-grid">
+            <div class="cocktail-card">
+                <h3>The Midnight Sour</h3>
+                <p>Whiskey, lemon juice, simple syrup, egg white, angostura bitters</p>
+                <span class="price">$16</span>
+            </div>
+            <div class="cocktail-card">
+                <h3>Crimson Kiss</h3>
+                <p>Pomegranate vodka, cranberry juice, lime, champagne float</p>
+                <span class="price">$18</span>
+            </div>
+            <div class="cocktail-card">
+                <h3>Smoky Old Fashioned</h3>
+                <p>Bourbon, maple syrup, angostura bitters, smoked rosemary</p>
+                <span class="price">$17</span>
+            </div>
+            <div class="cocktail-card">
+                <h3>Black Velvet</h3>
+                <p>Stout beer, champagne, blackberry liqueur</p>
+                <span class="price">$19</span>
+            </div>
+            <div class="cocktail-card">
+                <h3>Neon Noir</h3>
+                <p>Gin, elderflower liqueur, blue curaçao, tonic, citrus</p>
+                <span class="price">$15</span>
+            </div>
+            <div class="cocktail-card">
+                <h3>The Philadelphia</h3>
+                <p>Rye whiskey, sweet vermouth, bitters, cherry brandy</p>
+                <span class="price">$16</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events">
+        <h2 class="section-title">Upcoming Events</h2>
+        <p class="section-subtitle">Join Us</p>
+        <div class="events-grid">
+            <div class="event-card">
+                <div class="event-date">June 15, 2024</div>
+                <h3>Jazz Night Live</h3>
+                <a href="#" class="tickets-btn">Get Tickets</a>
+            </div>
+            <div class="event-card">
+                <div class="event-date">June 22, 2024</div>
+                <h3>Mixology Masterclass</h3>
+                <a href="#" class="tickets-btn">Get Tickets</a>
+            </div>
+            <div class="event-card">
+                <div class="event-date">July 4, 2024</div>
+                <h3>Independence Eve Party</h3>
+                <a href="#" class="tickets-btn">Get Tickets</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <h2 class="section-title">Gallery</h2>
+        <p class="section-subtitle">The Vibe</p>
+        <div class="gallery-grid">
+            <div class="gallery-item"></div>
+            <div class="gallery-item"></div>
+            <div class="gallery-item"></div>
+            <div class="gallery-item"></div>
+            <div class="gallery-item"></div>
+            <div class="gallery-item"></div>
+        </div>
+    </section>
+
+    <!-- Reservations & Hours Section -->
+    <section id="reservations">
+        <h2 class="section-title">Reservations & Hours</h2>
+        <p class="section-subtitle">Book Your Experience</p>
+        <div class="reservations-hours">
+            <div class="hours-info">
+                <h3>Hours</h3>
+                <ul class="hours-list">
+                    <li><span>Monday - Wednesday</span><span>5:00 PM - 1:00 AM</span></li>
+                    <li><span>Thursday - Friday</span><span>5:00 PM - 2:00 AM</span></li>
+                    <li><span>Saturday</span><span>6:00 PM - 2:00 AM</span></li>
+                    <li><span>Sunday</span><span>6:00 PM - 12:00 AM</span></li>
+                </ul>
+            </div>
+            <div class="reservation-form">
+                <h3>Make a Reservation</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="party-size">Party Size</label>
+                        <select id="party-size" required>
+                            <option value="">Select Size</option>
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5">5+ Guests</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Reservation</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Noir Lounge</div>
+            <p class="footer-phone">(215) 555-NOIR</p>
+            <div class="social-icons">
+                <div class="social-icon">f</div>
+                <div class="social-icon">𝕏</div>
+                <div class="social-icon">📷</div>
+                <div class="social-icon">in</div>
+            </div>
+            <p class="footer-copy">© 2024 Noir Lounge. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.backgroundColor = 'rgba(8, 8, 8, 0.98)';
+            } else {
+                nav.style.backgroundColor = 'rgba(8, 8, 8, 0.95)';
+            }
+        });
+
+        // Form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Reservation submitted successfully! We will contact you shortly.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
