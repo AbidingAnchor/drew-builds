@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sharp & Fresh Barbershop | Philadelphia's Premier Grooming Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #E5C158;
+      --gold-dark: #B8960C;
+      --cream: #F5F0E6;
+      --cream-light: #FAF7F2;
+      --black: #0A0A0A;
+      --charcoal: #121212;
+      --charcoal-2: #1A1A1A;
+      --charcoal-3: #242424;
+      --text: #FFFFFF;
+      --text-muted: #A0A0A0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 5%;
+      transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 2px 20px rgba(212,175,55,0.15);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--cream); }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--black) !important;
+      padding: 0.75rem 2rem;
+      font-weight: 600 !important;
+      letter-spacing: 0.08em;
+      transition: background 0.25s, transform 0.25s !important;
+      border: none;
+    }
+    .nav-cta:hover { 
+      background: var(--gold-light); 
+      transform: translateY(-2px);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,10,0.98);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.75rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 5%;
+      font-size: 2rem;
+      color: var(--gold);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 900px;
+      padding: 0 5%;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title span { color: var(--gold); }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      font-weight: 400;
+      color: var(--cream);
+      letter-spacing: 0.08em;
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+    .hero-cta-group {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1.25rem 3rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(212,175,55,0.3);
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: transparent;
+      color: var(--gold);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1.25rem 3rem;
+      border: 1px solid var(--gold);
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-outline:hover {
+      border-color: var(--gold-light);
+      background: rgba(212,175,55,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ── TAGLINE SECTION ── */
+    #tagline {
+      background: var(--gold);
+      padding: 3.5rem 5%;
+      text-align: center;
+    }
+    .tagline-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--black);
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 7rem 5%; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-title span { color: var(--gold); }
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 600px;
+    }
+    .gold-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 2rem 0;
+    }
+
+    /* ── SERVICES ── */
+    #services { background: var(--charcoal); }
+    .services-header { text-align: center; margin-bottom: 4rem; }
+    .services-header .gold-divider { margin: 2rem auto; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: var(--charcoal-2);
+      border: 1px solid var(--charcoal-3);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .service-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-5px);
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .service-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .service-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--black); }
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-story p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+    .about-story p strong { color: var(--cream); font-weight: 600; }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── BARBERS ── */
+    #barbers { background: var(--charcoal); }
+    .barbers-header { text-align: center; margin-bottom: 4rem; }
+    .barbers-header .gold-divider { margin: 2rem auto; }
+    .barbers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .barber-card {
+      background: var(--charcoal-2);
+      border: 1px solid var(--charcoal-3);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .barber-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-5px);
+    }
+    .barber-photo {
+      height: 280px;
+      background: linear-gradient(135deg, var(--charcoal-3), var(--charcoal-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: var(--gold);
+    }
+    .barber-content { padding: 2rem; }
+    .barber-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .barber-title {
+      font-size: 0.85rem;
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .barber-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── BOOKING ── */
+    #booking { background: var(--black); }
+    .booking-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .booking-header { text-align: center; margin-bottom: 3rem; }
+    .booking-header .gold-divider { margin: 2rem auto; }
+    .booking-form {
+      background: var(--charcoal-2);
+      border: 1px solid var(--charcoal-3);
+      border-radius: 12px;
+      padding: 3rem;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--charcoal-3);
+      border: 1px solid var(--charcoal-3);
+      border-radius: 4px;
+      padding: 1rem;
+      font-size: 1rem;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .form-textarea { min-height: 100px; resize: vertical; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(160,160,160,0.5); }
+    .form-submit {
+      width: 100%;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1.25rem 2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .form-submit:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212,175,55,0.3);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal);
+      padding: 5rem 5% 2rem;
+      border-top: 1px solid var(--charcoal-3);
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .footer-logo span { color: var(--cream); }
+    .footer-tagline {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .footer-heading {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.75rem; }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.25s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-contact-item {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .footer-contact-item strong { color: var(--cream); }
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--charcoal-2);
+      border: 1px solid var(--charcoal-3);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .footer-social a:hover {
+      border-color: var(--gold);
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    /* ── BOTTOM BAR ── */
+    .bottom-bar {
+      background: var(--charcoal-2);
+      padding: 1.5rem 5%;
+      text-align: center;
+      border-top: 1px solid var(--charcoal-3);
+    }
+    .bottom-bar p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .bottom-bar a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .bottom-bar a:hover { text-decoration: underline; }
+
+    /* ── FADE IN ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-up.delay-1 { transition-delay: 0.1s; }
+    .fade-up.delay-2 { transition-delay: 0.2s; }
+    .fade-up.delay-3 { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-container { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 5rem 5%; }
+      .about-stats { grid-template-columns: 1fr; }
+      .hero-cta-group { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">Sharp <span>& Fresh</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#barbers">Barbers</a></li>
+      <li><a href="#booking" class="nav-cta">Book Now</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" onclick="toggleMenu()">&#x2715;</button>
+    <a href="#services" onclick="toggleMenu()">Services</a>
+    <a href="#about" onclick="toggleMenu()">About</a>
+    <a href="#barbers" onclick="toggleMenu()">Barbers</a>
+    <a href="#booking" onclick="toggleMenu()">Book Now</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="barbershop-bg.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Sharp & Fresh
+        <span>Barbershop</span>
+      </h1>
+      <p class="hero-subtitle">Philadelphia's Premier Grooming Experience</p>
+      <div class="hero-cta-group">
+        <a href="#booking" class="btn-primary">
+          Book Now
+        </a>
+        <a href="#services" class="btn-outline">
+          View Services
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAGLINE -->
+  <div id="tagline">
+    <p class="tagline-text">Where Every Cut Tells a Story</p>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header fade-up">
+      <div class="section-eyebrow">Our Services</div>
+      <h2 class="section-title">Premium <span>Grooming</span></h2>
+      <div class="gold-divider"></div>
+      <p class="section-subtitle">Expert cuts and styling services tailored to your unique look.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up delay-1">
+        <div class="service-name">Haircut</div>
+        <div class="service-desc">Classic and modern cuts with precision styling. Includes consultation, wash, and finish.</div>
+        <div class="service-price">$35</div>
+      </div>
+      <div class="service-card fade-up delay-2">
+        <div class="service-name">Beard Trim</div>
+        <div class="service-desc">Expert beard shaping and trimming with hot towel finish for a clean, polished look.</div>
+        <div class="service-price">$25</div>
+      </div>
+      <div class="service-card fade-up delay-3">
+        <div class="service-name">Fade</div>
+        <div class="service-desc">Seamless fades from skin to any length. Perfect for the modern gentleman's style.</div>
+        <div class="service-price">$40</div>
+      </div>
+      <div class="service-card fade-up delay-1">
+        <div class="service-name">Hot Towel Shave</div>
+        <div class="service-desc">Traditional straight razor shave with hot towels, pre-shave oil, and soothing aftershave.</div>
+        <div class="service-price">$45</div>
+      </div>
+      <div class="service-card fade-up delay-2">
+        <div class="service-name">Kids Cut</div>
+        <div class="service-desc">Specialized cuts for children under 12. Patient, skilled barbers make it a great experience.</div>
+        <div class="service-price">$25</div>
+      </div>
+      <div class="service-card fade-up delay-3">
+        <div class="service-name">Full Grooming</div>
+        <div class="service-desc">The complete package: haircut, beard trim, hot towel shave, and facial treatment.</div>
+        <div class="service-price">$75</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-container">
+      <div class="about-story fade-up">
+        <div class="section-eyebrow">Our Story</div>
+        <h2 class="section-title">A Philly <span>Tradition</span></h2>
+        <div class="gold-divider"></div>
+        <p>Founded in 2015 by master barber <strong>James "Jimmy" Thompson</strong>, Sharp & Fresh has become a cornerstone of Philadelphia's grooming scene. We believe a great haircut is more than just a service — it's an experience.</p>
+        <p>Located in the vibrant Fishtown neighborhood, our shop combines classic barbershop traditions with modern techniques. Every chair tells a story, every conversation builds community, and every cut reflects our commitment to excellence.</p>
+        <p>Whether you're a lifelong local or just passing through, you'll leave looking sharp and feeling fresh. That's our promise to you.</p>
+      </div>
+      <div class="about-stats fade-up delay-2">
+        <div class="stat-item">
+          <span class="stat-num">9</span>
+          <span class="stat-label">Years Open</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">15K+</span>
+          <span class="stat-label">Happy Clients</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">6</span>
+          <span class="stat-label">Expert Barbers</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BARBERS -->
+  <section id="barbers">
+    <div class="barbers-header fade-up">
+      <div class="section-eyebrow">Our Team</div>
+      <h2 class="section-title">Meet The <span>Barbers</span></h2>
+      <div class="gold-divider"></div>
+      <p class="section-subtitle">Skilled professionals dedicated to making you look your best.</p>
+    </div>
+    <div class="barbers-grid">
+      <div class="barber-card fade-up delay-1">
+        <div class="barber-photo">JT</div>
+        <div class="barber-content">
+          <div class="barber-name">James Thompson</div>
+          <div class="barber-title">Master Barber / Owner</div>
+          <div class="barber-desc">20+ years experience. Specializes in classic cuts, fades, and traditional straight razor shaves.</div>
+        </div>
+      </div>
+      <div class="barber-card fade-up delay-2">
+        <div class="barber-photo">MR</div>
+        <div class="barber-content">
+          <div class="barber-name">Marcus Rodriguez</div>
+          <div class="barber-title">Senior Barber</div>
+          <div class="barber-desc">Expert in modern styles and precision fades. Known for creative designs and attention to detail.</div>
+        </div>
+      </div>
+      <div class="barber-card fade-up delay-3">
+        <div class="barber-photo">DW</div>
+        <div class="barber-content">
+          <div class="barber-name">David Williams</div>
+          <div class="barber-title">Barber</div>
+          <div class="barber-desc">Specializes in beard grooming and hot towel shaves. Brings a calm, professional approach to every cut.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking">
+    <div class="booking-container fade-up">
+      <div class="booking-header">
+        <div class="section-eyebrow">Book Your Visit</div>
+        <h2 class="section-title">Schedule Your <span>Appointment</span></h2>
+        <div class="gold-divider"></div>
+        <p class="section-subtitle">Ready to look sharp? Book your appointment today and experience the difference.</p>
+      </div>
+      <form class="booking-form" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="(215) 555-0123" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Service</label>
+          <select class="form-select" required>
+            <option value="">Select service</option>
+            <option value="haircut">Haircut - $35</option>
+            <option value="beard">Beard Trim - $25</option>
+            <option value="fade">Fade - $40</option>
+            <option value="shave">Hot Towel Shave - $45</option>
+            <option value="kids">Kids Cut - $25</option>
+            <option value="full">Full Grooming - $75</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preferred Date</label>
+          <input type="date" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes (Optional)</label>
+          <textarea class="form-textarea" placeholder="Any special requests or barber preference..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Book Appointment</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <div class="footer-logo">Sharp <span>& Fresh</span></div>
+        <p class="footer-tagline">Philadelphia's premier barbershop. Where tradition meets modern style.</p>
+      </div>
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#services">Services</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#barbers">Barbers</a></li>
+          <li><a href="#booking">Book Now</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Contact</h4>
+        <div class="footer-contact-item"><strong>Address:</strong> 789 Girard Avenue, Philadelphia, PA 19125</div>
+        <div class="footer-contact-item"><strong>Phone:</strong> (215) 555-CUTS</div>
+        <div class="footer-contact-item"><strong>Email:</strong> info@sharpandfresh.com</div>
+        <div class="footer-contact-item"><strong>Hours:</strong> Mon-Sat 9AM-8PM, Sun 10AM-5PM</div>
+      </div>
+      <div>
+        <h4 class="footer-heading">Follow Us</h4>
+        <div class="footer-social">
+          <a href="#">IG</a>
+          <a href="#">FB</a>
+          <a href="#">TT</a>
+          <a href="#">Yelp</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <p>Website by <a href="#">Drew Builds</a></p>
+  </div>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+
+    // Booking form
+    function handleSubmit(e) {
+      e.preventDefault();
+      alert('Thanks for booking! We\'ll confirm your appointment shortly.');
+      e.target.reset();
+    }
+
+    // Seamless video loop with fade transition
+    const video = document.querySelector('.hero-video');
+    if (video) {
+      video.addEventListener('timeupdate', () => {
+        const duration = video.duration;
+        const currentTime = video.currentTime;
+        const fadeThreshold = 0.5; // seconds before end to start fading
+
+        if (duration && currentTime >= duration - fadeThreshold) {
+          video.style.opacity = '0';
+        } else if (currentTime < 0.1) {
+          video.style.opacity = '1';
+        }
+      });
+    }
+
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

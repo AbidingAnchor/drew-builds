@@ -267,8 +267,22 @@
         /* Services Section */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 900px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .card {
@@ -1033,6 +1047,11 @@
                     <h3>Maintenance</h3>
                     <p>Ongoing support and updates to keep your website running smoothly.</p>
                 </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>AI Chatbot</h3>
+                    <p>Custom AI assistant trained on your business info. Answers customer questions 24/7 — hours, bookings, FAQs, and more.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1073,6 +1092,14 @@
                     <h3>La Noche</h3>
                     <p>An upscale bar & restaurant concept with nightclub vibes and full menu</p>
                     <a href="mockups/LaNocheMockup.html" target="_blank" class="btn-secondary">View Demo</a>
+                </div>
+                <div class="portfolio-card">
+                    <div class="portfolio-tags">
+                        <span class="tag">Laundry Concept</span>
+                    </div>
+                    <h3>FreshWave</h3>
+                    <p>A premium laundry service concept with booking and delivery</p>
+                    <a href="mockups/tidy-mockup.html" target="_blank" class="btn-secondary">View Demo</a>
                 </div>
             </div>
         </div>
@@ -1176,6 +1203,19 @@
                         <li>Updates</li>
                         <li>Edits</li>
                         <li>Backups & support</li>
+                    </ul>
+                    <a href="#contact" class="btn-secondary">Get started</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-label">Add-on</div>
+                    <h3>AI Chatbot</h3>
+                    <div class="price">$49<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>Custom trained on your business</li>
+                        <li>24/7 automated responses</li>
+                        <li>Answers hours/FAQs/bookings</li>
+                        <li>Easy embed on any website</li>
+                        <li>Free setup included</li>
                     </ul>
                     <a href="#contact" class="btn-secondary">Get started</a>
                 </div>

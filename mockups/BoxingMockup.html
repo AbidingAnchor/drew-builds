@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Fist Boxing & MMA | Philadelphia's Premier Fight Gym</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #DC2626;
+      --red-dark: #991B1B;
+      --red-light: #EF4444;
+      --black: #0A0A0A;
+      --charcoal: #121212;
+      --charcoal-2: #1A1A1A;
+      --charcoal-3: #242424;
+      --text: #FFFFFF;
+      --text-muted: #A3A3A3;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--black);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--red-dark); border-radius: 4px; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 5%;
+      transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 2px 20px rgba(220,38,38,0.2);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--text); }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta {
+      background: var(--red);
+      color: var(--text) !important;
+      padding: 0.75rem 2rem;
+      font-weight: 700 !important;
+      letter-spacing: 0.08em;
+      transition: background 0.25s, transform 0.25s !important;
+      border: none;
+    }
+    .nav-cta:hover { 
+      background: var(--red-light); 
+      transform: translateY(-2px);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 3px;
+      background: var(--red);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,10,0.98);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 2rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--red); }
+    .mobile-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 5%;
+      font-size: 2.5rem;
+      color: var(--red);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 900px;
+      padding: 0 5%;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 12vw, 9rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .hero-title span { color: var(--red); }
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 3rem;
+      text-transform: uppercase;
+    }
+    .hero-cta-group {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--red);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1.25rem 3rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-primary:hover {
+      background: var(--red-light);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(220,38,38,0.4);
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1.25rem 3rem;
+      border: 2px solid var(--red);
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-outline:hover {
+      border-color: var(--red-light);
+      background: rgba(220,38,38,0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ── TAGLINE SECTION ── */
+    #tagline {
+      background: var(--red);
+      padding: 4rem 5%;
+      text-align: center;
+    }
+    .tagline-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 7rem 5%; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .section-title span { color: var(--red); }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 600px;
+    }
+    .red-divider {
+      width: 80px;
+      height: 4px;
+      background: var(--red);
+      margin: 2rem 0;
+    }
+
+    /* ── CLASSES ── */
+    #classes { background: var(--charcoal); }
+    .classes-header { text-align: center; margin-bottom: 4rem; }
+    .classes-header .red-divider { margin: 2rem auto; }
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .class-card {
+      background: var(--charcoal-2);
+      border: 2px solid var(--charcoal-3);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .class-card:hover {
+      border-color: var(--red);
+      transform: translateY(-5px);
+    }
+    .class-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--red);
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+    .class-card:hover::before { transform: scaleX(1); }
+    .class-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .class-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .class-price {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--red);
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--black); }
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-story p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+    .about-story p strong { color: var(--text); font-weight: 700; }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--red);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* ── TRAINERS ── */
+    #trainers { background: var(--charcoal); }
+    .trainers-header { text-align: center; margin-bottom: 4rem; }
+    .trainers-header .red-divider { margin: 2rem auto; }
+    .trainers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .trainer-card {
+      background: var(--charcoal-2);
+      border: 2px solid var(--charcoal-3);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .trainer-card:hover {
+      border-color: var(--red);
+      transform: translateY(-5px);
+    }
+    .trainer-photo {
+      height: 250px;
+      background: linear-gradient(135deg, var(--charcoal-3), var(--charcoal-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--red);
+    }
+    .trainer-content { padding: 2rem; }
+    .trainer-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .trainer-title {
+      font-size: 0.9rem;
+      color: var(--red);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .trainer-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── PRICING ── */
+    #pricing { background: var(--black); }
+    .pricing-header { text-align: center; margin-bottom: 4rem; }
+    .pricing-header .red-divider { margin: 2rem auto; }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--charcoal-2);
+      border: 2px solid var(--charcoal-3);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .pricing-card:hover {
+      border-color: var(--red);
+      transform: translateY(-5px);
+    }
+    .pricing-card.featured {
+      border-color: var(--red);
+      background: linear-gradient(180deg, rgba(220,38,38,0.1), var(--charcoal-2));
+    }
+    .pricing-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .pricing-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--red);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .pricing-period {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .pricing-features li {
+      padding: 0.75rem 0;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--charcoal-3);
+      font-size: 0.95rem;
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .pricing-btn {
+      width: 100%;
+      background: var(--red);
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .pricing-btn:hover {
+      background: var(--red-light);
+      transform: translateY(-2px);
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--charcoal); }
+    .contact-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .contact-header { text-align: center; margin-bottom: 3rem; }
+    .contact-header .red-divider { margin: 2rem auto; }
+    .contact-form {
+      background: var(--charcoal-2);
+      border: 2px solid var(--charcoal-3);
+      border-radius: 12px;
+      padding: 3rem;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--charcoal-3);
+      border: 2px solid var(--charcoal-3);
+      border-radius: 4px;
+      padding: 1rem;
+      font-size: 1rem;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.2);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(163,163,163,0.5); }
+    .form-submit {
+      width: 100%;
+      background: var(--red);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1.25rem 2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+    }
+    .form-submit:hover {
+      background: var(--red-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(220,38,38,0.4);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      padding: 5rem 5% 2rem;
+      border-top: 2px solid var(--charcoal-3);
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .footer-logo span { color: var(--text); }
+    .footer-tagline {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .footer-heading {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.25rem;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.75rem; }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.25s;
+    }
+    .footer-links a:hover { color: var(--red); }
+    .footer-contact-item {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .footer-contact-item strong { color: var(--text); }
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: var(--charcoal-2);
+      border: 2px solid var(--charcoal-3);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .footer-social a:hover {
+      border-color: var(--red);
+      background: var(--red);
+    }
+
+    /* ── BOTTOM BAR ── */
+    .bottom-bar {
+      background: var(--charcoal-2);
+      padding: 1.5rem 5%;
+      text-align: center;
+      border-top: 1px solid var(--charcoal-3);
+    }
+    .bottom-bar p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .bottom-bar a {
+      color: var(--red);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .bottom-bar a:hover { text-decoration: underline; }
+
+    /* ── FADE IN ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-up.delay-1 { transition-delay: 0.1s; }
+    .fade-up.delay-2 { transition-delay: 0.2s; }
+    .fade-up.delay-3 { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-container { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 5rem 5%; }
+      .about-stats { grid-template-columns: 1fr; }
+      .hero-cta-group { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">Iron <span>Fist</span></a>
+    <ul class="nav-links">
+      <li><a href="#classes">Classes</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#trainers">Trainers</a></li>
+      <li><a href="#pricing">Membership</a></li>
+      <li><a href="#contact" class="nav-cta">Start Training</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" onclick="toggleMenu()">&#x2715;</button>
+    <a href="#classes" onclick="toggleMenu()">Classes</a>
+    <a href="#about" onclick="toggleMenu()">About</a>
+    <a href="#trainers" onclick="toggleMenu()">Trainers</a>
+    <a href="#pricing" onclick="toggleMenu()">Membership</a>
+    <a href="#contact" onclick="toggleMenu()">Start Training</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="boxing-bg.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Iron Fist
+        <span>Boxing & MMA</span>
+      </h1>
+      <p class="hero-subtitle">Philadelphia's Premier Fight Gym</p>
+      <div class="hero-cta-group">
+        <a href="#contact" class="btn-primary">
+          Start Training
+        </a>
+        <a href="#classes" class="btn-outline">
+          View Classes
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAGLINE -->
+  <div id="tagline">
+    <p class="tagline-text">Train Like A Champion</p>
+  </div>
+
+  <!-- CLASSES -->
+  <section id="classes">
+    <div class="classes-header fade-up">
+      <div class="section-eyebrow">Our Programs</div>
+      <h2 class="section-title">Fight <span>Classes</span></h2>
+      <div class="red-divider"></div>
+      <p class="section-subtitle">From beginners to pros, we have the right training program for you.</p>
+    </div>
+    <div class="classes-grid">
+      <div class="class-card fade-up delay-1">
+        <div class="class-name">Boxing</div>
+        <div class="class-desc">Master the sweet science with our comprehensive boxing program. Learn footwork, combinations, defense, and ring strategy from experienced coaches.</div>
+        <div class="class-price">$89/mo</div>
+      </div>
+      <div class="class-card fade-up delay-2">
+        <div class="class-name">MMA</div>
+        <div class="class-desc">Mixed Martial Arts training combining striking, grappling, and ground fighting. Perfect for those looking to compete or get in fighting shape.</div>
+        <div class="class-price">$99/mo</div>
+      </div>
+      <div class="class-card fade-up delay-3">
+        <div class="class-name">Kickboxing</div>
+        <div class="class-desc">High-energy striking workouts incorporating punches, kicks, knees, and elbows. Great for cardio, self-defense, and stress relief.</div>
+        <div class="class-price">$89/mo</div>
+      </div>
+      <div class="class-card fade-up delay-1">
+        <div class="class-name">Conditioning</div>
+        <div class="class-desc">Intense strength and conditioning sessions designed to build fighter-level endurance, power, and athleticism. No fighting experience required.</div>
+        <div class="class-price">$69/mo</div>
+      </div>
+      <div class="class-card fade-up delay-2">
+        <div class="class-name">Kids Boxing</div>
+        <div class="class-desc">Youth boxing program for ages 8-16. Teach discipline, confidence, and self-defense in a safe, supportive environment.</div>
+        <div class="class-price">$59/mo</div>
+      </div>
+      <div class="class-card fade-up delay-3">
+        <div class="class-name">Personal Training</div>
+        <div class="class-desc">One-on-one sessions with our expert coaches. Customized training plans tailored to your specific goals and skill level.</div>
+        <div class="class-price">$75/hr</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-container">
+      <div class="about-story fade-up">
+        <div class="section-eyebrow">Our Story</div>
+        <h2 class="section-title">Built in <span>Philly</span></h2>
+        <div class="red-divider"></div>
+        <p>Founded in 2010 by former pro fighter <strong>Marcus "The Hammer" Williams</strong>, Iron Fist Boxing & MMA has been the training ground for Philadelphia's toughest fighters. We're not just a gym — we're a family.</p>
+        <p>Located in the heart of North Philadelphia, our facility has produced regional champions and helped thousands of everyday people transform their lives through the discipline of combat sports. We believe everyone has a fighter inside them.</p>
+        <p>Whether you're training for your first amateur bout, looking to get in the best shape of your life, or want to learn self-defense, Iron Fist is where champions are made.</p>
+      </div>
+      <div class="about-stats fade-up delay-2">
+        <div class="stat-item">
+          <span class="stat-num">14</span>
+          <span class="stat-label">Years Open</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">2,500+</span>
+          <span class="stat-label">Members</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">47</span>
+          <span class="stat-label">Championships</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAINERS -->
+  <section id="trainers">
+    <div class="trainers-header fade-up">
+      <div class="section-eyebrow">Our Team</div>
+      <h2 class="section-title">Expert <span>Coaches</span></h2>
+      <div class="red-divider"></div>
+      <p class="section-subtitle">Learn from fighters who've been in the ring and know what it takes to win.</p>
+    </div>
+    <div class="trainers-grid">
+      <div class="trainer-card fade-up delay-1">
+        <div class="trainer-photo">MW</div>
+        <div class="trainer-content">
+          <div class="trainer-name">Marcus Williams</div>
+          <div class="trainer-title">Head Coach / Founder</div>
+          <div class="trainer-desc">Former pro boxer with 42 fights. 15 years coaching experience. Specializes in technical boxing and fight strategy.</div>
+        </div>
+      </div>
+      <div class="trainer-card fade-up delay-2">
+        <div class="trainer-photo">JR</div>
+        <div class="trainer-content">
+          <div class="trainer-name">Javier Rodriguez</div>
+          <div class="trainer-title">MMA Coach</div>
+          <div class="trainer-desc">UFC veteran with black belts in BJJ and Muay Thai. Expert in grappling and ground fighting techniques.</div>
+        </div>
+      </div>
+      <div class="trainer-card fade-up delay-3">
+        <div class="trainer-photo">KP</div>
+        <div class="trainer-content">
+          <div class="trainer-name">Kim Patterson</div>
+          <div class="trainer-title">Strength & Conditioning</div>
+          <div class="trainer-desc">Certified strength coach with background in collegiate athletics. Specializes in fighter-specific conditioning programs.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="pricing-header fade-up">
+      <div class="section-eyebrow">Membership</div>
+      <h2 class="section-title">Choose Your <span>Plan</span></h2>
+      <div class="red-divider"></div>
+      <p class="section-subtitle">Flexible membership options to fit your training goals and budget.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card fade-up delay-1">
+        <div class="pricing-name">Starter</div>
+        <div class="pricing-price">$79</div>
+        <div class="pricing-period">per month</div>
+        <ul class="pricing-features">
+          <li>2 classes per week</li>
+          <li>Access to gym equipment</li>
+          <li>Locker room access</li>
+          <li>Free intro session</li>
+        </ul>
+        <button class="pricing-btn">Get Started</button>
+      </div>
+      <div class="pricing-card featured fade-up delay-2">
+        <div class="pricing-name">Unlimited</div>
+        <div class="pricing-price">$149</div>
+        <div class="pricing-period">per month</div>
+        <ul class="pricing-features">
+          <li>Unlimited classes</li>
+          <li>All programs included</li>
+          <li>Open gym access 24/7</li>
+          <li>Personal training discount</li>
+          <li>Fight camp access</li>
+        </ul>
+        <button class="pricing-btn">Get Started</button>
+      </div>
+      <div class="pricing-card fade-up delay-3">
+        <div class="pricing-name">Competitor</div>
+        <div class="pricing-price">$249</div>
+        <div class="pricing-period">per month</div>
+        <ul class="pricing-features">
+          <li>Everything in Unlimited</li>
+          <li>1-on-1 coaching sessions</li>
+          <li>Fight camp preparation</li>
+          <li>Competition entry fees</li>
+          <li>Nutrition planning</li>
+        </ul>
+        <button class="pricing-btn">Get Started</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-container fade-up">
+      <div class="contact-header">
+        <div class="section-eyebrow">Join Us</div>
+        <h2 class="section-title">Start Your <span>Journey</span></h2>
+        <div class="red-divider"></div>
+        <p class="section-subtitle">Ready to train like a champion? Sign up for a free intro session today.</p>
+      </div>
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" placeholder="Your full name" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="(215) 555-0123" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Training Interest</label>
+          <select class="form-select" required>
+            <option value="">Select program</option>
+            <option value="boxing">Boxing</option>
+            <option value="mma">MMA</option>
+            <option value="kickboxing">Kickboxing</option>
+            <option value="conditioning">Conditioning</option>
+            <option value="kids">Kids Boxing</option>
+            <option value="personal">Personal Training</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message (Optional)</label>
+          <textarea class="form-textarea" placeholder="Tell us about your goals..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Sign Up Now</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <div class="footer-logo">Iron <span>Fist</span></div>
+        <p class="footer-tagline">Philadelphia's premier fight gym. Where champions are made, one round at a time.</p>
+      </div>
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#classes">Classes</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#trainers">Trainers</a></li>
+          <li><a href="#pricing">Membership</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Contact</h4>
+        <div class="footer-contact-item"><strong>Address:</strong> 456 Broad Street, Philadelphia, PA 19102</div>
+        <div class="footer-contact-item"><strong>Phone:</strong> (215) 555-FIST</div>
+        <div class="footer-contact-item"><strong>Email:</strong> info@ironfistphilly.com</div>
+        <div class="footer-contact-item"><strong>Hours:</strong> Mon-Sat 6AM-10PM, Sun 8AM-6PM</div>
+      </div>
+      <div>
+        <h4 class="footer-heading">Follow Us</h4>
+        <div class="footer-social">
+          <a href="#">IG</a>
+          <a href="#">FB</a>
+          <a href="#">YT</a>
+          <a href="#">TT</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <p>Website by <a href="#">Drew Builds</a></p>
+  </div>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+
+    // Contact form
+    function handleSubmit(e) {
+      e.preventDefault();
+      alert('Thanks for signing up! We\'ll contact you shortly to schedule your free intro session.');
+      e.target.reset();
+    }
+
+    // Seamless video loop with fade transition
+    const video = document.querySelector('.hero-video');
+    if (video) {
+      video.addEventListener('timeupdate', () => {
+        const duration = video.duration;
+        const currentTime = video.currentTime;
+        const fadeThreshold = 0.5; // seconds before end to start fading
+
+        if (duration && currentTime >= duration - fadeThreshold) {
+          video.style.opacity = '0';
+        } else if (currentTime < 0.1) {
+          video.style.opacity = '1';
+        }
+      });
+    }
+
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
