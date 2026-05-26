@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Velvet Ace Casino | Where Fortune Meets Luxury</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #050505;
+      --deep-red: #8B0000;
+      --crimson: #C41230;
+      --gold: #D4AF37;
+      --gold-light: #F5D76E;
+      --white: #F5F0E8;
+      --grey: #2a2a2a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: #050505;
+      color: var(--white);
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 4px; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 5%;
+      background: rgba(5,5,5,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(196,18,48,0.4);
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .nav-logo span {
+      color: var(--crimson);
+      text-shadow: 0 0 20px rgba(196,18,48,0.8), 0 0 40px rgba(196,18,48,0.4);
+    }
+    .nav-links {
+      display: flex;
+      gap: 3rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Bebas Neue', sans-serif;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .nav-links a:hover {
+      color: var(--crimson);
+      text-shadow: 0 0 20px rgba(196,18,48,0.6);
+    }
+    .nav-cta {
+      font-family: 'Bebas Neue', sans-serif;
+      background: var(--crimson);
+      color: var(--white) !important;
+      padding: 0.8rem 2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .nav-cta:hover {
+      background: var(--gold);
+      color: var(--black) !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(5,5,5,0.98);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 5%;
+      font-size: 2.5rem;
+      color: var(--gold);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .hero-video-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .hero-video.active { opacity: 1; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(5,5,5,0.4) 0%, rgba(5,5,5,0.75) 100%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1400px;
+      padding: 0 5%;
+    }
+    .hero-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.2s both;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 15vw, 140px);
+      font-weight: 700;
+      line-height: 0.85;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .hero-title .velvet {
+      color: var(--white);
+      display: inline-block;
+      opacity: 0;
+      animation: slideInLeft 1s ease-out 0.4s both;
+    }
+    .hero-title .ace {
+      color: var(--crimson);
+      text-shadow: 0 0 30px rgba(196,18,48,0.8), 0 0 60px rgba(196,18,48,0.4);
+      display: inline-block;
+      opacity: 0;
+      animation: slideInRight 1s ease-out 0.5s both;
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-100px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(100px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      color: var(--gold);
+      letter-spacing: 0.3em;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.7s both;
+    }
+    .hero-cta-group {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 1s ease-out 0.9s both;
+    }
+    .btn-primary {
+      font-family: 'Bebas Neue', sans-serif;
+      background: var(--crimson);
+      color: var(--gold);
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1.25rem 3rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(196,18,48,0.6);
+      transform: translateY(-3px);
+    }
+    .btn-outline {
+      font-family: 'Bebas Neue', sans-serif;
+      background: transparent;
+      color: var(--white);
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1.25rem 3rem;
+      border: 2px solid var(--white);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover {
+      box-shadow: 0 0 30px rgba(255,255,255,0.3);
+      transform: translateY(-3px);
+    }
+    .hero-marquee {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--crimson);
+      padding: 1rem 0;
+      overflow: hidden;
+      z-index: 3;
+    }
+    .marquee-content {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 30s linear infinite;
+    }
+    .marquee-content span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.2em;
+      color: var(--white);
+      padding: 0 2rem;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── FEATURED GAMES (BetMGM Style) ── */
+    #featured-games {
+      background: #0a0a0a;
+      padding: 0;
+      border-bottom: 1px solid rgba(196,18,48,0.3);
+    }
+
+    /* Category Tab Bar */
+    .category-tabs {
+      background: #111;
+      padding: 1rem 5%;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .category-tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .category-tabs-inner {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .tab-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .tab-btn:hover {
+      color: var(--white);
+    }
+    .tab-btn.active {
+      color: var(--white);
+    }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    /* Promo Banner Carousel */
+    .promo-carousel {
+      position: relative;
+      overflow: hidden;
+      margin: 2rem 5%;
+    }
+    .promo-slider {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .promo-banner {
+      min-width: 33.333%;
+      padding: 0 0.5rem;
+      box-sizing: border-box;
+    }
+    .promo-card {
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .promo-card.gold-theme {
+      background: linear-gradient(135deg, #2a2010, #1a1508);
+      border: 1px solid rgba(212,175,55,0.3);
+    }
+    .promo-card.crimson-theme {
+      background: linear-gradient(135deg, #3a0a10, #2a0508);
+      border: 1px solid rgba(196,18,48,0.3);
+    }
+    .promo-decor {
+      position: absolute;
+      font-size: 60px;
+      opacity: 0.15;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .promo-coins {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 40%;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0.1;
+      font-size: 24px;
+    }
+    .promo-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+      position: relative;
+      z-index: 2;
+    }
+    .promo-title span {
+      color: var(--gold);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .promo-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+    .promo-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      background: var(--crimson);
+      color: var(--white);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      width: fit-content;
+      position: relative;
+      z-index: 2;
+    }
+    .promo-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .promo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .promo-dot.active {
+      background: var(--gold);
+    }
+
+    /* Game Row Section */
+    .game-section {
+      padding: 2rem 5%;
+    }
+    .game-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .section-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .see-all-link {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      color: var(--crimson);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .see-all-link:hover {
+      color: var(--white);
+    }
+
+    /* Netflix-style Horizontal Scroll */
+    .games-row {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.5rem 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .games-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Game Cards */
+    .game-card {
+      flex-shrink: 0;
+      width: 160px;
+      height: 220px;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .game-card:hover {
+      transform: scale(1.05);
+    }
+    .game-card-bg {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .game-card-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
+    }
+    .game-card-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+    }
+    .game-card-bg.golden-reels {
+      background: linear-gradient(135deg, #FFD700, #FFA500, #FF8C00);
+    }
+    .game-card-bg.lucky-sevens {
+      background: linear-gradient(135deg, #228B22, #006400, #32CD32);
+    }
+    .game-card-bg.diamond-deck {
+      background: linear-gradient(135deg, #4169E1, #8A2BE2, #9370DB);
+    }
+    .game-card-bg.midnight-roulette {
+      background: linear-gradient(135deg, #191970, #000080, #4B0082);
+    }
+    .game-card-bg.high-stakes {
+      background: linear-gradient(135deg, #FF4500, #DC143C, #B22222);
+    }
+    .game-card-bg.fortune-wheel {
+      background: linear-gradient(135deg, #9932CC, #8B008B, #4B0082);
+    }
+    .game-card-bg.neon-nights {
+      background: linear-gradient(135deg, #00CED1, #20B2AA, #48D1CC);
+    }
+    .game-card-bg.cash-blitz {
+      background: linear-gradient(135deg, #32CD32, #7CFC00, #00FF00);
+    }
+    .game-card-bg.wild-safari {
+      background: linear-gradient(135deg, #D2691E, #CD853F, #8B4513);
+    }
+    .game-card-bg.ocean-treasure {
+      background: linear-gradient(135deg, #00BFFF, #1E90FF, #4169E1);
+    }
+    .game-card-bg.thunder-strike {
+      background: linear-gradient(135deg, #FFD700, #FFA500, #FF6347);
+    }
+    .game-card-bg.ruby-rush {
+      background: linear-gradient(135deg, #DC143C, #B22222, #8B0000);
+    }
+    .game-card-bg.jackpot-frenzy {
+      background: linear-gradient(135deg, #FF1493, #FF69B4, #FFB6C1);
+    }
+    .game-card-bg.royal-flush {
+      background: linear-gradient(135deg, #9400D3, #8B008B, #800080);
+    }
+    .game-card-bg.lucky-charm {
+      background: linear-gradient(135deg, #FF8C00, #FFA500, #FFD700);
+    }
+    .game-card-bg.mega-bucks {
+      background: linear-gradient(135deg, #00FF7F, #00FA9A, #7FFFD4);
+    }
+    .game-emoji {
+      font-size: 80px;
+      filter: drop-shadow(0 0 20px rgba(255,255,255,0.6));
+      position: relative;
+      z-index: 2;
+    }
+    .game-decor {
+      position: absolute;
+      font-size: 12px;
+      color: var(--gold);
+      opacity: 0.4;
+      z-index: 1;
+    }
+    .game-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      background: var(--gold);
+      color: var(--black);
+      font-weight: 700;
+      z-index: 3;
+      box-shadow: 0 0 15px rgba(212,175,55,0.5);
+    }
+    .game-name {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.6);
+      padding: 0.75rem 0.5rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+      text-align: center;
+      font-weight: 700;
+      z-index: 3;
+    }
+    .game-jackpot {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 0;
+      right: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.65rem;
+      color: var(--gold);
+      text-align: center;
+      letter-spacing: 0.05em;
+      z-index: 3;
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 8rem 5%; position: relative; z-index: 1; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .section-title span { color: var(--gold); }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 650px;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .gold-divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin: 2rem 0;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: #080808;
+    }
+    .services-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: #0d0d0d;
+      border-left: 4px solid var(--crimson);
+      padding: 3rem 2rem;
+      position: relative;
+      transition: all 0.4s;
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 30px rgba(196,18,48,0.3);
+    }
+    .service-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--crimson);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .service-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+    }
+    .service-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--white);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: #080808;
+    }
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-story p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+      line-height: 2;
+      margin-bottom: 1.5rem;
+    }
+    .about-story p strong { color: var(--gold); font-weight: 600; }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+      position: relative;
+      padding: 2rem;
+      border: 1px solid rgba(196,18,48,0.3);
+    }
+    .about-stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, var(--crimson), transparent);
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* ── VIP MEMBERSHIP ── */
+    #vip {
+      background: #080808;
+    }
+    .vip-header { text-align: center; margin-bottom: 5rem; }
+    .vip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    .vip-card {
+      background: #0d0d0d;
+      border-top: 4px solid var(--gold);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: all 0.4s;
+      position: relative;
+    }
+    .vip-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 30px rgba(212,175,55,0.3);
+    }
+    .vip-card.featured {
+      border-top: 4px solid var(--crimson);
+      transform: scale(1.05);
+      z-index: 2;
+    }
+    .vip-card.featured:hover {
+      transform: scale(1.05) translateY(-8px);
+      box-shadow: 0 0 30px rgba(196,18,48,0.4);
+    }
+    .vip-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      background: var(--crimson);
+      color: var(--white);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      box-shadow: 0 0 15px rgba(196,18,48,0.6);
+    }
+    .vip-tier {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.1em;
+    }
+    .vip-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .vip-period {
+      font-size: 0.85rem;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+    .vip-features {
+      list-style: none;
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+    .vip-features li {
+      font-family: 'Cormorant Garamond', serif;
+      padding: 0.75rem 0;
+      color: var(--white);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.95rem;
+    }
+    .vip-features li:last-child { border-bottom: none; }
+    .vip-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      width: 100%;
+      background: linear-gradient(135deg, var(--crimson), var(--deep-red));
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .vip-btn:hover {
+      box-shadow: 0 0 25px rgba(196,18,48,0.5);
+      transform: translateY(-2px);
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: #080808;
+    }
+    .contact-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .contact-header { text-align: center; margin-bottom: 3rem; }
+    .contact-form {
+      background: #0d0d0d;
+      border: 1px solid rgba(196,18,48,0.3);
+      border-radius: 12px;
+      padding: 3.5rem;
+      position: relative;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(212,175,55,0.5);
+      border-radius: 0;
+      padding: 1rem 0;
+      font-size: 1rem;
+      color: var(--white);
+      font-family: 'Cormorant Garamond', serif;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 4px 20px rgba(212,175,55,0.2);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .form-submit {
+      font-family: 'Bebas Neue', sans-serif;
+      width: 100%;
+      background: var(--crimson);
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1.25rem 2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .form-submit:hover {
+      box-shadow: 0 0 30px rgba(196,18,48,0.5);
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #030303;
+      padding: 6rem 5% 2rem;
+      border-top: 1px solid rgba(196,18,48,0.3);
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--white);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .footer-logo span {
+      color: var(--crimson);
+      text-shadow: 0 0 20px rgba(196,18,48,0.6);
+    }
+    .footer-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--white);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .footer-italic-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-top: 0.5rem;
+    }
+    .footer-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.75rem; }
+    .footer-links a {
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--crimson); }
+    .footer-contact-item {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .footer-contact-item strong { color: var(--gold); }
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .footer-social a:hover {
+      border-color: var(--crimson);
+      background: var(--crimson);
+      box-shadow: 0 0 20px rgba(196,18,48,0.5);
+    }
+
+    /* ── BOTTOM BAR ── */
+    .bottom-bar {
+      background: var(--black-3);
+      padding: 1.5rem 5%;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .bottom-bar p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+    .bottom-bar a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .bottom-bar a:hover { text-decoration: underline; }
+
+    /* ── FADE IN ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-up.delay-1 { transition-delay: 0.1s; }
+    .fade-up.delay-2 { transition-delay: 0.2s; }
+    .fade-up.delay-3 { transition-delay: 0.3s; }
+    .fade-up.delay-4 { transition-delay: 0.4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .about-container { grid-template-columns: 1fr; gap: 3rem; }
+      .vip-card.featured { transform: none; }
+      .vip-card.featured:hover { transform: translateY(-8px); }
+      .games-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 5rem 5%; }
+      .about-stats { grid-template-columns: 1fr; }
+      .hero-cta-group { flex-direction: column; align-items: center; }
+      .games-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">Velvet <span>Ace</span></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#vip">VIP Membership</a></li>
+      <li><a href="#contact" class="nav-cta">Join VIP</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" onclick="toggleMenu()">&#x2715;</button>
+    <a href="#services" onclick="toggleMenu()">Services</a>
+    <a href="#about" onclick="toggleMenu()">About</a>
+    <a href="#vip" onclick="toggleMenu()">VIP Membership</a>
+    <a href="#contact" onclick="toggleMenu()">Join VIP</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-video-container">
+      <video class="hero-video active" autoplay muted loop playsinline>
+        <source src="casino-roulette.mp4" type="video/mp4">
+      </video>
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="casino-poker.mp4" type="video/mp4">
+      </video>
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="casino-blackjack.mp4" type="video/mp4">
+      </video>
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="casino-chips.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-label">EST. 2010 · LAS VEGAS</div>
+      <h1 class="hero-title">
+        <span class="velvet">VELVET</span> <span class="ace">ACE</span>
+      </h1>
+      <p class="hero-tagline">WHERE FORTUNE MEETS LUXURY</p>
+      <div class="hero-cta-group">
+        <a href="#vip" class="btn-primary">JOIN VIP CLUB</a>
+        <a href="#featured-games" class="btn-outline">EXPLORE FLOOR</a>
+      </div>
+    </div>
+    <div class="hero-marquee">
+      <div class="marquee-content">
+        <span>🎰 GOLDEN REELS</span>
+        <span>🃏 HIGH STAKES POKER</span>
+        <span>🎲 LIVE ROULETTE</span>
+        <span>🏆 JACKPOT TOURNAMENTS</span>
+        <span>💎 VIP LOUNGE</span>
+        <span>🎰 GOLDEN REELS</span>
+        <span>🃏 HIGH STAKES POKER</span>
+        <span>🎲 LIVE ROULETTE</span>
+        <span>🏆 JACKPOT TOURNAMENTS</span>
+        <span>💎 VIP LOUNGE</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED GAMES -->
+  <section id="featured-games">
+    <!-- Category Tab Bar -->
+    <div class="category-tabs">
+      <div class="category-tabs-inner">
+        <button class="tab-btn active">ALL</button>
+        <button class="tab-btn">SLOTS</button>
+        <button class="tab-btn">TABLE GAMES</button>
+        <button class="tab-btn">LIVE DEALER</button>
+        <button class="tab-btn">JACKPOTS</button>
+        <button class="tab-btn">NEW GAMES</button>
+        <button class="tab-btn">EXCLUSIVE</button>
+      </div>
+    </div>
+
+    <!-- Promo Banner Carousel -->
+    <div class="promo-carousel">
+      <div class="promo-slider" id="promoSlider">
+        <div class="promo-banner">
+          <div class="promo-card gold-theme">
+            <div class="promo-coins">💰💰💰💰💰💰💰💰💰💰💰💰</div>
+            <div class="promo-title">100% <span>DEPOSIT MATCH</span></div>
+            <div class="promo-subtitle">UP TO $1,000</div>
+            <button class="promo-btn">CLAIM NOW</button>
+          </div>
+        </div>
+        <div class="promo-banner">
+          <div class="promo-card">
+            <div class="promo-decor">🏆</div>
+            <div class="promo-title">WIN YOUR SHARE OF <span>$25,000</span></div>
+            <div class="promo-subtitle">WEEKLY JACKPOT TOURNAMENT</div>
+            <button class="promo-btn">JOIN NOW</button>
+          </div>
+        </div>
+        <div class="promo-banner">
+          <div class="promo-card crimson-theme">
+            <div class="promo-decor">🎰</div>
+            <div class="promo-title">NEW PLAYER OFFER</div>
+            <div class="promo-subtitle">$25 ON THE HOUSE</div>
+            <button class="promo-btn">GET BONUS</button>
+          </div>
+        </div>
+      </div>
+      <div class="promo-dots">
+        <div class="promo-dot active"></div>
+        <div class="promo-dot"></div>
+        <div class="promo-dot"></div>
+      </div>
+    </div>
+
+    <!-- Featured Games Row -->
+    <div class="game-section">
+      <div class="game-section-header">
+        <span class="section-label">FEATURED</span>
+        <a href="#" class="see-all-link">SEE ALL →</a>
+      </div>
+      <div class="games-row">
+        <div class="game-card">
+          <div class="game-card-bg golden-reels">
+            <span class="game-decor" style="top: 15%; left: 15%;">✦</span>
+            <span class="game-decor" style="top: 25%; right: 20%;">✧</span>
+            <span class="game-decor" style="bottom: 35%; left: 25%;">◆</span>
+            <span class="game-emoji">🎰</span>
+          </div>
+          <span class="game-badge">EXCLUSIVE</span>
+          <div class="game-jackpot" data-jackpot="847293">JACKPOT: $847,293</div>
+          <div class="game-name">Golden Reels</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg lucky-sevens">
+            <span class="game-decor" style="top: 20%; right: 15%;">✦</span>
+            <span class="game-decor" style="bottom: 30%; left: 20%;">✧</span>
+            <span class="game-emoji">🍀</span>
+          </div>
+          <div class="game-name">Lucky Sevens</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg diamond-deck">
+            <span class="game-decor" style="top: 15%; left: 20%;">◆</span>
+            <span class="game-decor" style="top: 40%; right: 15%;">✦</span>
+            <span class="game-decor" style="bottom: 25%; right: 25%;">✧</span>
+            <span class="game-emoji">💎</span>
+          </div>
+          <span class="game-badge">EXCLUSIVE</span>
+          <div class="game-jackpot" data-jackpot="523847">JACKPOT: $523,847</div>
+          <div class="game-name">Diamond Deck</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg midnight-roulette">
+            <span class="game-decor" style="top: 25%; left: 15%;">✧</span>
+            <span class="game-decor" style="bottom: 35%; right: 20%;">◆</span>
+            <span class="game-emoji">🌙</span>
+          </div>
+          <div class="game-name">Midnight Roulette</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg high-stakes">
+            <span class="game-decor" style="top: 15%; right: 20%;">✦</span>
+            <span class="game-decor" style="bottom: 30%; left: 25%;">✧</span>
+            <span class="game-emoji">🔥</span>
+          </div>
+          <span class="game-badge">HOT</span>
+          <div class="game-jackpot" data-jackpot="1294567">JACKPOT: $1,294,567</div>
+          <div class="game-name">High Stakes</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg fortune-wheel">
+            <span class="game-decor" style="top: 20%; left: 20%;">◆</span>
+            <span class="game-decor" style="bottom: 25%; right: 15%;">✦</span>
+            <span class="game-emoji">⭐</span>
+          </div>
+          <div class="game-name">Fortune Wheel</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg neon-nights">
+            <span class="game-decor" style="top: 15%; right: 25%;">✧</span>
+            <span class="game-decor" style="bottom: 35%; left: 15%;">◆</span>
+            <span class="game-emoji">🌃</span>
+          </div>
+          <span class="game-badge">NEW</span>
+          <div class="game-name">Neon Nights</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg cash-blitz">
+            <span class="game-decor" style="top: 25%; left: 15%;">✦</span>
+            <span class="game-decor" style="bottom: 30%; right: 20%;">✧</span>
+            <span class="game-emoji">💵</span>
+          </div>
+          <div class="game-jackpot" data-jackpot="345892">JACKPOT: $345,892</div>
+          <div class="game-name">Cash Blitz</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg wild-safari">
+            <span class="game-decor" style="top: 20%; right: 15%;">◆</span>
+            <span class="game-decor" style="bottom: 25%; left: 20%;">✦</span>
+            <span class="game-emoji">🦁</span>
+          </div>
+          <div class="game-name">Wild Safari</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg ocean-treasure">
+            <span class="game-decor" style="top: 15%; left: 25%;">✧</span>
+            <span class="game-decor" style="bottom: 35%; right: 15%;">◆</span>
+            <span class="game-emoji">🐠</span>
+          </div>
+          <div class="game-name">Ocean Treasure</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg thunder-strike">
+            <span class="game-decor" style="top: 25%; right: 20%;">✦</span>
+            <span class="game-decor" style="bottom: 30%; left: 15%;">✧</span>
+            <span class="game-emoji">⚡</span>
+          </div>
+          <span class="game-badge">HOT</span>
+          <div class="game-jackpot" data-jackpot="678234">JACKPOT: $678,234</div>
+          <div class="game-name">Thunder Strike</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg ruby-rush">
+            <span class="game-decor" style="top: 15%; left: 20%;">◆</span>
+            <span class="game-decor" style="bottom: 25%; right: 25%;">✦</span>
+            <span class="game-emoji">💎</span>
+          </div>
+          <div class="game-name">Ruby Rush</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jackpots Row -->
+    <div class="game-section">
+      <div class="game-section-header">
+        <span class="section-label">JACKPOTS</span>
+        <a href="#" class="see-all-link">SEE ALL →</a>
+      </div>
+      <div class="games-row">
+        <div class="game-card">
+          <div class="game-card-bg jackpot-frenzy">
+            <span class="game-decor" style="top: 15%; left: 20%;">✦</span>
+            <span class="game-decor" style="bottom: 30%; right: 15%;">✧</span>
+            <span class="game-emoji">🎰</span>
+          </div>
+          <span class="game-badge">PROGRESSIVE</span>
+          <div class="game-jackpot" data-jackpot="2345678">JACKPOT: $2,345,678</div>
+          <div class="game-name">Jackpot Frenzy</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg royal-flush">
+            <span class="game-decor" style="top: 25%; right: 20%;">◆</span>
+            <span class="game-decor" style="bottom: 25%; left: 15%;">✦</span>
+            <span class="game-emoji">🃏</span>
+          </div>
+          <div class="game-jackpot" data-jackpot="892345">JACKPOT: $892,345</div>
+          <div class="game-name">Royal Flush</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg lucky-charm">
+            <span class="game-decor" style="top: 15%; right: 25%;">✧</span>
+            <span class="game-decor" style="bottom: 35%; left: 15%;">◆</span>
+            <span class="game-emoji">🍀</span>
+          </div>
+          <span class="game-badge">EXCLUSIVE</span>
+          <div class="game-jackpot" data-jackpot="456789">JACKPOT: $456,789</div>
+          <div class="game-name">Lucky Charm</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg mega-bucks">
+            <span class="game-decor" style="top: 20%; left: 15%;">✦</span>
+            <span class="game-decor" style="bottom: 30%; right: 20%;">✧</span>
+            <span class="game-emoji">💰</span>
+          </div>
+          <span class="game-badge">PROGRESSIVE</span>
+          <div class="game-jackpot" data-jackpot="5678901">JACKPOT: $5,678,901</div>
+          <div class="game-name">Mega Bucks</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg golden-reels">
+            <span class="game-decor" style="top: 25%; right: 15%;">◆</span>
+            <span class="game-decor" style="bottom: 25%; left: 20%;">✦</span>
+            <span class="game-emoji">🎯</span>
+          </div>
+          <div class="game-jackpot" data-jackpot="234567">JACKPOT: $234,567</div>
+          <div class="game-name">Golden Shot</div>
+        </div>
+        <div class="game-card">
+          <div class="game-card-bg diamond-deck">
+            <span class="game-decor" style="top: 15%; left: 25%;">✧</span>
+            <span class="game-decor" style="bottom: 35%; right: 15%;">◆</span>
+            <span class="game-emoji">💎</span>
+          </div>
+          <span class="game-badge">NEW</span>
+          <div class="game-jackpot" data-jackpot="345678">JACKPOT: $345,678</div>
+          <div class="game-name">Diamond Dreams</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header fade-up">
+      <h2 class="section-title">THE FLOOR</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up delay-1">
+        <div class="service-icon">🎰</div>
+        <div class="service-name">Table Games</div>
+        <div class="service-desc">Blackjack, Roulette, Baccarat, and more. Professional dealers, private high-limit rooms, and exclusive VIP tables.</div>
+      </div>
+      <div class="service-card fade-up delay-2">
+        <div class="service-icon">�</div>
+        <div class="service-name">Poker Room</div>
+        <div class="service-desc">Texas Hold'em, Omaha, and Seven-Card Stud. Daily tournaments, cash games, and private celebrity poker events.</div>
+      </div>
+      <div class="service-card fade-up delay-3">
+        <div class="service-icon">�</div>
+        <div class="service-name">High Stakes Lounge</div>
+        <div class="service-desc">Exclusive high-limit gaming area with personalized service, premium amenities, and private gaming tables.</div>
+      </div>
+      <div class="service-card fade-up delay-1">
+        <div class="service-icon">👔</div>
+        <div class="service-name">VIP Hospitality</div>
+        <div class="service-desc">Dedicated hosts, luxury accommodations, fine dining reservations, and exclusive access to premium entertainment.</div>
+      </div>
+      <div class="service-card fade-up delay-2">
+        <div class="service-icon">🎭</div>
+        <div class="service-name">Entertainment</div>
+        <div class="service-desc">World-class shows, concerts, and performances featuring top artists and entertainers from around the globe.</div>
+      </div>
+      <div class="service-card fade-up delay-3">
+        <div class="service-icon">�</div>
+        <div class="service-name">Private Events</div>
+        <div class="service-desc">Host your exclusive event in our private venues. Corporate gatherings, celebrations, and private parties.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-container">
+      <div class="about-story fade-up">
+        <h2 class="section-title">A TRADITION OF <span>EXCELLENCE</span></h2>
+        <p>Founded in 2010, Velvet Ace has redefined the casino experience. We believe that true luxury lies in the details — from the velvet ropes to the crystal chandeliers, every element has been curated for the discerning guest.</p>
+        <p>Located in the heart of Las Vegas, our 100,000 square foot gaming floor features over 500 table games, 2,000 slot machines, and the most exclusive high-limit room in the region.</p>
+        <p>At Velvet Ace, we don't just offer games — we offer an escape into a world where fortune favors the bold and luxury knows no bounds.</p>
+      </div>
+      <div class="about-stats fade-up delay-2">
+        <div class="stat-item">
+          <span class="stat-num" data-target="14">0</span>
+          <span class="stat-label">YEARS</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="2.5" data-prefix="$" data-suffix="B">0</span>
+          <span class="stat-label">PAID</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="50" data-suffix="K+">0</span>
+          <span class="stat-label">MEMBERS</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" data-target="98" data-suffix="%">0</span>
+          <span class="stat-label">SATISFACTION</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIP -->
+  <section id="vip">
+    <div class="vip-header fade-up">
+      <h2 class="section-title">EXCLUSIVE PRIVILEGES</h2>
+    </div>
+    <div class="vip-grid">
+      <div class="vip-card fade-up delay-1">
+        <div class="vip-tier">GOLD</div>
+        <div class="vip-price">$500</div>
+        <div class="vip-period">per month</div>
+        <ul class="vip-features">
+          <li>Priority Table Access</li>
+          <li>Complimentary Drinks</li>
+          <li>Exclusive Events</li>
+          <li>Personal Host</li>
+        </ul>
+        <button class="vip-btn">Join Gold</button>
+      </div>
+      <div class="vip-card featured fade-up delay-2">
+        <div class="vip-badge">MOST POPULAR</div>
+        <div class="vip-tier">PLATINUM</div>
+        <div class="vip-price">$2,000</div>
+        <div class="vip-period">per month</div>
+        <ul class="vip-features">
+          <li>All Gold Benefits</li>
+          <li>Private Gaming Room</li>
+          <li>Luxury Suite Access</li>
+          <li>Concierge Service</li>
+          <li>VIP Transportation</li>
+        </ul>
+        <button class="vip-btn">Join Platinum</button>
+      </div>
+      <div class="vip-card fade-up delay-3">
+        <div class="vip-tier">DIAMOND</div>
+        <div class="vip-price">$10,000</div>
+        <div class="vip-period">per month</div>
+        <ul class="vip-features">
+          <li>All Platinum Benefits</li>
+          <li>Private Jet Access</li>
+          <li>Exclusive Events</li>
+          <li>Personal Butler</li>
+          <li>Global Casino Access</li>
+        </ul>
+        <button class="vip-btn">Join Diamond</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-container fade-up">
+      <div class="contact-header">
+        <h2 class="section-title">BEGIN YOUR JOURNEY</h2>
+      </div>
+      <form class="contact-form">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="Enter your phone">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" placeholder="Tell us about your interests"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Submit Inquiry</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-col">
+        <div class="footer-logo">Velvet <span>Ace</span></div>
+        <p class="footer-tagline">Experience the pinnacle of luxury gaming in the heart of Las Vegas.</p>
+        <p class="footer-italic-tagline">Where Fortune Favors the Bold</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#featured-games">Games</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#vip">VIP Membership</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Contact</h3>
+        <div class="footer-contact-item"><strong>Phone:</strong> +1 (702) 555-0123</div>
+        <div class="footer-contact-item"><strong>Email:</strong> vip@velvetace.com</div>
+        <div class="footer-contact-item"><strong>Address:</strong> 1234 Las Vegas Blvd, NV</div>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">Follow Us</h3>
+        <div class="footer-social">
+          <a href="#">📱</a>
+          <a href="#">📸</a>
+          <a href="#">🐦</a>
+          <a href="#">▶️</a>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <p>&copy; 2024 Velvet Ace Casino. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+
+    // Rotating video background (4 videos, 8 seconds each, 1 second fade)
+    const videos = document.querySelectorAll('.hero-video');
+    let currentVideoIndex = 0;
+    const videoDuration = 8000; // 8 seconds
+
+    function rotateVideos() {
+      videos[currentVideoIndex].classList.remove('active');
+      currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+      videos[currentVideoIndex].classList.add('active');
+    }
+
+    setInterval(rotateVideos, videoDuration);
+
+    // Scroll animations - fade up from 30px below
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Stat counter animation
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const statNum = entry.target;
+          const target = parseFloat(statNum.dataset.target);
+          const prefix = statNum.dataset.prefix || '';
+          const suffix = statNum.dataset.suffix || '';
+          const duration = 2000;
+          const steps = 60;
+          const increment = target / steps;
+          let current = 0;
+          
+          const counter = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              statNum.textContent = prefix + target + suffix;
+              clearInterval(counter);
+            } else {
+              statNum.textContent = prefix + (target % 1 === 0 ? Math.floor(current) : current.toFixed(1)) + suffix;
+            }
+          }, duration / steps);
+          
+          statObserver.unobserve(statNum);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-num').forEach(el => statObserver.observe(el));
+
+    // Promo banner carousel auto-rotation
+    const promoSlider = document.getElementById('promoSlider');
+    const promoDots = document.querySelectorAll('.promo-dot');
+    let currentPromoIndex = 0;
+    const promoDuration = 4000; // 4 seconds
+
+    function rotatePromo() {
+      currentPromoIndex = (currentPromoIndex + 1) % 3;
+      const offset = currentPromoIndex * -33.333;
+      promoSlider.style.transform = `translateX(${offset}%)`;
+      
+      promoDots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentPromoIndex);
+      });
+    }
+
+    setInterval(rotatePromo, promoDuration);
+
+    // Tab button functionality
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Promo dot click functionality
+    promoDots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        currentPromoIndex = index;
+        const offset = currentPromoIndex * -33.333;
+        promoSlider.style.transform = `translateX(${offset}%)`;
+        
+        promoDots.forEach((d, i) => {
+          d.classList.toggle('active', i === currentPromoIndex);
+        });
+      });
+    });
+
+    // Live jackpot increment functionality
+    const jackpotElements = document.querySelectorAll('.game-jackpot');
+    jackpotElements.forEach(el => {
+      let currentJackpot = parseInt(el.dataset.jackpot);
+      
+      setInterval(() => {
+        const increment = Math.floor(Math.random() * 50) + 1;
+        currentJackpot += increment;
+        el.textContent = 'JACKPOT: $' + currentJackpot.toLocaleString();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
