@@ -94,19 +94,6 @@
             transform: translateY(-2px);
         }
 
-        /* Hero Section */
-        .hero h1 {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid var(--electric-blue);
-            animation: blink 0.75s step-end infinite;
-        }
-
-        @keyframes blink {
-            from, to { border-color: transparent }
-            50% { border-color: var(--electric-blue) }
-        }
-
         /* Scroll Animations */
         .fade-in-section {
             opacity: 0;
@@ -179,6 +166,22 @@
         .hero {
             padding: 160px 0 100px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 1;
         }
 
         .badge {
@@ -699,6 +702,86 @@
             display: none;
         }
 
+        /* Testimonials Section */
+        .testimonials {
+            padding: 100px 0;
+            background: var(--bg-dark);
+        }
+
+        .testimonials-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 0 10px rgba(79, 195, 247, 0.6), 0 0 20px rgba(79, 195, 247, 0.3);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+        }
+
+        .testimonial-label {
+            display: inline-block;
+            background: rgba(79, 195, 247, 0.1);
+            color: var(--electric-blue);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-stars {
+            color: var(--electric-blue);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            color: var(--text-white);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--electric-blue), #64b5f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--bg-dark);
+        }
+
+        .testimonial-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .testimonial-username {
+            font-size: 0.875rem;
+            color: var(--text-gray);
+        }
+
         /* Footer */
         .footer {
             padding: 40px 0;
@@ -1005,6 +1088,7 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <canvas id="particleCanvas" class="particle-canvas"></canvas>
         <div class="container">
             <div class="floating-badges">
                 <span class="floating-badge">Fast delivery</span>
@@ -1099,7 +1183,7 @@
                     </div>
                     <h3>FreshWave</h3>
                     <p>A premium laundry service concept with booking and delivery</p>
-                    <a href="mockups/tidy-mockup.html" target="_blank" class="btn-secondary">View Demo</a>
+                    <a href="mockups/FreshFoldMockup.html" target="_blank" class="btn-secondary">View Demo</a>
                 </div>
                 <div class="portfolio-card">
                     <div class="portfolio-tags">
@@ -1274,6 +1358,26 @@
         </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section class="testimonials fade-in-section">
+        <div class="container">
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <span class="testimonial-label">React Native App Development</span>
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-text">"Drew is amazing. He completed the task in three hours. He knew precisely what I was looking for with a couple of onboarding/diagnostic questions. The only difficulty with this job was waiting for Google to verify my identity over Memorial Day weekend. Drew worked within the environment and communicated throughout the process. I will be reaching out to Drew with more work--- AND YOU should be doing so as well."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">M</div>
+                        <div>
+                            <div class="testimonial-name">Matt</div>
+                            <div class="testimonial-username">@meadortm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact" class="fade-in-section">
         <div class="container">
@@ -1349,34 +1453,91 @@
             }
         });
 
-        // Typewriter animation for hero headline
-        function typeWriter(element, text, speed = 50) {
-            let i = 0;
-            element.textContent = '';
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                }
-            }
-            type();
+        // Particle Network Animation
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 60;
+        const connectionDistance = 150;
+        const particleColor = 'rgba(79, 195, 247, 0.8)';
+        const lineColor = 'rgba(79, 195, 247, 0.15)';
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
         }
 
-        // Initialize typewriter when page loads
-        window.addEventListener('load', () => {
-            const heroHeadline = document.getElementById('heroHeadline');
-            if (heroHeadline) {
-                const originalText = heroHeadline.innerHTML;
-                // Remove the span for typing, then add it back
-                const plainText = 'I build websites that grow your business';
-                typeWriter(heroHeadline, plainText, 60);
-                setTimeout(() => {
-                    heroHeadline.innerHTML = originalText;
-                    heroHeadline.style.borderRight = 'none';
-                    heroHeadline.style.animation = 'none';
-                }, plainText.length * 60 + 500);
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 1;
             }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = particleColor;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = lineColor;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            drawConnections();
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize particle animation
+        resizeCanvas();
+        initParticles();
+        animate();
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
         });
 
         // Scroll animations using Intersection Observer

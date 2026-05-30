@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFold | Professional Laundry & Fabric Care</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1a365d;
+            --navy-dark: #0f2744;
+            --navy-light: #2c5282;
+            --white: #ffffff;
+            --off-white: #f7fafc;
+            --gray-light: #e2e8f0;
+            --gray: #a0aec0;
+            --green: #38a169;
+            --green-light: #48bb78;
+            --green-dark: #276749;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--white);
+            color: var(--navy-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 5%;
+            border-bottom: 1px solid var(--gray-light);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 2px 20px rgba(26, 54, 93, 0.1);
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--navy);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+        }
+
+        .logo span {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--navy);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .nav-cta {
+            background: #38a169;
+            color: white;
+            padding: 0.75rem 1.75rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--green-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 165, 105, 0.3);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--navy);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--white);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-size: 1.5rem;
+            color: var(--navy);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .mobile-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--navy);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            padding: 120px 5% 150px;
+            background: linear-gradient(135deg, #0a1628 0%, #1a365d 50%, #1a4a3a 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero-bubble:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: 10%;
+            right: 5%;
+            animation-delay: 0s;
+        }
+
+        .hero-bubble:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            bottom: 20%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+
+        .hero-bubble:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 30%;
+            left: 30%;
+            animation-delay: 4s;
+        }
+
+        .hero-bubble:nth-child(4) {
+            width: 150px;
+            height: 150px;
+            bottom: 10%;
+            right: 20%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-30px) scale(1.05);
+            }
+        }
+
+        .hero-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            max-width: 900px;
+            text-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero h1 span {
+            color: var(--green);
+        }
+
+        .hero-tagline {
+            font-size: 1.35rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 3rem;
+            max-width: 650px;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: var(--white);
+            padding: 1.25rem 3rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--green);
+            box-shadow: 0 4px 25px rgba(56, 165, 105, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--green-light);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(56, 165, 105, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            padding: 1.25rem 3rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 35px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(56, 165, 105, 0.1);
+            color: var(--green-dark);
+            padding: 0.5rem 1.25rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(56, 165, 105, 0.2);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--white);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            border: 1px solid var(--gray-light);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--navy), var(--green));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(26, 54, 93, 0.12);
+            border-color: var(--navy-light);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .service-price {
+            display: inline-block;
+            background: rgba(56, 165, 105, 0.1);
+            color: var(--green-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Why FreshFold Section */
+        .why-freshfold {
+            background: var(--off-white);
+        }
+
+        .trust-badges {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .trust-badge {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border: 1px solid var(--gray-light);
+            transition: all 0.4s ease;
+        }
+
+        .trust-badge:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(26, 54, 93, 0.1);
+        }
+
+        .trust-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--green), var(--green-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .trust-badge h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .trust-badge p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            background: var(--white);
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 80px;
+            right: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--navy), var(--green));
+            z-index: 0;
+        }
+
+        .step {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 0 1.5rem;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
+            border: 3px solid var(--navy);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--navy);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover .step-number {
+            background: var(--navy);
+            color: var(--white);
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(26, 54, 93, 0.3);
+        }
+
+        .step h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .testimonials .section-label {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--green-light);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .testimonials .section-title {
+            color: var(--white);
+        }
+
+        .testimonials .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .testimonial-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .testimonial-stars {
+            color: var(--green-light);
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--green), var(--green-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .testimonial-role {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--off-white);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(26, 54, 93, 0.08);
+            border: 1px solid var(--gray-light);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: var(--off-white);
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--navy);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--navy);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(26, 54, 93, 0.1);
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            background: var(--navy);
+            color: var(--white);
+            padding: 1rem 3rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .form-submit:hover {
+            background: var(--navy-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(26, 54, 93, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--navy-dark);
+            color: var(--white);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand .logo {
+            color: var(--white);
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--green-light);
+        }
+
+        .footer-contact-item {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .services-grid,
+            .trust-badges,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .services-grid,
+            .trust-badges,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 3rem;
+            }
+
+            .steps-container::before {
+                display: none;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Fade Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-up.delay-1 { transition-delay: 0.1s; }
+        .fade-up.delay-2 { transition-delay: 0.2s; }
+        .fade-up.delay-3 { transition-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-content">
+            <a href="#" class="logo">FreshFold<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#why-freshfold">Why FreshFold</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-close" onclick="toggleMenu()">&#x2715;</div>
+        <a href="#services" onclick="toggleMenu()">Services</a>
+        <a href="#why-freshfold" onclick="toggleMenu()">Why FreshFold</a>
+        <a href="#how-it-works" onclick="toggleMenu()">How It Works</a>
+        <a href="#testimonials" onclick="toggleMenu()">Testimonials</a>
+        <a href="#contact" onclick="toggleMenu()">Get a Quote</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bubble"></div>
+        <div class="hero-bubble"></div>
+        <div class="hero-bubble"></div>
+        <div class="hero-bubble"></div>
+        <div class="hero-content">
+            <div class="hero-badge fade-up">Professional Fabric Care</div>
+            <h1 class="fade-up delay-1">Professional Laundry & <span>Fabric Care</span></h1>
+            <p class="hero-tagline fade-up delay-2">Cleaning clothing, uniforms and fabrics to perfection. Medical-grade quality for businesses and individuals.</p>
+            <div class="hero-buttons fade-up delay-3">
+                <a href="#contact" class="btn-primary">Get a Quote</a>
+                <a href="#services" class="btn-secondary">Our Services</a>
+            </div>
+        </div>
+        <div class="hero-wave">
+            <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="white"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="section-header fade-up">
+            <span class="section-label">Our Services</span>
+            <h2 class="section-title">What We Offer</h2>
+            <p class="section-subtitle">Professional laundry and fabric care solutions tailored to your needs</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card fade-up delay-1">
+                <div class="service-icon">👔</div>
+                <h3>Clothing Care</h3>
+                <p>Expert care for all garments including dry cleaning, pressing, and stain removal. From everyday wear to delicate fabrics.</p>
+                <span class="service-price">Starting at $2.50/item</span>
+            </div>
+            <div class="service-card fade-up delay-2">
+                <div class="service-icon">👨‍⚕️</div>
+                <h3>Uniform Cleaning</h3>
+                <p>Specialized cleaning for medical, hospitality, and corporate uniforms. Hygienic processes that meet industry standards.</p>
+                <span class="service-price">Starting at $3.00/item</span>
+            </div>
+            <div class="service-card fade-up delay-3">
+                <div class="service-icon">🧵</div>
+                <h3>Fabric & Textile Care</h3>
+                <p>Comprehensive textile care including linens, towels, and specialty fabrics. Commercial-grade equipment for consistent results.</p>
+                <span class="service-price">Custom pricing</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why FreshFold Section -->
+    <section id="why-freshfold" class="why-freshfold">
+        <div class="section-header fade-up">
+            <span class="section-label">Why Choose Us</span>
+            <h2 class="section-title">The FreshFold Difference</h2>
+            <p class="section-subtitle">Excellence in every aspect of our service</p>
+        </div>
+        <div class="trust-badges">
+            <div class="trust-badge fade-up delay-1">
+                <div class="trust-icon">⚡</div>
+                <h3>Fast Turnaround</h3>
+                <p>24-48 hour service with express options available</p>
+            </div>
+            <div class="trust-badge fade-up delay-2">
+                <div class="trust-icon">🌱</div>
+                <h3>Eco-Friendly</h3>
+                <p>Sustainable practices and biodegradable detergents</p>
+            </div>
+            <div class="trust-badge fade-up delay-3">
+                <div class="trust-icon">🏥</div>
+                <h3>Commercial Grade</h3>
+                <p>Medical-grade cleaning standards and equipment</p>
+            </div>
+            <div class="trust-badge fade-up delay-3">
+                <div class="trust-icon">🚚</div>
+                <h3>Free Pickup</h3>
+                <p>Complimentary pickup and delivery service</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="section-header fade-up">
+            <span class="section-label">Simple Process</span>
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three easy steps to fresh, clean fabrics</p>
+        </div>
+        <div class="steps-container">
+            <div class="step fade-up delay-1">
+                <div class="step-number">1</div>
+                <h3>Schedule Pickup</h3>
+                <p>Book a pickup time that works for you. We'll collect your items from your location.</p>
+            </div>
+            <div class="step fade-up delay-2">
+                <div class="step-number">2</div>
+                <h3>We Clean & Care</h3>
+                <p>Our experts clean, press, and inspect every item with meticulous attention to detail.</p>
+            </div>
+            <div class="step fade-up delay-3">
+                <div class="step-number">3</div>
+                <h3>Delivered Fresh</h3>
+                <p>Your freshly cleaned items are delivered back to you, ready to use.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials">
+        <div class="section-header fade-up">
+            <span class="section-label">Testimonials</span>
+            <h2 class="section-title">What Our Clients Say</h2>
+            <p class="section-subtitle">Trusted by businesses and individuals alike</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card fade-up delay-1">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"FreshFold has transformed our uniform program. The quality is exceptional and their pickup service makes everything seamless. Highly recommend for any business."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SM</div>
+                    <div>
+                        <div class="testimonial-name">Sarah Mitchell</div>
+                        <div class="testimonial-role">Hospitality Manager</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-up delay-2">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"As a medical facility, hygiene is paramount. FreshFold meets and exceeds our standards every time. Their attention to detail is unmatched."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">JR</div>
+                    <div>
+                        <div class="testimonial-name">Dr. James Rodriguez</div>
+                        <div class="testimonial-role">Clinic Director</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card fade-up delay-3">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I've been using FreshFold for my personal laundry for months. The convenience of pickup and delivery combined with professional quality is unbeatable."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">EK</div>
+                    <div>
+                        <div class="testimonial-name">Emily Kim</div>
+                        <div class="testimonial-role">Loyal Customer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="section-header fade-up">
+            <span class="section-label">Get Started</span>
+            <h2 class="section-title">Request a Quote</h2>
+            <p class="section-subtitle">Tell us about your needs and we'll provide a custom quote</p>
+        </div>
+        <div class="contact-container">
+            <form class="contact-form fade-up delay-1" id="contactForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Service Type</label>
+                        <select id="service" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="clothing">Clothing Care</option>
+                            <option value="uniforms">Uniform Cleaning</option>
+                            <option value="textile">Fabric & Textile Care</option>
+                            <option value="commercial">Commercial Account</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us about your laundry needs..."></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="form-submit">Submit Request</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="#" class="logo">FreshFold<span>.</span></a>
+                <p>Professional laundry and fabric care services for businesses and individuals. Medical-grade quality with eco-friendly practices.</p>
+            </div>
+            <div>
+                <h4 class="footer-heading">Services</h4>
+                <ul class="footer-links">
+                    <li><a href="#services">Clothing Care</a></li>
+                    <li><a href="#services">Uniform Cleaning</a></li>
+                    <li><a href="#services">Textile Care</a></li>
+                    <li><a href="#contact">Commercial Accounts</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-heading">Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#why-freshfold">About Us</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-heading">Contact</h4>
+                <div class="footer-contact-item">📞 (555) 123-4567</div>
+                <div class="footer-contact-item">✉️ hello@freshfold.com</div>
+                <div class="footer-contact-item">📍 123 Clean Street</div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 FreshFold. All rights reserved. Professional Laundry & Fabric Care.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your request! We will contact you within 24 hours.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
