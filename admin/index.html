@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Drew Builds</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --card-bg: #0A0A0A;
+            --accent: #6C63FF;
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: 200ms ease;
+            --radius: 12px;
+            --radius-lg: 16px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, .logo {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .admin-header {
+            padding: 24px 0;
+            border-bottom: 0.5px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .admin-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .admin-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-left: 8px;
+        }
+
+        .logout-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border: 0.5px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: border-color var(--transition), background var(--transition);
+        }
+
+        .logout-btn:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            border: 0.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            max-width: 420px;
+            margin: 80px auto;
+        }
+
+        .login-card h1 {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+        }
+
+        .login-card p {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .submit-btn {
+            background: #FFFFFF;
+            color: #000000;
+            padding: 14px 32px;
+            border-radius: 100px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background var(--transition);
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .login-error {
+            color: #ff6b6b;
+            font-size: 0.875rem;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .table-wrap {
+            background: var(--card-bg);
+            border: 0.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+            border-bottom: 0.5px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 0.5px solid var(--border);
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        td a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        .message-cell {
+            max-width: 280px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .status-select {
+            padding: 8px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.8125rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            outline: none;
+            min-width: 130px;
+        }
+
+        .status-select:focus {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .status-select option {
+            background: #000;
+            color: #fff;
+        }
+
+        .state-message {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--text-secondary);
+        }
+
+        .state-message.error {
+            color: #ff6b6b;
+        }
+
+        main {
+            padding-bottom: 64px;
+        }
+
+        @media (max-width: 768px) {
+            .login-card {
+                margin: 40px auto;
+                padding: 32px 24px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container admin-header-content">
+            <a href="/" class="logo">Drew Builds<span class="admin-badge">Admin</span></a>
+            <button type="button" class="logout-btn" id="logoutBtn" hidden>Log out</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="loginGate">
+            <div class="login-card">
+                <h1>Admin Login</h1>
+                <p>Enter the admin password to view contact submissions.</p>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="passwordInput">Password</label>
+                        <input type="password" id="passwordInput" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="submit-btn">Sign in</button>
+                    <p class="login-error" id="loginError" hidden>Incorrect password. Try again.</p>
+                </form>
+            </div>
+        </section>
+
+        <section id="adminDashboard" hidden>
+            <h1 class="page-title">Contact Submissions</h1>
+            <p class="page-subtitle">Manage leads from the Drew Builds contact form.</p>
+
+            <div class="table-wrap">
+                <p class="state-message" id="submissionsLoading">Loading submissions…</p>
+                <p class="state-message error" id="submissionsError" hidden></p>
+                <p class="state-message" id="submissionsEmpty" hidden>No submissions yet.</p>
+                <div class="table-scroll" id="tableScroll" hidden>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissionsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2/+esm"
+        }
+    }
+    </script>
+    <script type="module" src="/src/admin.js"></script>
+</body>
+</html>
