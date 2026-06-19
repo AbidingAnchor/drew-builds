@@ -1925,6 +1925,20 @@ section {
                     <a href="#" class="btn-secondary pricing-checkout" data-payment-plan="premium">Get started</a>
                 </div>
                 <div class="pricing-card">
+                    <h3>E-Commerce</h3>
+                    <div class="price">$2,000</div>
+                    <div class="price-period">starting at · one-time</div>
+                    <ul class="pricing-features">
+                        <li>Full online store setup</li>
+                        <li>Product pages & collections</li>
+                        <li>Shopping cart & checkout</li>
+                        <li>Mobile optimized</li>
+                        <li>Payment integration</li>
+                        <li>Live within 3 weeks</li>
+                    </ul>
+                    <a href="#" class="btn-secondary pricing-checkout" data-payment-plan="ecommerce">Get started</a>
+                </div>
+                <div class="pricing-card">
                     <h3>Monthly Maintenance</h3>
                     <div class="price">$75</div>
                     <div class="price-period">per month</div>
@@ -2075,7 +2089,7 @@ section {
                 <a href="#" class="payment-option payment-option-deposit" id="paymentDepositLink" target="_blank" rel="noopener noreferrer">
                     <span class="payment-option-label">Pay Deposit</span>
                     <span class="payment-option-price" id="paymentDepositPrice"></span>
-                    <span class="payment-option-desc">50% upfront — remaining balance due on completion</span>
+                    <span class="payment-option-desc" id="paymentDepositDesc">50% upfront — remaining balance due on completion</span>
                 </a>
                 <a href="#" class="payment-option payment-option-full" id="paymentFullLink" target="_blank" rel="noopener noreferrer">
                     <span class="payment-option-label">Pay in Full</span>
@@ -2138,9 +2152,26 @@ section {
                 name: 'Premium',
                 total: '$1,500',
                 deposit: { price: '$750', url: 'https://buy.stripe.com/7sY00kaSj3nVgBz2Z1asg04' },
-                full: { price: '$1,350', url: 'https://buy.stripe.com/8x25kE0dF1fN3ON1UXasg05' }
+                full: { price: '$1,350', url: 'https://buy.stripe.com/8x25kE0dF1fN3ON1UXasg05', desc: 'One-time payment — save 10% (first 10 clients)' }
+            },
+            ecommerce: {
+                name: 'E-Commerce',
+                total: 'Starting at $2,000',
+                deposit: {
+                    price: '$1,000',
+                    url: 'https://buy.stripe.com/dRm8wQ0dF5w3bhf8jlasg08',
+                    desc: '50% upfront — remaining $1,000 due on completion'
+                },
+                full: {
+                    price: '$2,000',
+                    url: 'https://buy.stripe.com/9B6fZi3pR8If5WV435asg09',
+                    desc: 'One-time payment — full store delivered.'
+                }
             }
         };
+
+        const defaultDepositDesc = '50% upfront — remaining balance due on completion';
+        const defaultFullDesc = 'One-time payment — best value';
 
         const paymentModal = document.getElementById('paymentModal');
         const paymentModalClose = document.getElementById('paymentModalClose');
@@ -2148,6 +2179,7 @@ section {
         const paymentModalSubtitle = document.getElementById('paymentModalSubtitle');
         const paymentDepositLink = document.getElementById('paymentDepositLink');
         const paymentDepositPrice = document.getElementById('paymentDepositPrice');
+        const paymentDepositDesc = document.getElementById('paymentDepositDesc');
         const paymentFullLink = document.getElementById('paymentFullLink');
         const paymentFullPrice = document.getElementById('paymentFullPrice');
         const paymentFullDesc = document.getElementById('paymentFullDesc');
@@ -2160,11 +2192,10 @@ section {
             paymentModalSubtitle.textContent = 'Choose how you would like to pay. You will be redirected to Stripe to complete checkout.';
             paymentDepositLink.href = plan.deposit.url;
             paymentDepositPrice.textContent = plan.deposit.price;
+            paymentDepositDesc.textContent = plan.deposit.desc || defaultDepositDesc;
             paymentFullLink.href = plan.full.url;
             paymentFullPrice.textContent = plan.full.price;
-            paymentFullDesc.textContent = planKey === 'premium'
-                ? 'One-time payment — save 10% (first 10 clients)'
-                : 'One-time payment — best value';
+            paymentFullDesc.textContent = plan.full.desc || defaultFullDesc;
 
             paymentModal.classList.add('open');
             paymentModal.setAttribute('aria-hidden', 'false');
