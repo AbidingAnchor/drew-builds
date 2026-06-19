@@ -656,18 +656,30 @@ section {
     border-radius: var(--radius-lg);
     padding: 32px 28px;
     border: 0.5px solid rgba(255, 255, 255, 0.08);
-    transition: border-color var(--transition);
+    transition:
+        border-color 250ms ease,
+        box-shadow 250ms ease;
     text-align: center;
     display: flex;
     flex-direction: column;
 }
 
 .pricing-card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(108, 99, 255, 0.45);
+    box-shadow:
+        0 0 16px rgba(0, 102, 255, 0.12),
+        0 0 32px rgba(108, 99, 255, 0.08);
 }
 
 .pricing-card.featured {
     border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pricing-card.featured:hover {
+    border-color: rgba(108, 99, 255, 0.5);
+    box-shadow:
+        0 0 20px rgba(0, 102, 255, 0.15),
+        0 0 40px rgba(108, 99, 255, 0.1);
 }
 
 .featured-badge {
@@ -747,6 +759,219 @@ section {
     text-align: center;
     padding: 12px 24px;
     font-size: 0.9rem;
+}
+
+.pricing-card-note {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: left;
+    margin-bottom: 20px;
+    line-height: 1.55;
+    padding-top: 12px;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.pricing-disclaimer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 32px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* Payment Modal */
+.payment-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 300ms ease, visibility 300ms ease;
+}
+
+.payment-modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.payment-modal {
+    background: #0A0A0A;
+    border-radius: var(--radius-lg);
+    border: 0.5px solid rgba(108, 99, 255, 0.35);
+    box-shadow:
+        0 0 40px rgba(0, 102, 255, 0.12),
+        0 0 80px rgba(108, 99, 255, 0.08),
+        0 16px 48px rgba(0, 0, 0, 0.6);
+    max-width: 440px;
+    width: 100%;
+    padding: 28px;
+    transform: translateY(12px) scale(0.98);
+    transition: transform 300ms ease;
+}
+
+.payment-modal-overlay.open .payment-modal {
+    transform: translateY(0) scale(1);
+}
+
+.payment-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.payment-modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.payment-modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    transition: color var(--transition);
+    flex-shrink: 0;
+}
+
+.payment-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.payment-modal-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 24px;
+}
+
+.payment-modal-options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.payment-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 20px 22px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition:
+        border-color 250ms ease,
+        background 250ms ease,
+        box-shadow 250ms ease,
+        transform 250ms ease;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+.payment-option::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 250ms ease;
+    pointer-events: none;
+}
+
+.payment-option:hover {
+    transform: translateY(-2px);
+    border-color: rgba(108, 99, 255, 0.55);
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.1) 0%, rgba(0, 102, 255, 0.06) 100%);
+    box-shadow:
+        0 0 20px rgba(0, 102, 255, 0.2),
+        0 0 40px rgba(108, 99, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.payment-option:hover::before {
+    opacity: 1;
+}
+
+.payment-option-deposit {
+    border-color: rgba(0, 102, 255, 0.28);
+}
+
+.payment-option-deposit::before {
+    background: radial-gradient(ellipse at 50% 0%, rgba(0, 102, 255, 0.12) 0%, transparent 70%);
+}
+
+.payment-option-deposit:hover {
+    border-color: rgba(0, 102, 255, 0.55);
+    box-shadow:
+        0 0 20px rgba(0, 102, 255, 0.28),
+        0 0 48px rgba(0, 102, 255, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.payment-option-full {
+    border-color: rgba(108, 99, 255, 0.32);
+}
+
+.payment-option-full:hover {
+    border-color: rgba(108, 99, 255, 0.6);
+    box-shadow:
+        0 0 20px rgba(108, 99, 255, 0.28),
+        0 0 48px rgba(0, 102, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.payment-option-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal);
+    position: relative;
+    z-index: 1;
+}
+
+.payment-option-price {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 1;
+}
+
+.payment-option-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+    position: relative;
+    z-index: 1;
+}
+
+.payment-modal-secure {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+    line-height: 1.5;
 }
 
 /* Contact Section */
@@ -1662,7 +1887,7 @@ section {
                         <li>Hours/location/contact</li>
                         <li>Live within 1 week</li>
                     </ul>
-                    <a href="#contact" class="btn-secondary">Get started</a>
+                    <a href="#" class="btn-secondary pricing-checkout" data-payment-plan="basic">Get started</a>
                 </div>
                 <div class="pricing-card featured">
                     <span class="featured-badge">Most Popular</span>
@@ -1676,7 +1901,7 @@ section {
                         <li>Social links + revisions</li>
                         <li>Live within 2 weeks</li>
                     </ul>
-                    <a href="#contact" class="btn-primary">Get started</a>
+                    <a href="#" class="btn-primary pricing-checkout" data-payment-plan="standard">Get started</a>
                 </div>
                 <div class="pricing-card">
                     <h3>Premium</h3>
@@ -1689,7 +1914,7 @@ section {
                         <li>Online menu/ordering</li>
                         <li>Priority turnaround</li>
                     </ul>
-                    <a href="#contact" class="btn-secondary">Get started</a>
+                    <a href="#" class="btn-secondary pricing-checkout" data-payment-plan="premium">Get started</a>
                 </div>
                 <div class="pricing-card">
                     <h3>Monthly Maintenance</h3>
@@ -1700,7 +1925,7 @@ section {
                         <li>Edits</li>
                         <li>Backups & support</li>
                     </ul>
-                    <a href="#contact" class="btn-secondary">Get started</a>
+                    <a href="https://buy.stripe.com/fZu4gA1hJbUretrczBasg06" target="_blank" rel="noopener noreferrer" class="btn-secondary">Get started</a>
                 </div>
                 <div class="pricing-card">
                     <div class="pricing-label">Add-on</div>
@@ -1713,9 +1938,11 @@ section {
                         <li>Easy embed on any website</li>
                         <li>Free setup included</li>
                     </ul>
-                    <a href="#contact" class="btn-secondary">Get started</a>
+                    <p class="pricing-card-note">We host and manage your chatbot for you — no technical knowledge needed. Prefer to own it outright? We also offer a one-time $399 setup where we hand you the code and you run it yourself.</p>
+                    <a href="https://buy.stripe.com/14A28se4v5w32KJ0QTasg07" target="_blank" rel="noopener noreferrer" class="btn-secondary">Get started</a>
                 </div>
             </div>
+            <p class="pricing-disclaimer">A 50% non-refundable deposit is required before work begins. The remaining balance is due upon project completion.</p>
         </div>
     </section>
 
@@ -1828,6 +2055,30 @@ section {
         </div>
     </footer>
 
+    <!-- Payment Modal -->
+    <div class="payment-modal-overlay" id="paymentModal" aria-hidden="true">
+        <div class="payment-modal" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+            <div class="payment-modal-header">
+                <h3 id="paymentModalTitle">Choose your payment</h3>
+                <button type="button" class="payment-modal-close" id="paymentModalClose" aria-label="Close">&times;</button>
+            </div>
+            <p class="payment-modal-subtitle" id="paymentModalSubtitle"></p>
+            <div class="payment-modal-options">
+                <a href="#" class="payment-option payment-option-deposit" id="paymentDepositLink" target="_blank" rel="noopener noreferrer">
+                    <span class="payment-option-label">Pay Deposit</span>
+                    <span class="payment-option-price" id="paymentDepositPrice"></span>
+                    <span class="payment-option-desc">50% upfront — remaining balance due on completion</span>
+                </a>
+                <a href="#" class="payment-option payment-option-full" id="paymentFullLink" target="_blank" rel="noopener noreferrer">
+                    <span class="payment-option-label">Pay in Full</span>
+                    <span class="payment-option-price" id="paymentFullPrice"></span>
+                    <span class="payment-option-desc" id="paymentFullDesc"></span>
+                </a>
+            </div>
+            <p class="payment-modal-secure">🔒 Secure checkout powered by Stripe</p>
+        </div>
+    </div>
+
     <!-- Chat Widget -->
     <button class="chat-bubble" id="chatBubble" aria-label="Open chat">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -1848,7 +2099,7 @@ section {
 
     <script>
         // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        document.querySelectorAll('a[href^="#"]:not(.pricing-checkout):not(.payment-option)').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
@@ -1859,6 +2110,84 @@ section {
                     });
                 }
             });
+        });
+
+        // Payment modal
+        const paymentPlans = {
+            basic: {
+                name: 'Basic',
+                total: '$400',
+                deposit: { price: '$200', url: 'https://buy.stripe.com/aFaaEYaSje2z1GFbvxasg00' },
+                full: { price: '$400', url: 'https://buy.stripe.com/28E00kgcDgaH9977fhasg01' }
+            },
+            standard: {
+                name: 'Standard',
+                total: '$800',
+                deposit: { price: '$400', url: 'https://buy.stripe.com/4gM00k5xZ3nVfxv0QTasg02' },
+                full: { price: '$800', url: 'https://buy.stripe.com/eVq4gA4tV3nV3ONartasg03' }
+            },
+            premium: {
+                name: 'Premium',
+                total: '$1,500',
+                deposit: { price: '$750', url: 'https://buy.stripe.com/7sY00kaSj3nVgBz2Z1asg04' },
+                full: { price: '$1,350', url: 'https://buy.stripe.com/8x25kE0dF1fN3ON1UXasg05' }
+            }
+        };
+
+        const paymentModal = document.getElementById('paymentModal');
+        const paymentModalClose = document.getElementById('paymentModalClose');
+        const paymentModalTitle = document.getElementById('paymentModalTitle');
+        const paymentModalSubtitle = document.getElementById('paymentModalSubtitle');
+        const paymentDepositLink = document.getElementById('paymentDepositLink');
+        const paymentDepositPrice = document.getElementById('paymentDepositPrice');
+        const paymentFullLink = document.getElementById('paymentFullLink');
+        const paymentFullPrice = document.getElementById('paymentFullPrice');
+        const paymentFullDesc = document.getElementById('paymentFullDesc');
+
+        function openPaymentModal(planKey) {
+            const plan = paymentPlans[planKey];
+            if (!plan) return;
+
+            paymentModalTitle.textContent = `${plan.name} — ${plan.total}`;
+            paymentModalSubtitle.textContent = 'Choose how you would like to pay. You will be redirected to Stripe to complete checkout.';
+            paymentDepositLink.href = plan.deposit.url;
+            paymentDepositPrice.textContent = plan.deposit.price;
+            paymentFullLink.href = plan.full.url;
+            paymentFullPrice.textContent = plan.full.price;
+            paymentFullDesc.textContent = planKey === 'premium'
+                ? 'One-time payment — save 10% (first 10 clients)'
+                : 'One-time payment — best value';
+
+            paymentModal.classList.add('open');
+            paymentModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePaymentModal() {
+            paymentModal.classList.remove('open');
+            paymentModal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.pricing-checkout').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                openPaymentModal(button.dataset.paymentPlan);
+            });
+        });
+
+        paymentModalClose.addEventListener('click', closePaymentModal);
+
+        paymentModal.addEventListener('click', (e) => {
+            if (e.target === paymentModal) {
+                closePaymentModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && paymentModal.classList.contains('open')) {
+                closePaymentModal();
+            }
         });
 
         // Navbar scroll + mobile menu
