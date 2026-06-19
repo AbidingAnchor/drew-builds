@@ -500,6 +500,19 @@ section {
     transform: scale(0.28);
 }
 
+.portfolio-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 400ms ease;
+}
+
+.portfolio-card:hover .portfolio-thumb {
+    transform: scale(1.04);
+}
+
 .portfolio-body {
     padding: 24px;
     flex: 1;
@@ -1828,6 +1841,28 @@ section {
                     <h3>Nexus AI</h3>
                     <p>AI startup concept with dark glassmorphism design, animated gradients, and enterprise pricing</p>
                     <a href="mockups/NexusMockup.html" target="_blank" class="btn-secondary">View Demo</a>
+                    </div>
+                </div>
+                                <div class="portfolio-card">
+                    <div class="portfolio-preview">
+                        <div class="browser-bar">
+                            <span class="browser-dot"></span>
+                            <span class="browser-dot"></span>
+                            <span class="browser-dot"></span>
+                        </div>
+                        <div class="browser-screen">
+                            <div class="iframe-preview-wrap">
+                                <img src="https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?w=800&q=80" class="portfolio-thumb" alt="Élevé Catering Co. preview" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-body">
+                    <div class="portfolio-tags">
+                        <span class="tag">E-Commerce / Catering</span>
+                    </div>
+                    <h3>Élevé Catering Co.</h3>
+                    <p>Luxury catering company website with full event booking, signature menus, and an elegant gold and black design.</p>
+                    <a href="eleve-catering.html" target="_blank" class="btn-secondary">View Demo</a>
                     </div>
                 </div>
             </div>

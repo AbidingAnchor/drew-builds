@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉLEVÉ CATERING CO. | Las Vegas Luxury · Philadelphia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #000000;
+            --gold: #D4AF37;
+            --gold-light: #E8C547;
+            --gold-glow: rgba(212, 175, 55, 0.55);
+            --gold-dim: rgba(212, 175, 55, 0.12);
+            --crimson: #8B0000;
+            --crimson-glow: rgba(139, 0, 0, 0.4);
+            --white: #FFFFFF;
+            --white-muted: rgba(255, 255, 255, 0.65);
+            --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .brand {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 clamp(24px, 5vw, 64px);
+        }
+
+        /* ── NAV ── */
+        .nav {
+            position: fixed;
+            inset: 0 0 auto;
+            z-index: 1000;
+            padding: 24px 0;
+            transition: background 400ms, border-color 400ms;
+            border-bottom: 1px solid transparent;
+        }
+
+        .nav.scrolled {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom-color: rgba(212, 175, 55, 0.15);
+        }
+
+        .nav-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 0.85rem;
+            letter-spacing: 0.35em;
+            color: var(--gold);
+            text-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--white-muted);
+            transition: color 300ms, text-shadow 300ms;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--black);
+            overflow: hidden;
+        }
+
+        .hero-glow {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 40%, rgba(212, 175, 55, 0.12) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 20% 80%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 40% at 80% 70%, rgba(139, 0, 0, 0.1) 0%, transparent 50%);
+            animation: heroPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroPulse {
+            0% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .hero-shimmer {
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(212, 175, 55, 0.04) 60deg, transparent 120deg, rgba(212, 175, 55, 0.06) 180deg, transparent 240deg);
+            animation: shimmerSpin 20s linear infinite;
+        }
+
+        @keyframes shimmerSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--gold-glow), 0 0 12px var(--gold-glow);
+            animation: particleFloat linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 140px 24px 80px;
+        }
+
+        .hero-rule {
+            width: min(400px, 70vw);
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto;
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .hero-rule-top { margin-bottom: 40px; }
+        .hero-rule-bottom { margin-top: 40px; margin-bottom: 36px; }
+
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 4.2rem);
+            font-weight: 500;
+            letter-spacing: 0.45em;
+            color: var(--gold);
+            text-shadow: 0 0 40px var(--gold-glow), 0 0 80px rgba(212, 175, 55, 0.2);
+            margin-right: -0.45em;
+        }
+
+        .hero-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+            font-style: italic;
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: 0.06em;
+            margin-bottom: 48px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-solid {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            padding: 18px 40px;
+            background: var(--gold);
+            color: var(--black);
+            border: 1px solid var(--gold);
+            cursor: pointer;
+            transition: box-shadow 400ms, transform 400ms;
+        }
+
+        .btn-solid:hover {
+            box-shadow: 0 0 40px var(--gold-glow), 0 0 80px rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            padding: 18px 40px;
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            cursor: pointer;
+            transition: box-shadow 400ms, background 400ms, transform 400ms;
+        }
+
+        .btn-outline:hover {
+            background: rgba(212, 175, 55, 0.08);
+            box-shadow: 0 0 30px var(--gold-glow);
+            transform: translateY(-2px);
+        }
+
+        /* ── STATS ── */
+        .stats {
+            background: var(--black);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 36px 0;
+        }
+
+        .stats-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0;
+        }
+
+        .stat-item {
+            padding: 12px clamp(16px, 3vw, 32px);
+            text-align: center;
+        }
+
+        .stat-item span {
+            font-size: clamp(0.6rem, 1.2vw, 0.72rem);
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+            white-space: nowrap;
+        }
+
+        .stat-diamond {
+            color: var(--gold);
+            font-size: 0.5rem;
+            text-shadow: 0 0 12px var(--gold-glow);
+            padding: 0 8px;
+            flex-shrink: 0;
+        }
+
+        /* ── SERVICES ── */
+        .services { background: var(--black); }
+
+        .service-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 480px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .service-block.flip { direction: rtl; }
+        .service-block.flip > * { direction: ltr; }
+
+        .service-visual {
+            position: relative;
+            overflow: hidden;
+            background: var(--black);
+            min-height: 480px;
+        }
+
+        .service-visual img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            min-height: 480px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .service-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .service-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            margin: 24px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .service-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: clamp(48px, 6vw, 80px) clamp(32px, 5vw, 72px);
+            background: var(--black);
+        }
+
+        .service-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(5rem, 10vw, 8rem);
+            font-weight: 600;
+            line-height: 1;
+            color: rgba(212, 175, 55, 0.12);
+            margin-bottom: -20px;
+        }
+
+        .service-text h3 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .service-text p {
+            color: var(--white-muted);
+            font-size: 0.95rem;
+            line-height: 1.85;
+            max-width: 440px;
+            margin-bottom: 32px;
+        }
+
+        .service-link {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+            transition: letter-spacing 400ms, text-shadow 400ms;
+            align-self: flex-start;
+        }
+
+        .service-link:hover {
+            letter-spacing: 0.28em;
+            text-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        /* ── MENU ── */
+        .menu {
+            padding: clamp(100px, 12vw, 140px) 0;
+            background: var(--black);
+        }
+
+        .section-head {
+            text-align: center;
+            margin-bottom: clamp(56px, 7vw, 80px);
+        }
+
+        .section-head h2 {
+            font-size: clamp(2.25rem, 4vw, 3.25rem);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 40px var(--gold-glow);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .menu-card {
+            background: #0a0a0a;
+            padding: 40px 32px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            position: relative;
+            transition: border-color 400ms, box-shadow 400ms;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(135deg, var(--gold), transparent, var(--gold), transparent);
+            background-size: 300% 300%;
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 400ms;
+            animation: borderShimmer 4s linear infinite;
+        }
+
+        @keyframes borderShimmer {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .menu-card:hover {
+            border-color: transparent;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.15), inset 0 0 30px rgba(212, 175, 55, 0.03);
+        }
+
+        .menu-card:hover::before { opacity: 1; }
+
+        .menu-card h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 15px var(--gold-glow);
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .menu-row {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            padding: 10px 0;
+            font-size: 0.88rem;
+        }
+
+        .menu-row-name { color: var(--white); flex-shrink: 0; }
+
+        .menu-row-dots {
+            flex: 1;
+            border-bottom: 1px dotted rgba(212, 175, 55, 0.35);
+            min-width: 16px;
+            margin-bottom: 3px;
+        }
+
+        .menu-row-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            text-shadow: 0 0 12px var(--gold-glow);
+            flex-shrink: 0;
+        }
+
+        /* ── GALLERY ── */
+        .gallery {
+            padding: clamp(100px, 12vw, 140px) 0;
+            background: var(--black);
+        }
+
+        .gallery-masonry {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: 220px;
+            gap: 12px;
+        }
+
+        .g-cell {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--black);
+        }
+
+        .g-cell img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 600ms var(--ease);
+        }
+
+        .g-cell:hover img { transform: scale(1.05); }
+
+        .g-cell:nth-child(1) { grid-column: span 5; grid-row: span 2; }
+        .g-cell:nth-child(2) { grid-column: span 4; }
+        .g-cell:nth-child(3) { grid-column: span 3; grid-row: span 2; }
+        .g-cell:nth-child(4) { grid-column: span 4; }
+        .g-cell:nth-child(5) { grid-column: span 3; }
+        .g-cell:nth-child(6) { grid-column: span 5; }
+
+        .g-shimmer {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(105deg, transparent 40%, rgba(212, 175, 55, 0.15) 50%, transparent 60%);
+            background-size: 200% 100%;
+            opacity: 0;
+            transition: opacity 500ms;
+        }
+
+        .g-cell:hover .g-shimmer {
+            opacity: 1;
+            animation: shimmerSlide 1.2s ease forwards;
+        }
+
+        @keyframes shimmerSlide {
+            from { background-position: 200% 0; }
+            to { background-position: -200% 0; }
+        }
+
+        .g-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 28px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            transform: translateY(100%);
+            transition: transform 500ms var(--ease);
+            z-index: 3;
+        }
+
+        .g-cell:hover .g-label { transform: translateY(0); }
+
+        .g-label span {
+            font-size: 0.7rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        /* ── TESTIMONIALS ── */
+        .testimonials {
+            padding: clamp(100px, 12vw, 140px) 0;
+            background: var(--black);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .testimonial-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            min-height: 320px;
+        }
+
+        .testimonial-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 600ms var(--ease), visibility 600ms;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+        }
+
+        .testimonial-slide.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+
+        .t-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(6rem, 12vw, 9rem);
+            line-height: 0.5;
+            color: var(--gold);
+            text-shadow: 0 0 60px var(--gold-glow);
+            margin-bottom: 32px;
+            opacity: 0.8;
+        }
+
+        .t-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+            font-style: italic;
+            color: var(--white);
+            line-height: 1.75;
+            margin-bottom: 36px;
+        }
+
+        .t-name {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .t-dots {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 48px;
+        }
+
+        .t-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            background: transparent;
+            cursor: pointer;
+            padding: 0;
+            transition: background 300ms, box-shadow 300ms;
+        }
+
+        .t-dot.active,
+        .t-dot:hover {
+            background: var(--gold);
+            box-shadow: 0 0 16px var(--gold-glow);
+        }
+
+        /* ── BOOKING ── */
+        .booking {
+            padding: clamp(100px, 12vw, 140px) 0;
+            background: var(--black);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: clamp(48px, 8vw, 96px);
+            align-items: start;
+        }
+
+        .booking-intro h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-shadow: 0 0 30px var(--gold-glow);
+            margin-bottom: 20px;
+        }
+
+        .booking-intro p {
+            color: var(--white-muted);
+            max-width: 380px;
+        }
+
+        .booking-form { display: flex; flex-direction: column; gap: 28px; }
+
+        .form-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--white-muted);
+            margin-bottom: 10px;
+        }
+
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 300ms, box-shadow 300ms;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow), 0 0 40px rgba(212, 175, 55, 0.15);
+        }
+
+        .field select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23D4AF37' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+
+        .field select option { background: #111; }
+
+        .field textarea { resize: vertical; min-height: 110px; }
+
+        .form-submit {
+            align-self: flex-start;
+            padding: 18px 56px;
+            background: var(--gold);
+            border: none;
+            color: var(--black);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: box-shadow 400ms, transform 400ms;
+        }
+
+        .form-submit:hover {
+            box-shadow: 0 0 50px var(--gold-glow), 0 0 100px rgba(212, 175, 55, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            background: var(--black);
+            padding: 56px 0 32px;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            box-shadow: 0 0 20px var(--gold-glow);
+            margin-bottom: 48px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-logo {
+            font-size: 0.9rem;
+            letter-spacing: 0.35em;
+            color: var(--gold);
+            text-shadow: 0 0 30px var(--gold-glow);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            color: var(--white-muted);
+            max-width: 260px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.6rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul { list-style: none; }
+
+        .footer-col li { margin-bottom: 12px; }
+
+        .footer-col a {
+            font-size: 0.85rem;
+            color: var(--white);
+            transition: color 300ms, text-shadow 300ms;
+        }
+
+        .footer-col a:hover {
+            color: var(--gold);
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.1em;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 960px) {
+            .nav-links { display: none; }
+
+            .service-block,
+            .service-block.flip {
+                grid-template-columns: 1fr;
+                direction: ltr;
+            }
+
+            .service-visual { min-height: 280px; }
+
+            .menu-grid { grid-template-columns: 1fr; }
+
+            .booking-grid { grid-template-columns: 1fr; }
+
+            .gallery-masonry {
+                grid-template-columns: 1fr 1fr;
+                grid-auto-rows: 180px;
+            }
+
+            .g-cell:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+            .g-cell:nth-child(1),
+            .g-cell:nth-child(6) { grid-column: span 2; }
+
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+
+            .stat-diamond { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .form-pair { grid-template-columns: 1fr; }
+            .hero h1 { letter-spacing: 0.25em; margin-right: -0.25em; }
+            .gallery-masonry { grid-template-columns: 1fr; }
+            .g-cell:nth-child(n) { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav" id="nav">
+        <div class="container nav-row">
+            <a href="#" class="brand">ÉLEVÉ</a>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#menu">Menus</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#booking">Reserve</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-shimmer"></div>
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <div class="hero-rule hero-rule-top"></div>
+            <h1>ÉLEVÉ CATERING CO.</h1>
+            <div class="hero-rule hero-rule-bottom"></div>
+            <p class="hero-tagline">Where Every Detail is Savored</p>
+            <div class="hero-buttons">
+                <a href="#booking" class="btn-solid">Reserve Your Event</a>
+                <a href="#menu" class="btn-outline">View Menus</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+        <div class="container stats-row">
+            <div class="stat-item"><span>500+ Elite Events</span></div>
+            <span class="stat-diamond">◆</span>
+            <div class="stat-item"><span>12 Years of Excellence</span></div>
+            <span class="stat-diamond">◆</span>
+            <div class="stat-item"><span>98% Client Retention</span></div>
+            <span class="stat-diamond">◆</span>
+            <div class="stat-item"><span>Philadelphia's #1 Caterer</span></div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services">
+        <article class="service-block">
+            <div class="service-visual">
+                <img src="https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?w=1200&q=80" alt="Elegant dinner table for corporate events">
+            </div>
+            <div class="service-text">
+                <div class="service-num">01</div>
+                <h3>Corporate Events</h3>
+                <p>Boardroom banquets, product launches, and executive galas executed with the precision of a high-stakes evening. Impeccable service, dramatic presentation, zero compromise.</p>
+                <a href="#booking" class="service-link">Learn More →</a>
+            </div>
+        </article>
+        <article class="service-block flip">
+            <div class="service-visual">
+                <img src="https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?w=1200&q=80" alt="Wedding reception celebration">
+            </div>
+            <div class="service-text">
+                <div class="service-num">02</div>
+                <h3>Wedding Receptions</h3>
+                <p>Your love story deserves a feast of legendary proportions. Custom menus, white-glove service, and culinary artistry that transforms your celebration into an unforgettable spectacle.</p>
+                <a href="#booking" class="service-link">Learn More →</a>
+            </div>
+        </article>
+        <article class="service-block">
+            <div class="service-visual">
+                <img src="https://images.pexels.com/photos/587741/pexels-photo-587741.jpeg?w=1200&q=80" alt="Black tie gala event">
+            </div>
+            <div class="service-text">
+                <div class="service-num">03</div>
+                <h3>Private Galas</h3>
+                <p>Black-tie affairs and milestone celebrations crafted for those who demand the extraordinary. Theatre, taste, and an atmosphere of pure opulence from first course to final toast.</p>
+                <a href="#booking" class="service-link">Learn More →</a>
+            </div>
+        </article>
+    </section>
+
+    <!-- MENU -->
+    <section class="menu" id="menu">
+        <div class="container">
+            <div class="section-head">
+                <h2>Signature Menus</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <h3>Hors d'Oeuvres</h3>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Lobster Bisque Shooter</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$18</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Wagyu Tartare Crostini</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$22</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Truffle Arancini</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$16</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Champagne Oysters</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$28</span>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <h3>Plated Dinners</h3>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Pan-Seared Duck Breast</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$78</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Filet Mignon, Red Wine Jus</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$85</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Herb-Crusted Lamb Rack</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$72</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Chilean Sea Bass</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$68</span>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <h3>Dessert Stations</h3>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Dark Chocolate Fondue</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$18</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Crème Brûlée Trio</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$16</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Macaron Tower</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$12</span>
+                    </div>
+                    <div class="menu-row">
+                        <span class="menu-row-name">Champagne Sorbet</span>
+                        <span class="menu-row-dots"></span>
+                        <span class="menu-row-price">$14</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <div class="section-head">
+                <h2>Event Gallery</h2>
+            </div>
+        </div>
+        <div class="container" style="max-width:100%;padding:0 clamp(12px,2vw,24px);">
+            <div class="gallery-masonry">
+                <div class="g-cell">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Luxury catering spread">
+                    <div class="g-shimmer"></div>
+                    <div class="g-label"><span>Corporate Gala 2024</span></div>
+                </div>
+                <div class="g-cell">
+                    <img src="https://images.unsplash.com/photo-1424847651672-bf20a4b0982b?w=800&q=80" alt="Elegant plated dinner">
+                    <div class="g-shimmer"></div>
+                    <div class="g-label"><span>Spring Wedding Reception</span></div>
+                </div>
+                <div class="g-cell">
+                    <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&q=80" alt="Wedding reception tables">
+                    <div class="g-shimmer"></div>
+                    <div class="g-label"><span>Charity Black-Tie Benefit</span></div>
+                </div>
+                <div class="g-cell">
+                    <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=800&q=80" alt="Corporate event setup">
+                    <div class="g-shimmer"></div>
+                    <div class="g-label"><span>Executive Retreat Dinner</span></div>
+                </div>
+                <div class="g-cell">
+                    <img src="https://images.unsplash.com/photo-1529543544282-ea669407fca3?w=800&q=80" alt="Fine dining dessert station">
+                    <div class="g-shimmer"></div>
+                    <div class="g-label"><span>Winter Garden Ceremony</span></div>
+                </div>
+                <div class="g-cell">
+                    <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&q=80" alt="Upscale banquet hall event">
+                    <div class="g-shimmer"></div>
+                    <div class="g-label"><span>Private Casino Soirée</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-head">
+                <h2>Client Testimonials</h2>
+            </div>
+            <div class="testimonial-slider" id="testimonialSlider">
+                <div class="testimonial-slide active">
+                    <div class="t-quote">&ldquo;</div>
+                    <p class="t-text">Élevé delivered an experience that rivaled any five-star resort. Our shareholders gala was the talk of the industry for months. Pure theatre, pure perfection.</p>
+                    <cite class="t-name">Victoria Ashford · CEO, Meridian Capital</cite>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="t-quote">&ldquo;</div>
+                    <p class="t-text">Our wedding was a dream wrapped in gold and candlelight. Every course was a masterpiece. Guests still ask us who catered — and we tell everyone.</p>
+                    <cite class="t-name">James &amp; Elena Whitmore · Rittenhouse Square</cite>
+                </div>
+                <div class="testimonial-slide">
+                    <div class="t-quote">&ldquo;</div>
+                    <p class="t-text">We raised a record at our foundation gala. Élevé understood that luxury is in the details — and they nailed every single one without breaking a sweat.</p>
+                    <cite class="t-name">Dr. Marcus Chen · Philadelphia Arts Foundation</cite>
+                </div>
+            </div>
+            <div class="t-dots" id="testimonialDots">
+                <button class="t-dot active" aria-label="Testimonial 1"></button>
+                <button class="t-dot" aria-label="Testimonial 2"></button>
+                <button class="t-dot" aria-label="Testimonial 3"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section class="booking" id="booking">
+        <div class="container booking-grid">
+            <div class="booking-intro">
+                <h2>Reserve Your Event</h2>
+                <p>Submit your inquiry and our concierge team will contact you within one business day to begin crafting an unforgettable experience.</p>
+            </div>
+            <form class="booking-form" id="bookingForm">
+                <div class="form-pair">
+                    <div class="field">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                <div class="form-pair">
+                    <div class="field">
+                        <label for="eventType">Event Type</label>
+                        <select id="eventType" name="eventType" required>
+                            <option value="">Select type</option>
+                            <option value="corporate">Corporate Event</option>
+                            <option value="wedding">Wedding Reception</option>
+                            <option value="gala">Private Gala</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="eventDate">Event Date</label>
+                        <input type="date" id="eventDate" name="eventDate" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="guestCount">Guest Count</label>
+                    <input type="number" id="guestCount" name="guestCount" min="10" placeholder="Estimated guests" required>
+                </div>
+                <div class="field">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Describe your vision…" required></textarea>
+                </div>
+                <button type="submit" class="form-submit">Submit Inquiry</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-divider"></div>
+            <div class="footer-grid">
+                <div>
+                    <span class="footer-logo">ÉLEVÉ CATERING CO.</span>
+                    <p class="footer-tagline">Philadelphia's premier luxury catering experience. Opulence, perfected.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Navigate</h4>
+                    <ul>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#menu">Menus</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#booking">Reserve</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li><a href="tel:2155550147">(215) 555-0147</a></li>
+                        <li><a href="mailto:inquiries@elevecatering.com">inquiries@elevecatering.com</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="footer-bottom">&copy; 2026 Élevé Catering Co. · Philadelphia, PA · All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        // Nav scroll
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
+
+        // Gold particles
+        const particlesEl = document.getElementById('particles');
+        for (let i = 0; i < 60; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDuration = (8 + Math.random() * 12) + 's';
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+            particlesEl.appendChild(p);
+        }
+
+        // Testimonial slider
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.t-dot');
+        let currentSlide = 0;
+        let slideTimer;
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            goToSlide((currentSlide + 1) % slides.length);
+        }
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                goToSlide(i);
+                clearInterval(slideTimer);
+                slideTimer = setInterval(nextSlide, 6000);
+            });
+        });
+
+        slideTimer = setInterval(nextSlide, 6000);
+
+        // Form
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Your inquiry has been received. Our concierge team will contact you within one business day.');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
