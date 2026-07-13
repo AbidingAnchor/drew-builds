@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sole N Stride | Premium Authentic Sneakers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue: #4B9FE1;
+      --blue-dark: #3a8fd4;
+      --blue-dim: rgba(75, 159, 225, 0.1);
+      --blue-glow: rgba(75, 159, 225, 0.25);
+      --text: #111111;
+      --text-muted: #6b7280;
+      --bg: #ffffff;
+      --bg-soft: #F5F5F5;
+      --bg-muted: #ececee;
+      --navy-dark: #0a0f1e;
+      --blue-deep: #1a3a5c;
+      --footer-bg: #0d0d0d;
+      --border: #e5e7eb;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.08);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --radius: 12px;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --announcement-height: 36px;
+      --nav-height: 68px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-soft); }
+    ::-webkit-scrollbar-thumb {
+      background: var(--blue);
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--blue-dark); }
+
+    body {
+      font-family: var(--font-body);
+      background: #ffffff;
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ─── ANNOUNCEMENT BAR ─── */
+    .announcement-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1001;
+      height: var(--announcement-height);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--blue);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    /* ─── NAVBAR ─── */
+    .navbar {
+      position: fixed;
+      top: var(--announcement-height); left: 0; right: 0;
+      z-index: 1000;
+      padding: 0.85rem 0;
+      background: #ffffff;
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+      color: var(--text);
+    }
+
+    .navbar.scrolled {
+      box-shadow: var(--shadow-sm);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .logo-text {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .logo-text span { color: var(--blue); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color var(--transition);
+    }
+
+    .nav-links a:hover { color: var(--blue); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .icon-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: var(--blue-dim);
+    }
+
+    .icon-btn svg { width: 18px; height: 18px; }
+
+    .cart-badge { position: relative; }
+
+    .cart-badge .badge {
+      position: absolute;
+      top: -2px; right: -2px;
+      width: 17px; height: 17px;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.6rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.6rem;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.6rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding-top: calc(var(--announcement-height) + var(--nav-height));
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%),
+        var(--navy-dark);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(3.25rem, 8vw, 6.25rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+      color: #fff;
+      max-width: 780px;
+    }
+
+    .hero h1 .highlight { color: #fff; }
+
+    .hero-divider {
+      width: 56px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.45);
+      border: none;
+      margin: 2rem 0 1.5rem;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 480px;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero .btn-outline {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    .hero .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+      color: #fff;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      gap: 0;
+      max-width: 520px;
+      background: rgba(26, 26, 46, 0.7);
+      border: 1px solid rgba(75, 159, 225, 0.15);
+      border-radius: var(--radius);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-item {
+      flex: 1;
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      border-right: 1px solid rgba(75, 159, 225, 0.1);
+      position: relative;
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--blue);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.25rem;
+    }
+
+    .stat-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 2px;
+      background: var(--blue);
+      transition: width 1s ease;
+    }
+
+    .stat-item.animated::after { width: 60%; }
+
+    /* ─── SECTIONS COMMON ─── */
+    section { padding: 5.5rem 0; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.65rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+      margin-bottom: 0.65rem;
+      color: var(--text);
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── BRAND FILTERS ─── */
+    .brand-filters {
+      padding: 2.5rem 0 0.5rem;
+      background: #ffffff;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .filter-pills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-pill {
+      padding: 0.55rem 1.25rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text-muted);
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+
+    /* ─── PRODUCTS ─── */
+    #products {
+      background: #F5F5F5;
+      color: var(--text);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+
+    .product-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-image-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--bg-soft);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image { transform: scale(1.06); }
+
+    .product-image.gradient-1 { background: linear-gradient(135deg, #eef4fa 0%, #d4e8f7 100%); }
+    .product-image.gradient-2 { background: linear-gradient(135deg, #f0f0f2 0%, #dceaf5 100%); }
+    .product-image.gradient-3 { background: linear-gradient(160deg, #e8eef5 0%, #c8dff0 100%); }
+    .product-image.gradient-4 { background: linear-gradient(135deg, #eef2f8 0%, #d0e3f4 100%); }
+    .product-image.gradient-5 { background: linear-gradient(145deg, #f5f5f7 0%, #dae9f6 100%); }
+    .product-image.gradient-6 { background: linear-gradient(135deg, #e4edf6 0%, #bdd8f0 100%); }
+
+    .product-tag {
+      position: absolute;
+      top: 0.85rem; left: 0.85rem;
+      padding: 0.28rem 0.65rem;
+      background: var(--bg);
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .product-info { padding: 1.35rem; }
+
+    .product-brand {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      margin-bottom: 0.3rem;
+    }
+
+    .product-name {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .product-price {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .size-selector {
+      display: flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .size-pill {
+      width: 36px; height: 36px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .size-pill:hover { border-color: var(--blue); color: var(--blue); }
+
+    .size-pill.selected {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .add-cart-btn {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 4px;
+      background: var(--text);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .add-cart-btn:hover { background: var(--blue); }
+
+    .add-cart-btn.added {
+      background: #27ae60;
+      pointer-events: none;
+    }
+
+    /* ─── BANNER ─── */
+    .promo-banner {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .promo-banner-bg { display: none; }
+
+    .promo-inner {
+      position: relative;
+      text-align: center;
+      padding: 5rem 2rem;
+      background: var(--blue-deep);
+      color: #ffffff;
+    }
+
+    .promo-inner h2 {
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      margin-bottom: 0.85rem;
+      line-height: 1.1;
+      color: #fff;
+    }
+
+    .promo-inner h2 span { color: #fff; opacity: 0.85; }
+
+    .promo-inner p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .promo-inner .btn-primary {
+      background: #fff;
+      color: var(--blue);
+    }
+
+    .promo-inner .btn-primary:hover { background: var(--bg-soft); }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonials {
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .testimonial-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+    }
+
+    .stars {
+      display: flex;
+      gap: 0.15rem;
+      margin-bottom: 1rem;
+      color: #f5a623;
+      font-size: 0.95rem;
+    }
+
+    .testimonial-text {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .author-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+    }
+
+    .author-avatar.av-1 { background: var(--blue); }
+    .author-avatar.av-2 { background: #6c5ce7; }
+    .author-avatar.av-3 { background: #00b894; }
+
+    .author-name {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .author-role { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ─── INSTAGRAM GRID ─── */
+    .insta-section {
+      background: var(--navy-dark);
+      color: #ffffff;
+    }
+
+    .insta-section .section-header h2 { color: #ffffff; }
+    .insta-section .section-header p { color: rgba(255, 255, 255, 0.7); }
+
+    .insta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .insta-item {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .insta-item:hover { opacity: 0.88; }
+
+    .insta-item:hover .insta-overlay { opacity: 1; }
+
+    .insta-bg {
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .insta-bg.i1 { background: linear-gradient(135deg, #dceaf5, #4B9FE1); }
+    .insta-bg.i2 { background: linear-gradient(160deg, #eef2f8, #a8cce8); }
+    .insta-bg.i3 { background: linear-gradient(135deg, #c8dff0, #3a8fd4); }
+    .insta-bg.i4 { background: linear-gradient(145deg, #e8eef5, #7eb8e0); }
+    .insta-bg.i5 { background: linear-gradient(135deg, #d4e8f7, #4B9FE1); }
+    .insta-bg.i6 { background: linear-gradient(160deg, #eef4fa, #2d6fa0); }
+
+    .insta-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(17, 17, 17, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .insta-overlay span {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    /* ─── NEWSLETTER ─── */
+    .newsletter {
+      background: #F5F5F5;
+      color: var(--text);
+      border-top: 1px solid var(--border);
+    }
+
+    .newsletter-inner {
+      text-align: center;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .newsletter-inner h2 { font-size: 1.85rem; margin-bottom: 0.65rem; color: var(--text); }
+    .newsletter-inner p { color: var(--text-muted); margin-bottom: 1.75rem; }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.65rem;
+      max-width: 460px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 0.85rem 1.1rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .newsletter-form input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-dim);
+    }
+
+    .newsletter-form input::placeholder { color: var(--text-muted); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 4.5rem 0 2rem;
+      background: var(--footer-bg);
+      color: #ffffff;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    footer .logo { color: #ffffff; }
+    footer .logo-text span { color: var(--blue); }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-logo .logo { margin-bottom: 1rem; }
+    .footer-logo .logo-text { font-size: 1.35rem; margin-bottom: 0.65rem; display: block; }
+
+    .footer-tagline {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-heading);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.15rem;
+      color: #ffffff;
+    }
+
+    .footer-col ul { list-style: none; }
+
+    .footer-col ul li { margin-bottom: 0.55rem; }
+
+    .footer-col ul a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: color var(--transition);
+    }
+
+    .footer-col ul a:hover { color: var(--blue); }
+
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-bottom p { color: rgba(255, 255, 255, 0.5); font-size: 0.82rem; }
+
+    .social-links { display: flex; gap: 0.65rem; }
+
+    .social-links a {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.78rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* ─── CHATBOT ─── */
+    .chatbot-bubble {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .chatbot-panel {
+      width: 340px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95) translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+
+    .chatbot-panel.open {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .chatbot-header {
+      padding: 1.15rem 1.35rem;
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .chatbot-avatar {
+      width: 36px; height: 36px;
+      background: var(--blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .chatbot-header-text h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .chatbot-header-text span {
+      font-size: 0.72rem;
+      color: #27ae60;
+    }
+
+    .chatbot-body {
+      padding: 1.35rem;
+      min-height: 110px;
+    }
+
+    .chatbot-msg {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px 12px 12px 4px;
+      padding: 0.85rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .chatbot-trigger {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: none;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .chatbot-trigger:hover { transform: scale(1.06); background: var(--blue-dark); }
+
+    /* ─── PROMO MODAL ─── */
+    .promo-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      background: rgba(5, 8, 16, 0.82);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .promo-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+
+    .promo-modal {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      width: 100%;
+      max-width: 820px;
+      min-height: 420px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.55);
+      transform: translateY(24px) scale(0.97);
+      opacity: 0;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s ease;
+    }
+
+    .promo-modal-overlay.active .promo-modal {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .promo-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(10, 10, 10, 0.06);
+      color: #555;
+      font-size: 1.35rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .promo-modal-close:hover {
+      background: rgba(10, 10, 10, 0.1);
+      color: #111;
+    }
+
+    .promo-modal-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      background: linear-gradient(160deg, #1a3a5c 0%, #4B9FE1 100%);
+    }
+
+    .promo-modal-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .promo-modal-logo .logo-icon {
+      width: 56px;
+      height: 56px;
+      font-size: 1.6rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .promo-modal-logo .logo-text {
+      font-size: 1.75rem;
+      color: #fff;
+    }
+
+    .promo-modal-logo .logo-text span { color: #fff; opacity: 0.85; }
+
+    .promo-modal-tagline {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.75);
+      max-width: 220px;
+    }
+
+    .promo-modal-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2.5rem;
+      background: #ffffff;
+      color: #111;
+    }
+
+    .promo-modal-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.75rem;
+    }
+
+    .promo-modal-right h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: #0a0a0a;
+      margin-bottom: 0.85rem;
+    }
+
+    .promo-modal-desc {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: #666;
+      margin-bottom: 1.75rem;
+    }
+
+    .promo-modal-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .promo-modal-form input {
+      width: 100%;
+      padding: 0.9rem 1.1rem;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: #111;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .promo-modal-form input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(75, 159, 225, 0.15);
+    }
+
+    .promo-modal-form input::placeholder { color: #aaa; }
+
+    .promo-modal-submit {
+      width: 100%;
+      padding: 0.95rem 1.25rem;
+      border: none;
+      border-radius: 4px;
+      background: var(--blue);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .promo-modal-submit:hover {
+      background: var(--blue-dark);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    .promo-modal-dismiss {
+      margin-top: 1rem;
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      color: #999;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color var(--transition);
+    }
+
+    .promo-modal-dismiss:hover { color: #555; }
+
+    body.modal-open { overflow: hidden; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .hero h1 { font-size: clamp(2.5rem, 10vw, 4rem); }
+      .hero-content { padding: 1.25rem 2rem 2.5rem; }
+      .stats-bar { max-width: 100%; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .promo-modal { grid-template-columns: 1fr; max-width: 480px; }
+      .promo-modal-left { padding: 2.5rem 2rem; }
+      .promo-modal-right { padding: 2rem 2rem 2.5rem; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-actions .btn-primary { display: none; }
+      .mobile-toggle { display: block; }
+
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: #fff;
+        padding: 1.5rem 2rem;
+        gap: 1.25rem;
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .stats-bar { flex-direction: column; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(75, 159, 225, 0.1); }
+      .stat-item:last-child { border-bottom: none; }
+
+      .products-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .insta-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; }
+      .newsletter-form { flex-direction: column; }
+      .chatbot-panel { width: calc(100vw - 2rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">Free Shipping on Orders $75+ &nbsp;|&nbsp; Authentic Guaranteed</div>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">👟</div>
+        <span class="logo-text">Sole <span>N</span> Stride</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#nike">Nike</a></li>
+        <li><a href="#puma">Puma</a></li>
+        <li><a href="#skechers">Skechers</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" aria-label="Search">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <button class="icon-btn cart-badge" aria-label="Cart">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="badge" id="cartCount">0</span>
+        </button>
+        <a href="#products" class="btn-primary">Shop Now</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content reveal">
+      <h1>Step Into<br><span class="highlight">Premium</span> Style</h1>
+      <hr class="hero-divider">
+      <p class="hero-sub">Discover authenticated sneakers from the world's most iconic brands. Curated collections, verified quality, delivered to your door.</p>
+      <div class="hero-ctas">
+        <a href="#products" class="btn-primary">Explore Collection</a>
+        <a href="#brands" class="btn-outline">View Brands</a>
+      </div>
+      <div class="stats-bar" id="statsBar">
+        <div class="stat-item" data-target="500">
+          <span class="stat-number"><span class="counter">0</span>+</span>
+          <span class="stat-label">Styles</span>
+        </div>
+        <div class="stat-item" data-target="100">
+          <span class="stat-number"><span class="counter">0</span>%</span>
+          <span class="stat-label">Authentic</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Free</span>
+          <span class="stat-label">Shipping</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Filters -->
+  <section class="brand-filters reveal" id="brands">
+    <div class="container">
+      <div class="filter-pills">
+        <button class="filter-pill active" data-brand="all">All Brands</button>
+        <button class="filter-pill" data-brand="nike">Nike</button>
+        <button class="filter-pill" data-brand="puma">Puma</button>
+        <button class="filter-pill" data-brand="skechers">Skechers</button>
+        <button class="filter-pill" data-brand="new">New Arrivals</button>
+        <button class="filter-pill" data-brand="sale">On Sale</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section id="products">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Curated Selection</span>
+        <h2>Featured Kicks</h2>
+        <p>Hand-picked premium sneakers from top brands, ready to elevate your collection.</p>
+      </div>
+      <div class="products-grid">
+
+        <div class="product-card reveal" data-brand="nike">
+          <div class="product-image-wrap">
+            <div class="product-image gradient-1">👟</div>
+            <span class="product-tag">Best Seller</span>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Nike</div>
+            <h3 class="product-name">Air Max Pulse</h3>
+            <div class="product-price">$189.00</div>
+            <div class="size-selector">
+              <button class="size-pill">7</button>
+              <button class="size-pill selected">8</button>
+              <button class="size-pill">9</button>
+              <button class="size-pill">10</button>
+              <button class="size-pill">11</button>
+            </div>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-brand="puma">
+          <div class="product-image-wrap">
+            <div class="product-image gradient-2">👟</div>
+            <span class="product-tag">New</span>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Puma</div>
+            <h3 class="product-name">RS-X Reinvention</h3>
+            <div class="product-price">$145.00</div>
+            <div class="size-selector">
+              <button class="size-pill">7</button>
+              <button class="size-pill">8</button>
+              <button class="size-pill selected">9</button>
+              <button class="size-pill">10</button>
+              <button class="size-pill">11</button>
+            </div>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-brand="skechers">
+          <div class="product-image-wrap">
+            <div class="product-image gradient-3">👟</div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Skechers</div>
+            <h3 class="product-name">D'Lites Fresh Start</h3>
+            <div class="product-price">$98.00</div>
+            <div class="size-selector">
+              <button class="size-pill">7</button>
+              <button class="size-pill selected">8</button>
+              <button class="size-pill">9</button>
+              <button class="size-pill">10</button>
+              <button class="size-pill">11</button>
+            </div>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-brand="nike">
+          <div class="product-image-wrap">
+            <div class="product-image gradient-4">👟</div>
+            <span class="product-tag">Limited</span>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Nike</div>
+            <h3 class="product-name">Dunk Low Retro</h3>
+            <div class="product-price">$125.00</div>
+            <div class="size-selector">
+              <button class="size-pill">7</button>
+              <button class="size-pill">8</button>
+              <button class="size-pill selected">9</button>
+              <button class="size-pill">10</button>
+              <button class="size-pill">11</button>
+            </div>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-brand="puma">
+          <div class="product-image-wrap">
+            <div class="product-image gradient-5">👟</div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Puma</div>
+            <h3 class="product-name">Suede Classic XXI</h3>
+            <div class="product-price">$89.00</div>
+            <div class="size-selector">
+              <button class="size-pill selected">7</button>
+              <button class="size-pill">8</button>
+              <button class="size-pill">9</button>
+              <button class="size-pill">10</button>
+              <button class="size-pill">11</button>
+            </div>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+
+        <div class="product-card reveal" data-brand="skechers">
+          <div class="product-image-wrap">
+            <div class="product-image gradient-6">👟</div>
+            <span class="product-tag">Sale</span>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Skechers</div>
+            <h3 class="product-name">Go Walk Arch Fit</h3>
+            <div class="product-price">$79.00</div>
+            <div class="size-selector">
+              <button class="size-pill">7</button>
+              <button class="size-pill">8</button>
+              <button class="size-pill">9</button>
+              <button class="size-pill selected">10</button>
+              <button class="size-pill">11</button>
+            </div>
+            <button class="add-cart-btn">Add to Cart</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Promo Banner -->
+  <section class="promo-banner reveal">
+    <div class="promo-banner-bg"></div>
+    <div class="container">
+      <div class="promo-inner">
+        <h2>Limited Drop — <span>30% Off</span> Select Styles</h2>
+        <p>Don't miss our exclusive seasonal sale. Premium sneakers at unbeatable prices — while supplies last.</p>
+        <a href="#products" class="btn-primary">Shop Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Customer Love</span>
+        <h2>What Sneakerheads Say</h2>
+        <p>Join thousands of satisfied customers who trust Sole N Stride for authentic kicks.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"The Air Max Pulse I ordered arrived in perfect condition with full authentication tags. Fastest shipping I've ever experienced from an online sneaker store."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar av-1">JM</div>
+            <div>
+              <div class="author-name">Jordan M.</div>
+              <div class="author-role">Verified Buyer · Nike</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Finally found a site I can trust for Puma exclusives. The size guide was spot-on and the packaging felt premium. Already on my third order!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar av-2">SK</div>
+            <div>
+              <div class="author-name">Sarah K.</div>
+              <div class="author-role">Verified Buyer · Puma</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Skechers never looked this good. Sole N Stride curated a collection that actually matches my style. Customer support was incredibly helpful too."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar av-3">DL</div>
+            <div>
+              <div class="author-name">Devon L.</div>
+              <div class="author-role">Verified Buyer · Skechers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instagram Grid -->
+  <section class="insta-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">@solensstride</span>
+        <h2>Follow the Culture</h2>
+        <p>See how our community styles their Sole N Stride picks.</p>
+      </div>
+      <div class="insta-grid reveal">
+        <div class="insta-item"><div class="insta-bg i1">👟</div><div class="insta-overlay"><span>View Post</span></div></div>
+        <div class="insta-item"><div class="insta-bg i2">🔥</div><div class="insta-overlay"><span>View Post</span></div></div>
+        <div class="insta-item"><div class="insta-bg i3">👟</div><div class="insta-overlay"><span>View Post</span></div></div>
+        <div class="insta-item"><div class="insta-bg i4">✨</div><div class="insta-overlay"><span>View Post</span></div></div>
+        <div class="insta-item"><div class="insta-bg i5">👟</div><div class="insta-overlay"><span>View Post</span></div></div>
+        <div class="insta-item"><div class="insta-bg i6">💎</div><div class="insta-overlay"><span>View Post</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter reveal">
+    <div class="container">
+      <div class="newsletter-inner">
+        <h2>Stay Ahead of the Drop</h2>
+        <p>Get exclusive early access to new releases, restocks, and member-only deals.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('input').value=''; alert('Thanks for subscribing!');">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit" class="btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-logo">
+          <a href="#" class="logo">
+            <div class="logo-icon">👟</div>
+            <span class="logo-text">Sole <span>N</span> Stride</span>
+          </a>
+          <p class="footer-tagline">Premium authenticated sneakers from the world's leading brands. Step up your game with confidence.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#">Nike Collection</a></li>
+            <li><a href="#">Puma Collection</a></li>
+            <li><a href="#">Skechers Collection</a></li>
+            <li><a href="#">New Arrivals</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">Shipping & Returns</a></li>
+            <li><a href="#">Authentication</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Twitter / X</a></li>
+            <li><a href="#">TikTok</a></li>
+            <li><a href="#">YouTube</a></li>
+            <li><a href="#">Discord</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Sole N Stride. All rights reserved.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Twitter">X</a>
+          <a href="#" aria-label="TikTok">TT</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Promo Modal -->
+  <div class="promo-modal-overlay" id="promoModal" aria-hidden="true">
+    <div class="promo-modal" role="dialog" aria-labelledby="promoModalTitle" aria-modal="true">
+      <button class="promo-modal-close" id="promoModalClose" aria-label="Close">&times;</button>
+      <div class="promo-modal-left">
+        <div class="promo-modal-logo">
+          <div class="logo-icon">👟</div>
+          <span class="logo-text">Sole <span>N</span> Stride</span>
+          <p class="promo-modal-tagline">Premium authenticated sneakers from the world's leading brands.</p>
+        </div>
+      </div>
+      <div class="promo-modal-right">
+        <p class="promo-modal-eyebrow">Welcome to Sole N Stride</p>
+        <h2 id="promoModalTitle">Unlock 10% Off Your First Order</h2>
+        <p class="promo-modal-desc">Join our community and get exclusive access to new drops, restocks, and member deals.</p>
+        <form class="promo-modal-form" id="promoModalForm">
+          <input type="email" placeholder="Enter your email address" required aria-label="Email address">
+          <button type="submit" class="promo-modal-submit">Claim My Discount</button>
+        </form>
+        <button type="button" class="promo-modal-dismiss" id="promoModalDismiss">No thanks</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Chatbot -->
+  <div class="chatbot-bubble">
+    <div class="chatbot-panel" id="chatPanel">
+      <div class="chatbot-header">
+        <div class="chatbot-avatar">🤖</div>
+        <div class="chatbot-header-text">
+          <h4>Stride AI Assistant</h4>
+          <span>● Online</span>
+        </div>
+      </div>
+      <div class="chatbot-body">
+        <div class="chatbot-msg">Hey! 👋 I'm your Sole N Stride assistant. Need help finding the perfect pair, checking sizes, or tracking an order? Just ask!</div>
+      </div>
+    </div>
+    <button class="chatbot-trigger" id="chatTrigger" aria-label="Open AI chat">💬</button>
+  </div>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Mobile menu
+    document.getElementById('mobileToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('mobile-open');
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // Animated stats counter
+    const statsBar = document.getElementById('statsBar');
+    const animateCounters = () => {
+      statsBar.querySelectorAll('.stat-item').forEach(item => {
+        item.classList.add('animated');
+        const target = item.dataset.target;
+        if (!target) return;
+        const counter = item.querySelector('.counter');
+        let current = 0;
+        const increment = target / 60;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            counter.textContent = target;
+            clearInterval(timer);
+          } else {
+            counter.textContent = Math.floor(current);
+          }
+        }, 25);
+      });
+    };
+
+    const statsObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        animateCounters();
+        statsObserver.disconnect();
+      }
+    }, { threshold: 0.5 });
+    statsObserver.observe(statsBar);
+
+    // Brand filter pills
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const brand = pill.dataset.brand;
+        document.querySelectorAll('.product-card').forEach(card => {
+          if (brand === 'all') {
+            card.style.display = '';
+          } else if (brand === 'new' || brand === 'sale') {
+            const tag = card.querySelector('.product-tag');
+            const match = brand === 'new' ? tag?.textContent === 'New' : tag?.textContent === 'Sale';
+            card.style.display = match ? '' : 'none';
+          } else {
+            card.style.display = card.dataset.brand === brand ? '' : 'none';
+          }
+        });
+      });
+    });
+
+    // Size pill selection
+    document.querySelectorAll('.size-selector').forEach(selector => {
+      selector.querySelectorAll('.size-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          selector.querySelectorAll('.size-pill').forEach(p => p.classList.remove('selected'));
+          pill.classList.add('selected');
+        });
+      });
+    });
+
+    // Add to cart
+    let cartCount = 0;
+    document.querySelectorAll('.add-cart-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('added')) return;
+        btn.textContent = 'Added ✓';
+        btn.classList.add('added');
+        cartCount++;
+        document.getElementById('cartCount').textContent = cartCount;
+      });
+    });
+
+    // Chatbot toggle
+    const chatTrigger = document.getElementById('chatTrigger');
+    const chatPanel = document.getElementById('chatPanel');
+    chatTrigger.addEventListener('click', () => {
+      chatPanel.classList.toggle('open');
+      chatTrigger.textContent = chatPanel.classList.contains('open') ? '✕' : '💬';
+    });
+
+    // Promo modal
+    const promoModal = document.getElementById('promoModal');
+    const promoModalClose = document.getElementById('promoModalClose');
+    const promoModalDismiss = document.getElementById('promoModalDismiss');
+    const promoModalForm = document.getElementById('promoModalForm');
+
+    const closePromoModal = () => {
+      promoModal.classList.remove('active');
+      promoModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+    };
+
+    const openPromoModal = () => {
+      promoModal.classList.add('active');
+      promoModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+    };
+
+    setTimeout(openPromoModal, 2000);
+
+    promoModalClose.addEventListener('click', closePromoModal);
+    promoModalDismiss.addEventListener('click', closePromoModal);
+
+    promoModal.addEventListener('click', (e) => {
+      if (e.target === promoModal) closePromoModal();
+    });
+
+    promoModalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      closePromoModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && promoModal.classList.contains('active')) closePromoModal();
+    });
+  </script>
+</body>
+</html>

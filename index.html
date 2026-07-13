@@ -1133,13 +1133,16 @@ section {
 }
 
 /* Testimonials Section */
-.testimonials {
-    padding: 100px 0;
+#testimonials {
+    background: #000000;
 }
 
 .testimonials-container {
-    max-width: 720px;
+    max-width: 760px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .testimonial-card {
@@ -1147,6 +1150,14 @@ section {
     border-radius: var(--radius-lg);
     padding: 40px;
     border: 0.5px solid rgba(255, 255, 255, 0.08);
+    transition: border-color 250ms ease, box-shadow 250ms ease;
+}
+
+.testimonial-card:hover {
+    border-color: rgba(108, 99, 255, 0.35);
+    box-shadow:
+        0 0 16px rgba(0, 102, 255, 0.1),
+        0 0 32px rgba(108, 99, 255, 0.06);
 }
 
 .testimonial-label {
@@ -1163,10 +1174,11 @@ section {
 }
 
 .testimonial-stars {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--teal);
     font-size: 1rem;
     margin-bottom: 1.25rem;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    line-height: 1;
 }
 
 .testimonial-text {
@@ -1195,6 +1207,7 @@ section {
     font-size: 1.1rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.7);
+    flex-shrink: 0;
 }
 
 .testimonial-name {
@@ -1551,6 +1564,14 @@ section {
         padding: 32px 24px;
     }
 
+    .testimonial-card {
+        padding: 28px 24px;
+    }
+
+    .testimonial-text {
+        font-size: 0.95rem;
+    }
+
     .chat-window {
         width: calc(100% - 32px);
         right: 16px;
@@ -1667,6 +1688,50 @@ section {
         <div class="container">
             <h2 class="section-title">Work</h2>
             <div class="portfolio-grid">
+                                <div class="portfolio-card">
+                    <div class="portfolio-preview">
+                        <div class="browser-bar">
+                            <span class="browser-dot"></span>
+                            <span class="browser-dot"></span>
+                            <span class="browser-dot"></span>
+                        </div>
+                        <div class="browser-screen">
+                            <div class="iframe-preview-wrap">
+                                <iframe src="https://ascendbehavioralwellness.com" class="portfolio-iframe" title="Ascend Behavioral Wellness preview" loading="lazy" tabindex="-1"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-body">
+                    <div class="portfolio-tags">
+                        <span class="tag">Behavioral Wellness</span>
+                    </div>
+                    <h3>Ascend Behavioral Wellness</h3>
+                    <p>A clean, professional 5-page site for a mental health practice, featuring service info, insurance/payment details, and a client contact/intake system</p>
+                    <a href="https://ascendbehavioralwellness.com" target="_blank" rel="noopener noreferrer" class="btn-secondary">View Live Site</a>
+                    </div>
+                </div>
+                                <div class="portfolio-card">
+                    <div class="portfolio-preview">
+                        <div class="browser-bar">
+                            <span class="browser-dot"></span>
+                            <span class="browser-dot"></span>
+                            <span class="browser-dot"></span>
+                        </div>
+                        <div class="browser-screen">
+                            <div class="iframe-preview-wrap">
+                                <iframe src="mockups/GoldenCrumbMockup.html" class="portfolio-iframe" title="Golden Crumb Co. preview" loading="lazy" tabindex="-1"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-body">
+                    <div class="portfolio-tags">
+                        <span class="tag">Bakery / Dessert Concept</span>
+                    </div>
+                    <h3>Golden Crumb Co.</h3>
+                    <p>Premium dessert atelier site with specialty cakes, featured promos, product shop, and occasion gift collections</p>
+                    <a href="mockups/GoldenCrumbMockup.html" target="_blank" class="btn-secondary">View Demo</a>
+                    </div>
+                </div>
                                 <div class="portfolio-card">
                     <div class="portfolio-preview">
                         <div class="browser-bar">
@@ -2081,12 +2146,25 @@ section {
     </section>
 
     <!-- Testimonials Section -->
-    <section class="testimonials fade-in-section">
+    <section id="testimonials" class="fade-in-section">
         <div class="container">
+            <h2 class="section-title">Client Reviews</h2>
             <div class="testimonials-container">
                 <div class="testimonial-card">
+                    <span class="testimonial-label">Website Development</span>
+                    <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                    <p class="testimonial-text">"Drew was extremely professional, easy to work with, and communicated clearly throughout the entire process. Working with him felt effortless because he listened, understood the vision, and made the process smooth from start to finish. What stood out most is that Drew brings a human side to his work. He values relationships, integrity, and client satisfaction, which made me feel respected and supported throughout the project. He goes above and beyond what is asked of him and is willing to make sure the final product meets your needs and reflects your vision. Drew provides quality work and clearly takes pride in ensuring that his clients are satisfied with the end result. I truly appreciate his professionalism, creativity, patience, and dedication. I would highly recommend him to anyone looking for a reliable and talented website developer."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">K</div>
+                        <div>
+                            <div class="testimonial-name">Kadiatu T.</div>
+                            <div class="testimonial-username">Ascend Behavioral Wellness</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
                     <span class="testimonial-label">React Native App Development</span>
-                    <div class="testimonial-stars">★★★★★</div>
+                    <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
                     <p class="testimonial-text">"Drew is amazing. He completed the task in three hours. He knew precisely what I was looking for with a couple of onboarding/diagnostic questions. The only difficulty with this job was waiting for Google to verify my identity over Memorial Day weekend. Drew worked within the environment and communicated throughout the process. I will be reaching out to Drew with more work--- AND YOU should be doing so as well."</p>
                     <div class="testimonial-author">
                         <div class="testimonial-avatar">M</div>
