@@ -1,0 +1,469 @@
+{
+  "local_index_bytes": 255018,
+  "live_html_bytes": 255018,
+  "live_html_ms": 216.4,
+  "base64": [
+    {
+      "name": "About profile photo (base64 inline)",
+      "format": "jpeg",
+      "decoded_bytes": 129024,
+      "markup_bytes": 172055
+    }
+  ],
+  "local_assets": [
+    {
+      "path": "mockups/thumbs/anchored-poster.webp",
+      "bytes": 43698,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/ascend.webp",
+      "bytes": 18298,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/barbershop.webp",
+      "bytes": 67558,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/casino.webp",
+      "bytes": 25890,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/eleve.webp",
+      "bytes": 52408,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/freshwave.webp",
+      "bytes": 44546,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/goldencrumb.webp",
+      "bytes": 72826,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/gym.webp",
+      "bytes": 48824,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/lanoche.webp",
+      "bytes": 25552,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/lounge.webp",
+      "bytes": 79766,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/nexus.webp",
+      "bytes": 144452,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/npc.webp",
+      "bytes": 12766,
+      "type": "webp thumb"
+    },
+    {
+      "path": "mockups/thumbs/tattoo.webp",
+      "bytes": 46300,
+      "type": "webp thumb"
+    },
+    {
+      "path": "Profile.jpg",
+      "bytes": 129024,
+      "type": "local media"
+    },
+    {
+      "path": "ChurchWorship.mp4",
+      "bytes": 7481892,
+      "type": "local media"
+    }
+  ],
+  "live_resources": [
+    {
+      "url": "https://fonts.googleapis.com",
+      "bytes": null,
+      "ms": null,
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://fonts.gstatic.com",
+      "bytes": null,
+      "ms": null,
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap",
+      "bytes": 13943,
+      "ms": 72.1,
+      "content_type": "text/css"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/ascend.webp",
+      "bytes": 18298,
+      "ms": 96.6,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/goldencrumb.webp",
+      "bytes": 72826,
+      "ms": 151.6,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/GoldenCrumbMockup.html",
+      "bytes": 32956,
+      "ms": 100.4,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/npc.webp",
+      "bytes": 12766,
+      "ms": 109.8,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/NPC.html",
+      "bytes": 45343,
+      "ms": 133.9,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/gym.webp",
+      "bytes": 48824,
+      "ms": 121.2,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/GymMockup.html",
+      "bytes": 27887,
+      "ms": 91.5,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/lounge.webp",
+      "bytes": 79766,
+      "ms": 146.8,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/LoungeMockup.html",
+      "bytes": 27862,
+      "ms": 355.0,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/lanoche.webp",
+      "bytes": 25552,
+      "ms": 80.5,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/LaNocheMockup.html",
+      "bytes": 29448,
+      "ms": 93.2,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/freshwave.webp",
+      "bytes": 44546,
+      "ms": 146.3,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/FreshFoldMockup.html",
+      "bytes": 37247,
+      "ms": 90.2,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/casino.webp",
+      "bytes": 25890,
+      "ms": 134.2,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/CasinoMockup.html",
+      "bytes": 55212,
+      "ms": 153.3,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/tattoo.webp",
+      "bytes": 46300,
+      "ms": 138.1,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/TattooMockup.html",
+      "bytes": 36078,
+      "ms": 149.8,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/nexus.webp",
+      "bytes": 144452,
+      "ms": 193.1,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/NexusMockup.html",
+      "bytes": 51370,
+      "ms": 151.5,
+      "content_type": "text/html"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/eleve.webp",
+      "bytes": 52408,
+      "ms": 138.9,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/eleve-catering.html",
+      "bytes": null,
+      "ms": null,
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/mockups/thumbs/anchored-poster.webp",
+      "bytes": 43698,
+      "ms": 135.0,
+      "content_type": "image/webp"
+    },
+    {
+      "url": "https://drew-builds.vercel.app/anchored-church.html",
+      "bytes": 50592,
+      "ms": 147.8,
+      "content_type": "text/html"
+    }
+  ],
+  "scripts": [
+    {
+      "path": "api/chat.js",
+      "bytes": 3557,
+      "note": "serverless; not downloaded on page load unless called"
+    }
+  ],
+  "chatbot": {
+    "chatBubble": 9,
+    "SYSTEM_PROMPT_chars": 2140,
+    "api_chat_refs": 2,
+    "groq_mentions": 0,
+    "inline_js_bytes": 13877
+  },
+  "fonts": [
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7W0Q5n-wU.woff2",
+      "bytes": 25844,
+      "ms": 50.9
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7W0Q5n-wU.woff2",
+      "bytes": 18744,
+      "ms": 62.0
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2ZL7W0Q5n-wU.woff2",
+      "bytes": 11272,
+      "ms": 57.7
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1pL7W0Q5n-wU.woff2",
+      "bytes": 19044,
+      "ms": 180.2
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2pL7W0Q5n-wU.woff2",
+      "bytes": 10280,
+      "ms": 34.8
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2",
+      "bytes": 85272,
+      "ms": 127.3
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2",
+      "bytes": 48432,
+      "ms": 120.2
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb54C_k3HqUtEw.woff2",
+      "bytes": 6772,
+      "ms": 53.7
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb94C_k3HqUtEw.woff2",
+      "bytes": 18924,
+      "ms": 52.2
+    },
+    {
+      "url": "https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2",
+      "bytes": 22320,
+      "ms": 57.2
+    }
+  ],
+  "inline_css_bytes": 30602,
+  "inline_js_bytes": 13877,
+  "approx_transfer_bytes": 1545186,
+  "top_offenders": [
+    {
+      "name": "index.html (full document)",
+      "bytes": 255018,
+      "category": "HTML",
+      "note": "includes inline CSS/JS/base64"
+    },
+    {
+      "name": "About profile photo (base64 inline)",
+      "bytes": 172055,
+      "category": "inline base64 (in HTML)",
+      "note": "decoded 126.0KB; inflates HTML parse"
+    },
+    {
+      "name": "/mockups/thumbs/nexus.webp",
+      "bytes": 144452,
+      "category": "image/webp",
+      "note": "193.1ms"
+    },
+    {
+      "name": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2",
+      "bytes": 85272,
+      "category": "font file",
+      "note": "127.3ms"
+    },
+    {
+      "name": "/mockups/thumbs/lounge.webp",
+      "bytes": 79766,
+      "category": "image/webp",
+      "note": "146.8ms"
+    },
+    {
+      "name": "/mockups/thumbs/goldencrumb.webp",
+      "bytes": 72826,
+      "category": "image/webp",
+      "note": "151.6ms"
+    },
+    {
+      "name": "/mockups/CasinoMockup.html",
+      "bytes": 55212,
+      "category": "text/html",
+      "note": "153.3ms"
+    },
+    {
+      "name": "/mockups/thumbs/eleve.webp",
+      "bytes": 52408,
+      "category": "image/webp",
+      "note": "138.9ms"
+    },
+    {
+      "name": "/mockups/NexusMockup.html",
+      "bytes": 51370,
+      "category": "text/html",
+      "note": "151.5ms"
+    },
+    {
+      "name": "/anchored-church.html",
+      "bytes": 50592,
+      "category": "text/html",
+      "note": "147.8ms"
+    },
+    {
+      "name": "/mockups/thumbs/gym.webp",
+      "bytes": 48824,
+      "category": "image/webp",
+      "note": "121.2ms"
+    },
+    {
+      "name": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2",
+      "bytes": 48432,
+      "category": "font file",
+      "note": "120.2ms"
+    },
+    {
+      "name": "/mockups/thumbs/tattoo.webp",
+      "bytes": 46300,
+      "category": "image/webp",
+      "note": "138.1ms"
+    },
+    {
+      "name": "/mockups/NPC.html",
+      "bytes": 45343,
+      "category": "text/html",
+      "note": "133.9ms"
+    },
+    {
+      "name": "/mockups/thumbs/freshwave.webp",
+      "bytes": 44546,
+      "category": "image/webp",
+      "note": "146.3ms"
+    },
+    {
+      "name": "/mockups/thumbs/anchored-poster.webp",
+      "bytes": 43698,
+      "category": "image/webp",
+      "note": "135.0ms"
+    },
+    {
+      "name": "/mockups/FreshFoldMockup.html",
+      "bytes": 37247,
+      "category": "text/html",
+      "note": "90.2ms"
+    },
+    {
+      "name": "/mockups/TattooMockup.html",
+      "bytes": 36078,
+      "category": "text/html",
+      "note": "149.8ms"
+    },
+    {
+      "name": "/mockups/GoldenCrumbMockup.html",
+      "bytes": 32956,
+      "category": "text/html",
+      "note": "100.4ms"
+    },
+    {
+      "name": "Inline CSS",
+      "bytes": 30602,
+      "category": "render-blocking CSS",
+      "note": "in <style> in head/body"
+    },
+    {
+      "name": "/mockups/LaNocheMockup.html",
+      "bytes": 29448,
+      "category": "text/html",
+      "note": "93.2ms"
+    },
+    {
+      "name": "/mockups/GymMockup.html",
+      "bytes": 27887,
+      "category": "text/html",
+      "note": "91.5ms"
+    },
+    {
+      "name": "/mockups/LoungeMockup.html",
+      "bytes": 27862,
+      "category": "text/html",
+      "note": "355.0ms"
+    },
+    {
+      "name": "/mockups/thumbs/casino.webp",
+      "bytes": 25890,
+      "category": "image/webp",
+      "note": "134.2ms"
+    },
+    {
+      "name": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7W0Q5n-wU.woff2",
+      "bytes": 25844,
+      "category": "font file",
+      "note": "50.9ms"
+    }
+  ]
+}

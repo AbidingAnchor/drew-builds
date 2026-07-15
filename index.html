@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drew Builds | Web Design - Northeast Philadelphia</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="icon" type="image/webp" sizes="32x32" href="images/vector-favicon-32.webp">
+    <link rel="icon" type="image/webp" sizes="48x48" href="images/vector-favicon-48.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
 * {
     margin: 0;
@@ -29,6 +34,7 @@
     --transition: 200ms ease;
     --radius: 12px;
     --radius-lg: 16px;
+    --font-display: 'Cabinet Grotesk', 'Inter', sans-serif;
 }
 
 html {
@@ -43,7 +49,7 @@ body {
 }
 
 h1, h2, h3, h4, .logo, .section-title {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
 }
 
 .container {
@@ -79,11 +85,13 @@ h1, h2, h3, h4, .logo, .section-title {
 }
 
 .logo {
+    font-family: var(--font-display);
     font-size: 1.35rem;
     font-weight: 700;
     color: var(--text-primary);
     text-decoration: none;
     flex-shrink: 0;
+    letter-spacing: -0.03em;
 }
 
 .logo-accent {
@@ -134,10 +142,12 @@ h1, h2, h3, h4, .logo, .section-title {
 }
 
 .nav-links a {
+    font-family: var(--font-display);
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
+    letter-spacing: -0.01em;
     transition: color var(--transition);
 }
 
@@ -146,13 +156,15 @@ h1, h2, h3, h4, .logo, .section-title {
 }
 
 .hire-btn {
+    font-family: var(--font-display);
     background: #FFFFFF;
     color: #000000;
     padding: 10px 22px;
     border-radius: 100px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 0.9rem;
+    letter-spacing: -0.02em;
     transition: background var(--transition), opacity var(--transition);
     flex-shrink: 0;
     white-space: nowrap;
@@ -175,105 +187,452 @@ h1, h2, h3, h4, .logo, .section-title {
     transform: translateY(0);
 }
 
-/* Hero Section */
+/* Hero Section — studio redesign */
 .hero {
-    padding: 160px 0 48px;
-    text-align: center;
+    --hero-accent: #3D8BFF;
+    --hero-accent-muted: #8EB6FF;
+    --hero-mx: 0px;
+    --hero-my: 0px;
+    --hero-grid-y: 0px;
     position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    padding: 96px 0 72px;
     overflow: hidden;
-    background: #000000;
+    background:
+        radial-gradient(ellipse 90% 70% at 50% -10%, rgba(61, 139, 255, 0.18), transparent 55%),
+        radial-gradient(ellipse 45% 40% at 85% 55%, rgba(90, 140, 255, 0.08), transparent 60%),
+        radial-gradient(ellipse 40% 35% at 8% 75%, rgba(50, 110, 220, 0.07), transparent 55%),
+        linear-gradient(180deg, #0a0a0f 0%, #06060a 48%, #030306 100%);
 }
 
-.hero-mesh {
+.hero-glow {
     position: absolute;
     inset: 0;
-    overflow: hidden;
     pointer-events: none;
     z-index: 0;
+    background:
+        radial-gradient(circle at 42% 38%, rgba(61, 139, 255, 0.12), transparent 28%),
+        radial-gradient(circle at 68% 28%, rgba(140, 180, 255, 0.06), transparent 22%);
 }
 
-.mesh-blob {
+.hero-grid {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: 0.15;
+    inset: -10% 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+    background-image:
+        radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: center top;
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 15%, transparent 72%);
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 15%, transparent 72%);
+    transform: translate3d(0, var(--hero-grid-y), 0);
+    will-change: transform;
 }
 
-.mesh-blob-purple {
-    width: 640px;
-    height: 640px;
-    background: #6C63FF;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-65%);
+.hero-noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.045;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 180px 180px;
 }
 
-.mesh-blob-blue {
-    width: 520px;
-    height: 520px;
-    background: #0066FF;
-    top: 15%;
-    left: 50%;
-    transform: translateX(-5%);
-}
-
-.mesh-blob-purple-alt {
-    width: 480px;
-    height: 480px;
-    background: #6C63FF;
-    top: 25%;
-    left: 25%;
-    transform: translateX(-20%);
-}
-
-.hero .container {
+.hero-inner {
     position: relative;
     z-index: 1;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
 }
 
-.hero-eyebrow {
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 28px;
-}
-
-.hero-eyebrow-available {
-    color: #00FF88;
-}
-
-.hero h1 {
-    font-size: 80px;
+.hero-brand {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
     font-weight: 700;
-    margin-bottom: 24px;
-    line-height: 1.1;
     letter-spacing: -0.03em;
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-    color: #FFFFFF;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1;
+    margin-bottom: clamp(28px, 4.5vh, 44px);
 }
 
-.hero h1 span {
-    color: #FFFFFF;
+.hero-brand span {
+    color: rgba(255, 255, 255, 0.92);
 }
 
-.hero p {
-    font-size: 1.15rem;
-    color: var(--text-secondary);
-    max-width: 580px;
-    margin: 0 auto 36px;
-    line-height: 1.7;
+.hero-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
 }
 
-.hero-buttons {
+.hero-copy {
+    min-width: 0;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    margin-bottom: clamp(18px, 2.8vh, 28px);
+    padding: 8px 14px 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.hero-badge-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45);
+    flex-shrink: 0;
+    animation: hero-status-pulse 2s ease-in-out infinite;
+}
+
+.hero-badge-text {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.72);
+    white-space: nowrap;
+}
+
+@keyframes hero-status-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+    50% {
+        transform: scale(0.86);
+        opacity: 0.7;
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+    }
+}
+
+.hero-layout {
     display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 48px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: clamp(24px, 3.2vw, 36px);
+}
+
+.hero-headline {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8.2vw, 6.5rem);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    max-width: 14ch;
+    margin: 0;
+    transform: translate3d(calc(var(--hero-mx) * 0.008), calc(var(--hero-my) * 0.005), 0);
+    transition: transform 140ms linear;
+}
+
+.hero-headline .line {
+    display: block;
+    width: fit-content;
+    position: relative;
+    color: transparent;
+    background-image: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #f2f5fa 42%,
+        #c5d0e0 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-headline .line-light,
+.hero-headline .line-strong {
+    /* drop-shadow lifts clipped gradient text where text-shadow cannot */
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.28)) drop-shadow(0 6px 16px rgba(8, 16, 32, 0.16));
+}
+
+.hero-headline .line-light {
+    font-weight: 500;
+}
+
+.hero-headline .line-strong {
+    font-weight: 700;
+}
+
+/* Accent line: no parent filter so the behind-glow can paint correctly */
+.hero-headline .line-accent {
+    filter: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+}
+
+.hero-headline .accent {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    color: transparent;
+    background-image: linear-gradient(
+        105deg,
+        #ffffff 0%,
+        #d7e6ff 38%,
+        #8eb6ff 72%,
+        #5a9cff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-bottom: 0.06em;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+.hero-headline .accent-glow {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 22%;
+    height: 70%;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(90, 156, 255, 0.55) 0%,
+        rgba(61, 139, 255, 0.22) 45%,
+        transparent 72%
+    );
+    filter: blur(32px);
+    transform: translateZ(0);
+    opacity: 0.9;
+}
+
+.hero-headline .accent::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.02em;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(61, 139, 255, 0.5), rgba(142, 182, 255, 0.12), transparent);
+    opacity: 0.85;
+}
+
+.hero-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    width: min(100%, 300px);
+}
+
+.hero-sub {
+    font-size: clamp(0.9rem, 1.15vw, 1rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.48);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    padding: 12px 18px;
+    background: #ffffff;
+    color: #0a0a0c;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: -0.015em;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    box-shadow: 0 0 0 0 transparent;
+}
+
+.hero-cta:hover {
+    background: rgba(255, 255, 255, 0.92);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(61, 139, 255, 0.12);
+}
+
+.hero-cta:active {
+    transform: translateY(0);
+}
+
+.hero-cta-arrow {
+    display: inline-block;
+    transition: transform 160ms ease;
+    color: var(--hero-accent);
+}
+
+.hero-cta:hover .hero-cta-arrow {
+    transform: translateX(3px);
+}
+
+.hero-stats-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: min(100%, 220px);
+    padding: 6px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(12, 14, 20, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.hero-stats-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(61, 139, 255, 0.28);
+    box-shadow:
+        0 28px 56px rgba(0, 0, 0, 0.4),
+        0 0 32px rgba(61, 139, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.hero-stat-item {
+    padding: 16px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hero-stat-item:last-child {
+    border-bottom: none;
+}
+
+.hero-stat-value {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1.25;
+}
+
+.hero-stat-label {
+    margin-top: 4px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.38);
+}
+
+.hero-scroll {
+    position: absolute;
+    left: 32px;
+    bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.24);
+    text-decoration: none;
+    z-index: 1;
+    transition: color 160ms ease;
+}
+
+.hero-scroll:hover {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-scroll-line {
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+}
+
+/* Hero entrance — CSS only, GPU-friendly */
+.hero-reveal {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition: opacity 650ms cubic-bezier(0.22, 1, 0.36, 1), transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero.is-ready .hero-reveal {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.hero.is-ready .hero-reveal-delay-1 { transition-delay: 60ms; }
+.hero.is-ready .hero-reveal-delay-2 { transition-delay: 140ms; }
+.hero.is-ready .hero-reveal-delay-3 { transition-delay: 220ms; }
+.hero.is-ready .hero-reveal-delay-4 { transition-delay: 300ms; }
+.hero.is-ready .hero-reveal-delay-5 { transition-delay: 400ms; }
+
+@media (prefers-reduced-motion: reduce) {
+    .chat-bubble {
+        animation: none;
+    }
+
+    .chat-bubble-ring {
+        animation: none;
+    }
+
+    .hero-headline {
+        transform: none;
+        transition: none;
+    }
+
+    .hero-headline .accent-glow {
+        filter: none;
+        opacity: 0.35;
+    }
+
+    .hero-badge-dot {
+        animation: none;
+    }
+
+    .hero-grid {
+        transform: none;
+        will-change: auto;
+    }
+
+    .hero-stats-card:hover {
+        transform: none;
+    }
+
+    .hero-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .hero-cta,
+    .hero-cta-arrow {
+        transition: none;
+    }
+
+    .hero-cta:hover {
+        transform: none;
+        box-shadow: none;
+    }
 }
 
 .btn-primary {
@@ -307,43 +666,6 @@ h1, h2, h3, h4, .logo, .section-title {
 .btn-secondary:hover {
     border-color: rgba(255, 255, 255, 0.5);
     background: rgba(255, 255, 255, 0.04);
-}
-
-.hero-stats {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
-    max-width: 720px;
-    margin: 0 auto;
-    padding-top: 32px;
-}
-
-.hero-stat {
-    text-align: center;
-    padding: 0 36px;
-    position: relative;
-}
-
-.hero-stat:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0.5px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.hero-stat-value {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
 }
 
 /* Section Styles */
@@ -635,7 +957,7 @@ section {
 
 .step-number {
     display: inline-block;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 0.7rem;
     font-weight: 500;
     letter-spacing: 0.12em;
@@ -728,7 +1050,7 @@ section {
 }
 
 .price {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 2.5rem;
     font-weight: 700;
     color: #FFFFFF;
@@ -969,7 +1291,7 @@ section {
 }
 
 .payment-option-price {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 1.35rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -1203,7 +1525,7 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.7);
@@ -1235,31 +1557,69 @@ section {
 }
 
 /* Chat Widget */
+@keyframes vector-float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-5px); }
+}
+
+@keyframes vector-ring-pulse {
+    0%, 100% { transform: scale(1);    opacity: 0.55; }
+    60%       { transform: scale(1.22); opacity: 0;    }
+}
+
 .chat-bubble {
     position: fixed;
     bottom: 28px;
     right: 28px;
-    width: 52px;
-    height: 52px;
-    background: #FFFFFF;
+    width: 60px;
+    height: 60px;
+    background: transparent;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: opacity var(--transition);
     z-index: 1001;
     border: none;
-    color: #000000;
-}
-
-.chat-bubble svg {
-    width: 22px;
-    height: 22px;
+    padding: 0;
+    animation: vector-float 2.8s ease-in-out infinite;
+    transition: transform 200ms ease;
 }
 
 .chat-bubble:hover {
-    opacity: 0.9;
+    transform: scale(1.08);
+    animation-play-state: paused;
+}
+
+.chat-bubble-ring {
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 2px solid rgba(61, 139, 255, 0.55);
+    animation: vector-ring-pulse 2.8s ease-out infinite;
+    pointer-events: none;
+}
+
+.chat-bubble-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    border: 2px solid rgba(61, 139, 255, 0.4);
+    box-shadow:
+        0 0 0 3px rgba(61, 139, 255, 0.12),
+        0 8px 24px rgba(0, 0, 0, 0.45);
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.chat-bubble:hover .chat-bubble-avatar {
+    border-color: rgba(61, 139, 255, 0.75);
+    box-shadow:
+        0 0 0 4px rgba(61, 139, 255, 0.22),
+        0 0 24px rgba(61, 139, 255, 0.28),
+        0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
 .chat-window {
@@ -1284,18 +1644,65 @@ section {
 
 .chat-header {
     background: #000000;
-    padding: 16px 20px;
+    padding: 12px 16px 12px 14px;
     border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
 }
 
-.chat-header h3 {
+.chat-header-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.chat-header-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 1.5px solid rgba(61, 139, 255, 0.35);
+    flex-shrink: 0;
+}
+
+.chat-header-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.chat-header-name {
+    font-family: var(--font-display);
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
     margin: 0;
-    font-weight: 600;
+}
+
+.chat-header-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.chat-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    flex-shrink: 0;
+    animation: hero-status-pulse 2s ease-in-out infinite;
 }
 
 .chat-close {
@@ -1433,6 +1840,40 @@ section {
 }
 
 /* Mobile Responsive */
+@media (max-width: 1100px) {
+    .hero-main {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .hero-headline {
+        font-size: clamp(3.1rem, 8vw, 5.25rem);
+        max-width: 12ch;
+    }
+
+    .hero-aside {
+        width: min(100%, 340px);
+    }
+
+    .hero-stats-card {
+        width: min(100%, 420px);
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    .hero-stat-item {
+        flex: 1 1 33%;
+        border-bottom: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+        padding: 14px 16px;
+    }
+
+    .hero-stat-item:last-child {
+        border-right: none;
+    }
+}
+
 @media (max-width: 900px) {
     .services-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -1499,31 +1940,91 @@ section {
     }
 
     .hero {
-        padding: 130px 0 40px;
-    }
-
-    .hero h1 {
-        font-size: 44px;
-        letter-spacing: -0.03em;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
+        min-height: 100svh;
         align-items: center;
+        padding: 88px 0 48px;
     }
 
-    .hero-buttons a {
+    .hero-inner {
+        padding: 0 20px;
+    }
+
+    .hero-brand {
+        margin-bottom: 22px;
+    }
+
+    .hero-layout {
+        gap: 24px;
+    }
+
+    .hero-headline {
+        /* Scale to keep longest line ("outperform.") inside the viewport */
+        font-size: clamp(1.85rem, calc((100vw - 2.75rem) / 9.4), 3.35rem);
+        max-width: none;
+        transform: none;
+        line-height: 1.04;
+        letter-spacing: -0.02em;
+    }
+
+    .hero-headline .accent {
+        white-space: nowrap;
+    }
+
+    .hero-headline .accent-glow {
+        filter: blur(18px);
+        opacity: 0.7;
+    }
+
+    .hero-aside {
+        width: 100%;
+        margin-left: 0;
+        gap: 18px;
+    }
+
+    .hero-cta {
         width: 100%;
         max-width: 280px;
-        text-align: center;
+        justify-content: center;
     }
 
-    .hero-stat {
-        padding: 10px 24px;
-    }
-
-    .hero-stat:not(:last-child)::after {
+    .hero-scroll {
         display: none;
+    }
+
+    .hero-noise {
+        opacity: 0.03;
+    }
+
+    .hero-grid {
+        opacity: 0.28;
+        will-change: auto;
+    }
+
+    .hero-badge {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-stats-card {
+        width: 100%;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(16, 18, 24, 0.88);
+    }
+
+    .hero-stats-card:hover {
+        transform: none;
+    }
+
+    .hero-stat-item {
+        flex: 1 1 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hero-stat-item:last-child {
+        border-bottom: none;
     }
 
     .section-title {
@@ -1582,6 +2083,11 @@ section {
     .chat-bubble {
         bottom: 20px;
         right: 20px;
+        animation: none;
+    }
+
+    .chat-bubble-ring {
+        animation: none;
     }
 }
 
@@ -1590,9 +2096,8 @@ section {
         grid-template-columns: 1fr;
     }
 
-    .hero-stats {
-        flex-direction: column;
-        gap: 20px;
+    .hero-badge-text {
+        font-size: 0.72rem;
     }
 }
 
@@ -1621,32 +2126,56 @@ section {
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-mesh" aria-hidden="true">
-            <div class="mesh-blob mesh-blob-purple"></div>
-            <div class="mesh-blob mesh-blob-blue"></div>
-            <div class="mesh-blob mesh-blob-purple-alt"></div>
-        </div>
-        <div class="container">
-            <p class="hero-eyebrow">Based in Philadelphia · <span class="hero-eyebrow-available">Available for Projects</span></p>
-            <h1 id="heroHeadline">Philadelphia Businesses Deserve Better Websites. <span>I Build Them.</span></h1>
-            <p>Custom React websites built for local Philly businesses. Fast, mobile-first, and designed to convert visitors into customers.</p>
-            <div class="hero-buttons">
-                <a href="#contact" class="btn-primary">Get a free mockup</a>
-                <a href="#portfolio" class="btn-secondary">See my work</a>
+    <section class="hero" id="home" aria-label="Drew Builds hero">
+        <div class="hero-glow" aria-hidden="true"></div>
+        <div class="hero-grid" id="heroGrid" aria-hidden="true"></div>
+        <div class="hero-noise" aria-hidden="true"></div>
+        <div class="hero-inner">
+            <p class="hero-brand hero-reveal hero-reveal-delay-1">Drew <span>Builds</span></p>
+            <div class="hero-main">
+                <div class="hero-copy">
+                    <div class="hero-badge hero-reveal hero-reveal-delay-1">
+                        <span class="hero-badge-dot" aria-hidden="true"></span>
+                        <span class="hero-badge-text">Available for new projects</span>
+                    </div>
+                    <div class="hero-layout">
+                        <h1 class="hero-headline" id="heroHeadline">
+                            <span class="line line-light hero-reveal hero-reveal-delay-2">Websites</span>
+                            <span class="line line-strong hero-reveal hero-reveal-delay-3">engineered to</span>
+                            <span class="line line-strong line-accent hero-reveal hero-reveal-delay-4">
+                                <span class="accent-glow" aria-hidden="true"></span>
+                                <span class="accent">outperform.</span>
+                            </span>
+                        </h1>
+                        <div class="hero-aside">
+                            <p class="hero-sub hero-reveal hero-reveal-delay-4">Custom sites for ambitious businesses — fast, intentional, and built to convert visitors into clients.</p>
+                            <a href="#start-project" class="hero-cta hero-reveal hero-reveal-delay-5">
+                                Start a Project
+                                <span class="hero-cta-arrow" aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <aside class="hero-stats-card hero-reveal hero-reveal-delay-5" aria-label="Studio highlights">
+                    <div class="hero-stat-item">
+                        <div class="hero-stat-value">12+ Sites Shipped</div>
+                        <div class="hero-stat-label">Production launches</div>
+                    </div>
+                    <div class="hero-stat-item">
+                        <div class="hero-stat-value">5.0★ Avg Rating</div>
+                        <div class="hero-stat-label">Client feedback</div>
+                    </div>
+                    <div class="hero-stat-item">
+                        <div class="hero-stat-value">Philadelphia-Based</div>
+                        <div class="hero-stat-label">Built locally</div>
+                    </div>
+                </aside>
             </div>
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <div class="hero-stat-value">10+ Projects Built</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-value">5★ Rated on Fiverr</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-value">React & SEO Specialist</div>
-                </div>
-            </div>
         </div>
+        <a href="#services" class="hero-scroll hero-reveal hero-reveal-delay-5" aria-label="Scroll to services">
+            <span class="hero-scroll-line" aria-hidden="true"></span>
+            Scroll
+        </a>
     </section>
 
     <!-- Services Section -->
@@ -2097,6 +2626,8 @@ section {
             <div class="form-section">
                 <div class="form-content" id="formContent">
                     <form id="projectForm">
+                        <input type="hidden" name="_subject" id="formSubject" value="New Drew Builds inquiry">
+                        <input type="hidden" name="requestType" id="requestType" value="general">
                         <div class="form-group">
                             <label for="name">Your name</label>
                             <input type="text" id="name" name="name" required>
@@ -2111,7 +2642,7 @@ section {
                         </div>
                         <div class="form-group">
                             <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="4" required></textarea>
+                            <textarea id="message" name="message" rows="4" required placeholder="Tell me about your project"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="business">Business name</label>
@@ -2128,6 +2659,7 @@ section {
                                 <option value="basic">Basic site</option>
                                 <option value="standard">Standard site</option>
                                 <option value="premium">Premium site</option>
+                                <option value="ecommerce">E-Commerce site</option>
                                 <option value="not-sure">Not sure yet</option>
                             </select>
                         </div>
@@ -2237,16 +2769,36 @@ section {
     </div>
 
     <!-- Chat Widget -->
-    <button class="chat-bubble" id="chatBubble" aria-label="Open chat">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <button class="chat-bubble" id="chatBubble" aria-label="Chat with Vector">
+        <span class="chat-bubble-ring" aria-hidden="true"></span>
+        <img class="chat-bubble-avatar"
+             src="images/vector-avatar.webp"
+             alt="Vector mascot"
+             width="60" height="60"
+             loading="eager"
+             decoding="async">
     </button>
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
-            <h3>Drew Builds Assistant</h3>
+            <div class="chat-header-identity">
+                <img class="chat-header-avatar"
+                     src="images/vector-avatar.webp"
+                     alt="Vector"
+                     width="36" height="36"
+                     loading="lazy"
+                     decoding="async">
+                <div class="chat-header-meta">
+                    <p class="chat-header-name">Vector</p>
+                    <span class="chat-header-status">
+                        <span class="chat-status-dot" aria-hidden="true"></span>
+                        Online
+                    </span>
+                </div>
+            </div>
             <button class="chat-close" id="chatClose">×</button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="message assistant">Hi! I'm the Drew Builds Assistant. How can I help you today?</div>
+            <div class="message assistant">Hey! I'm Vector — ask me anything about pricing, timelines, or what Drew can build for you.</div>
         </div>
         <div class="chat-input-container">
             <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
@@ -2371,7 +2923,7 @@ section {
 
         window.addEventListener('scroll', () => {
             navbar.classList.toggle('scrolled', window.scrollY > 50);
-        });
+        }, { passive: true });
 
         navToggle.addEventListener('click', () => {
             const isOpen = navLinks.classList.toggle('open');
@@ -2386,6 +2938,79 @@ section {
                 navToggle.setAttribute('aria-expanded', 'false');
             });
         });
+
+        // Hero entrance + light cursor parallax + grid parallax (desktop / fine pointer)
+        const hero = document.querySelector('.hero');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+        if (hero) {
+            requestAnimationFrame(() => {
+                hero.classList.add('is-ready');
+            });
+
+            if (!reduceMotion && finePointer) {
+                let cursorRaf = 0;
+                let targetMx = 0;
+                let targetMy = 0;
+
+                const applyHeroCursor = () => {
+                    cursorRaf = 0;
+                    hero.style.setProperty('--hero-mx', `${targetMx}px`);
+                    hero.style.setProperty('--hero-my', `${targetMy}px`);
+                };
+
+                hero.addEventListener('pointermove', (e) => {
+                    const rect = hero.getBoundingClientRect();
+                    targetMx = e.clientX - rect.left - rect.width / 2;
+                    targetMy = e.clientY - rect.top - rect.height / 2;
+                    if (!cursorRaf) {
+                        cursorRaf = requestAnimationFrame(applyHeroCursor);
+                    }
+                }, { passive: true });
+
+                hero.addEventListener('pointerleave', () => {
+                    targetMx = 0;
+                    targetMy = 0;
+                    if (!cursorRaf) {
+                        cursorRaf = requestAnimationFrame(applyHeroCursor);
+                    }
+                });
+
+                // Subtle grid parallax — transform only, runs while hero is near viewport
+                let gridRaf = 0;
+                let gridListening = false;
+
+                const updateGridParallax = () => {
+                    gridRaf = 0;
+                    const rect = hero.getBoundingClientRect();
+                    const offset = Math.max(-48, Math.min(48, -rect.top * 0.12));
+                    hero.style.setProperty('--hero-grid-y', `${offset.toFixed(1)}px`);
+                };
+
+                const onScrollOrResize = () => {
+                    if (!gridRaf) {
+                        gridRaf = requestAnimationFrame(updateGridParallax);
+                    }
+                };
+
+                const gridObserver = new IntersectionObserver((entries) => {
+                    const visible = entries.some((entry) => entry.isIntersecting);
+                    if (visible && !gridListening) {
+                        gridListening = true;
+                        window.addEventListener('scroll', onScrollOrResize, { passive: true });
+                        window.addEventListener('resize', onScrollOrResize, { passive: true });
+                        onScrollOrResize();
+                    } else if (!visible && gridListening) {
+                        gridListening = false;
+                        window.removeEventListener('scroll', onScrollOrResize);
+                        window.removeEventListener('resize', onScrollOrResize);
+                    }
+                }, { rootMargin: '20% 0px' });
+
+                gridObserver.observe(hero);
+            }
+        }
 
         // Scroll animations using Intersection Observer
         const observerOptions = {
@@ -2415,33 +3040,36 @@ section {
         const chatSend = document.getElementById('chatSend');
         const chatMessages = document.getElementById('chatMessages');
 
-        const SYSTEM_PROMPT = `You are the Drew Builds Assistant, a friendly and persuasive sales assistant for Drew Builds, a professional web design business based in Philadelphia run by Drew Negron. Your job is to answer questions, build excitement about working with Drew, and guide visitors toward hiring him.
+        const SYSTEM_PROMPT = `You're Vector — Drew's AI sidekick for Drew Builds. Talk like a sharp, chill friend who knows the business cold. Keep answers short (usually 2–4 sentences). Sound natural, not corporate. A little personality is good; gimmicks and slang-spam aren't. Be helpful, confident, and honest — never pushy.
 
-About Drew Builds:
-- Self-taught developer building custom websites for small businesses
-- Based in Philadelphia but works with clients anywhere
+Facts about Drew Builds:
+- Drew Negron is a self-taught developer building custom websites for small businesses
+- Based in Philadelphia, works with clients anywhere
 - Portfolio: drew-builds.vercel.app
 - Instagram: @devdrewneg
 - Email: drewnegron95@gmail.com
 
-Pricing:
-- Basic ($400 one-time): Single page website, mobile friendly, hours/location/contact, live within 1 week
-- Standard ($800 one-time): Up to 5 pages, custom brand design, photo gallery + SEO, social links + revisions, live within 2 weeks
-- Premium ($1,500 one-time): Everything in Standard plus Google Business setup, full local SEO, online menu/ordering, priority turnaround
-- Monthly Maintenance ($75/mo): Updates, edits, backups and support
-- AI Chatbot Add-on ($49/mo): Custom trained on your business, 24/7 automated responses, answers hours/FAQs/bookings, easy embed on any site
-- E-commerce sites: Custom pricing starting at $2,000 — contact Drew for a quote
+Pricing (stick to these numbers):
+- Basic — $400 one-time: single page, mobile friendly, hours/location/contact, live in about 1 week
+- Standard — $800 one-time: up to 5 pages, custom brand design, gallery + SEO, social links + revisions, live in about 2 weeks
+- Premium — $1,500 one-time: everything in Standard plus Google Business setup, full local SEO, online menu/ordering, priority turnaround
+- Monthly Maintenance — $75/mo: updates, edits, backups, support
+- AI Chatbot add-on — $49/mo: trained on the business, 24/7 answers for hours/FAQs/bookings, easy to embed
+- E-commerce — custom pricing starting at $2,000; tell them to email Drew for a quote
 
-All plans require a 50% non-refundable deposit before work begins. Remaining balance is due on completion.
+All plans: 50% non-refundable deposit to start, rest due when it's done. Payments via Stripe (card, Apple Pay, Cash App, etc.).
 
-How to handle questions:
-- Timeline questions: Basic is 1 week, Standard is 2 weeks, Premium is priority turnaround
-- Revision questions: Revisions are included in Standard and above
-- Payment questions: We accept card, Apple Pay, Cash App and more via Stripe. A 50% deposit secures your spot.
-- E-commerce questions: Tell them Drew builds custom online stores starting at $2,000 and to email drewnegron95@gmail.com for a quote
-- General contact: Reach Drew at drewnegron95@gmail.com or Instagram @devdrewneg
+Quick answers:
+- Timelines: Basic ~1 week, Standard ~2 weeks, Premium is priority
+- Revisions: included on Standard and above
+- Contact: drewnegron95@gmail.com or Instagram @devdrewneg
 
-Your personality: Friendly, confident, and helpful. Never pushy but always guide the conversation toward booking. If someone seems interested, encourage them to email drewnegron95@gmail.com or DM @devdrewneg on Instagram to get started. Always end responses with a question or call to action to keep the conversation going.`;
+Style rules:
+- Lead with the answer, then a light next step if it fits
+- Skip stiff phrases like "I'd be happy to assist" or "Please don't hesitate"
+- Don't dump long lists unless they ask — summarize, then offer details
+- If they're interested, casually point them to email or IG DM to get rolling
+- End with a short question when it keeps the chat going, not every single time like a script`;
 
         let conversationHistory = [
             { role: 'system', content: SYSTEM_PROMPT }
@@ -2481,28 +3109,56 @@ Your personality: Friendly, confident, and helpful. Never pushy but always guide
                     })
                 });
 
-                const data = await response.json();
+                const raw = await response.text();
+                let data = {};
+                try {
+                    data = raw ? JSON.parse(raw) : {};
+                } catch (parseError) {
+                    loadingIndicator.remove();
+                    console.error('Chat API returned non-JSON:', {
+                        status: response.status,
+                        bodyPreview: raw.slice(0, 300)
+                    });
+                    addMessage(
+                        `Sorry — chat API returned an unexpected response (HTTP ${response.status}). If you're testing locally, run \`vercel dev\` so /api/chat is available.`,
+                        'assistant'
+                    );
+                    chatSend.disabled = false;
+                    return;
+                }
 
                 // Remove loading indicator
                 loadingIndicator.remove();
 
                 if (!response.ok) {
-                    console.error('API Error:', data);
-                    addMessage(`Error: ${data.error || 'Unknown error'}`, 'assistant');
+                    const apiError = typeof data.error === 'string'
+                        ? data.error
+                        : (data.error?.message || data.message || 'Unknown error');
+                    console.error('Chat API Error:', {
+                        status: response.status,
+                        code: data.code || null,
+                        error: apiError,
+                        payload: data
+                    });
+                    addMessage(`Sorry — ${apiError}`, 'assistant');
                     return;
                 }
 
-                if (data.choices && data.choices[0]) {
+                if (data.choices && data.choices[0]?.message?.content) {
                     const assistantMessage = data.choices[0].message.content;
                     addMessage(assistantMessage, 'assistant');
                     conversationHistory.push({ role: 'assistant', content: assistantMessage });
                 } else {
-                    addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
+                    console.error('Chat API success payload missing choices:', data);
+                    addMessage('Sorry — the chat service returned an empty reply. Please try again.', 'assistant');
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Chat request failed:', error);
                 loadingIndicator.remove();
-                addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
+                addMessage(
+                    `Sorry — couldn't reach the chat service (${error?.message || 'network error'}). Please try again.`,
+                    'assistant'
+                );
             }
 
             // Re-enable send button
