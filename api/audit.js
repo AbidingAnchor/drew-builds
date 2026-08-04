@@ -53,6 +53,7 @@ function createAuditContext(url) {
     renderWarning: null,
     pageSpeed: null,
     brokenLinks: [],
+    unverifiedLinks: [],
     linksError: null,
     linksPartial: false,
     spellingIssues: { issues: [], error: null },
@@ -78,6 +79,10 @@ function buildAuditResponse(ctx, startTime) {
       count: ctx.brokenLinks.length,
       links: ctx.brokenLinks,
       error: ctx.linksError
+    },
+    unverifiedLinks: {
+      count: ctx.unverifiedLinks.length,
+      links: ctx.unverifiedLinks
     },
     pageSpeed: {
       mobileScore: ctx.pageSpeed?.mobileScore ?? null,
@@ -307,9 +312,58 @@ async function applyBrowserFallback(url, plainHtml, plainContent, deadline) {
   };
 }
 
+const SOCIAL_MEDIA_BASES = [
+  'facebook.com',
+  'instagram.com',
+  'twitter.com',
+  'x.com',
+  'linkedin.com',
+  'tiktok.com',
+  'youtube.com',
+  'youtu.be'
+];
+
+function isSocialMediaUrl(urlString) {
+  try {
+    const hostname = new URL(urlString).hostname.toLowerCase();
+    return SOCIAL_MEDIA_BASES.some(
+      (base) => hostname === base || hostname.endsWith(`.${base}`)
+    );
+  } catch {
+    return false;
+  }
+}
+
+function classifyLinkCheckResult(absoluteUrl, response, link, brokenLinks, unverifiedLinks) {
+  const isSocial = isSocialMediaUrl(absoluteUrl);
+
+  if (response.ok) return;
+
+  if (isSocial) {
+    if (response.status === 404) {
+      brokenLinks.push({ url: absoluteUrl, status: response.status, text: link.text });
+      return;
+    }
+    if (!response.ok) {
+      unverifiedLinks.push({
+        url: absoluteUrl,
+        status: response.status,
+        text: link.text,
+        reason: "Couldn't verify (site may be blocking automated checks)"
+      });
+    }
+    return;
+  }
+
+  if (response.status === 404 || !response.ok) {
+    brokenLinks.push({ url: absoluteUrl, status: response.status, text: link.text });
+  }
+}
+
 // Check for broken links with timeout
 async function checkBrokenLinks(links, baseUrl, deadline) {
   const brokenLinks = [];
+  const unverifiedLinks = [];
   const checkedUrls = new Set();
   const TIMEOUT_MS = 2000;
   let partial = false;
@@ -351,7 +405,7 @@ async function checkBrokenLinks(links, baseUrl, deadline) {
       const response = await fetch(absoluteUrl, {
         method: 'HEAD',
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'User-Agent': USER_AGENT,
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.5'
         },
@@ -361,29 +415,32 @@ async function checkBrokenLinks(links, baseUrl, deadline) {
       
       clearTimeout(timeoutId);
       
-      if (response.status === 404 || !response.ok) {
-        brokenLinks.push({
-          url: absoluteUrl,
-          status: response.status,
-          text: link.text
-        });
-      }
+      classifyLinkCheckResult(absoluteUrl, response, link, brokenLinks, unverifiedLinks);
     } catch (error) {
       if (error.name === 'AbortError') {
         // Skip timed out links rather than marking as broken
         console.log('[audit] Link check timeout for:', absoluteUrl);
         continue;
       }
-      brokenLinks.push({
-        url: absoluteUrl,
-        status: 'FAILED',
-        text: link.text,
-        error: error.message
-      });
+      if (isSocialMediaUrl(absoluteUrl)) {
+        unverifiedLinks.push({
+          url: absoluteUrl,
+          status: 'UNVERIFIED',
+          text: link.text,
+          reason: "Couldn't verify (site may be blocking automated checks)"
+        });
+      } else {
+        brokenLinks.push({
+          url: absoluteUrl,
+          status: 'FAILED',
+          text: link.text,
+          error: error.message
+        });
+      }
     }
   }
   
-  return { brokenLinks, partial };
+  return { brokenLinks, unverifiedLinks, partial };
 }
 
 // Call Google PageSpeed Insights API with timeout
@@ -738,11 +795,13 @@ async function runAudit(url, deadline, ctx) {
 
     if (linksResult.status === 'fulfilled') {
       ctx.brokenLinks = linksResult.value.brokenLinks;
+      ctx.unverifiedLinks = linksResult.value.unverifiedLinks;
       ctx.linksPartial = linksResult.value.partial;
       ctx.linksError = linksResult.value.partial ? 'Link check incomplete — time budget reached' : null;
     } else {
       console.error('[audit] Link check failed:', linksResult.reason);
       ctx.brokenLinks = [];
+      ctx.unverifiedLinks = [];
       ctx.linksError = linksResult.reason?.message || 'Link check failed';
     }
 
