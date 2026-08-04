@@ -288,7 +288,7 @@ async function checkSpelling(text, url) {
         messages: [
           {
             role: 'system',
-            content: 'You are a spelling checker for website content. Identify genuine spelling errors including typos, misspellings, and obvious mistakes. IMPORTANT: Check ALL text including navigation links, menu labels, headings, and short phrases - typos in these are still errors. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish, common on menus), industry terms, local place names, and technical vocabulary. Be aggressive about flagging clear misspellings like "Appetizier" -> "Appetizers". Return real mistakes with the correct spelling. If no genuine errors found, return an empty list. Respond in JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
+            content: 'You are an aggressive spelling checker for website content. Find ALL spelling errors - typos, misspellings, and obvious mistakes. CRITICAL: Check navigation links, menu labels, headings, and short phrases - typos here are still errors. EXCLUDE ONLY: brand/business names, proper nouns, foreign-language words (especially Spanish), industry terms, local place names, and technical vocabulary. Examples of REAL TYPOS to flag: "Appetizier" should be "Appetizers", "recieve" should be "receive", "thier" should be "their". Do NOT be conservative - if a word is clearly misspelled, flag it. Return errors with correct spelling. If no errors found, return empty list. JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
           },
           {
             role: 'user',
@@ -488,13 +488,7 @@ export default async function handler(req, res) {
       spellingIssues: {
         count: spellingIssues.issues.length,
         issues: spellingIssues.issues,
-        error: spellingError,
-        debug: {
-          textLength: visibleText.length,
-          textSample: visibleText.substring(0, 500),
-          containsAppetizier: visibleText.includes('Appetizier'),
-          containsAppetizers: visibleText.includes('Appetizers')
-        }
+        error: spellingError
       },
       technicalChecks: {
         isHttps: technicalChecks.isHttps,
