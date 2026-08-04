@@ -3630,7 +3630,7 @@ Style rules:
             }
             
             const translatedData = translateAuditData(auditData);
-            renderResults(translatedData);
+            renderResults(translatedData, translatedData.typoCount || 0);
         }
 
         function translateAuditData(data) {
@@ -3664,7 +3664,7 @@ Style rules:
                     // Grammar/style issues are too unreliable for automated flagging
                     if (issue.type === 'TYPOS' || issue.type === 'MORFOLOGIK_RULE') {
                         results.critical.push({
-                            title: 'Spelling mistake',
+                            title: 'Possible spelling issue — verify',
                             description: `"${issue.word}" — ${issue.message}`
                         });
                         typoCount++;
@@ -3743,10 +3743,10 @@ Style rules:
                 });
             }
 
-            return results;
+            return { critical: results.critical, warnings: results.warnings, good: results.good, typoCount };
         }
 
-        function renderResults(data) {
+        function renderResults(data, typoCount = 0) {
             let html = '';
 
             // Critical issues (red)
@@ -3765,6 +3765,17 @@ Style rules:
                         `).join('')}
                     </div>
                 `;
+                
+                // Add disclaimer if there are spelling issues
+                if (typoCount > 0) {
+                    html += `
+                        <div class="results-section">
+                            <div class="results-item" style="font-style: italic; opacity: 0.8;">
+                                Note: Automated spell-check may flag names, brands, or foreign words that are actually correct.
+                            </div>
+                        </div>
+                    `;
+                }
             }
 
             // Warnings (yellow)

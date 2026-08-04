@@ -314,6 +314,13 @@ async function checkSpelling(text) {
       };
     }) || [];
     
+    // Calculate word frequency in the original text
+    const words = textToCheck.toLowerCase().match(/\b\w+\b/g) || [];
+    const wordFrequency = {};
+    words.forEach(w => {
+      wordFrequency[w] = (wordFrequency[w] || 0) + 1;
+    });
+    
     // Filter out whitelisted terms and proper nouns
     const filteredIssues = issues.filter(issue => {
       const word = issue.word.toLowerCase();
@@ -328,6 +335,11 @@ async function checkSpelling(text) {
       // Only flag pure misspellings (TYPOS/MORFOLOGIK_RULE) as critical
       // Grammar/style issues are too unreliable for automated flagging
       if (issue.type !== 'TYPOS' && issue.type !== 'MORFOLOGIK_RULE') {
+        return false;
+      }
+      
+      // Skip words that appear 2+ times (likely correct, not typos)
+      if (wordFrequency[word] >= 2) {
         return false;
       }
       
@@ -350,7 +362,18 @@ async function checkSpelling(text) {
       return true;
     });
     
-    return { issues: filteredIssues, error: null };
+    // Deduplicate issues by word (only report each word once)
+    const seenWords = new Set();
+    const deduplicatedIssues = filteredIssues.filter(issue => {
+      const lowerWord = issue.word.toLowerCase();
+      if (seenWords.has(lowerWord)) {
+        return false;
+      }
+      seenWords.add(lowerWord);
+      return true;
+    });
+    
+    return { issues: deduplicatedIssues, error: null };
   } catch (error) {
     if (error.name === 'AbortError') {
       console.error('[audit] LanguageTool API timeout after', TIMEOUT_MS, 'ms');
