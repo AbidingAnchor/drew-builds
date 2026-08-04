@@ -243,12 +243,12 @@ async function checkSpelling(text) {
   console.log('[audit] checkSpelling called with text length:', text.length);
   
   try {
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = (process.env.GROQ_API_KEY || '').trim();
     
-    console.log('[audit] GROQ_API_KEY check:', !!apiKey);
+    console.log('[audit] GROQ_API_KEY check:', !!apiKey, 'length:', apiKey.length);
     
     if (!apiKey) {
-      console.warn('[audit] GROQ_API_KEY not configured, skipping spelling check');
+      console.error('[audit] GROQ_API_KEY is missing or empty. Check Vercel environment variables.');
       return { issues: [], error: 'API key not configured' };
     }
     
