@@ -240,8 +240,12 @@ function performTechnicalChecks(html, url) {
 
 // Check spelling using Groq LLM instead of LanguageTool
 async function checkSpelling(text) {
+  console.log('[audit] checkSpelling called with text length:', text.length);
+  
   try {
     const apiKey = process.env.GROQ_API_KEY;
+    
+    console.log('[audit] GROQ_API_KEY check:', !!apiKey);
     
     if (!apiKey) {
       console.warn('[audit] GROQ_API_KEY not configured, skipping spelling check');
@@ -250,6 +254,9 @@ async function checkSpelling(text) {
     
     const textToCheck = text.substring(0, 3000); // Limit text length for LLM
     
+    console.log('[audit] Sending text to Groq for spelling check (first 500 chars):', textToCheck.substring(0, 500));
+    console.log('[audit] Full text length:', text.length, 'Sending:', textToCheck.length);
+
     const TIMEOUT_MS = 8000; // 8 second timeout
     
     const controller = new AbortController();
@@ -266,7 +273,7 @@ async function checkSpelling(text) {
         messages: [
           {
             role: 'system',
-            content: 'You are a spelling checker for website content. Identify ONLY genuine spelling errors - typos, misspellings, and obvious mistakes. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish, common on menus), industry terms, local place names, and technical vocabulary. Return only real mistakes with the correct spelling. If no genuine errors found, return an empty list. Respond in JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
+            content: 'You are a spelling checker for website content. Identify genuine spelling errors including typos, misspellings, and obvious mistakes. IMPORTANT: Check ALL text including navigation links, menu labels, headings, and short phrases - typos in these are still errors. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish, common on menus), industry terms, local place names, and technical vocabulary. Be aggressive about flagging clear misspellings like "Appetizier" -> "Appetizers". Return real mistakes with the correct spelling. If no genuine errors found, return an empty list. Respond in JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
           },
           {
             role: 'user',
