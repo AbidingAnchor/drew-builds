@@ -260,23 +260,8 @@ async function checkSpelling(text) {
     
     console.log('[audit] LanguageTool candidates:', languageToolIssues.map(i => i.word));
     
-    // Calculate word frequency in the original text
-    const words = textToCheck.toLowerCase().match(/\b\w+\b/g) || [];
-    const wordFrequency = {};
-    words.forEach(w => {
-      wordFrequency[w] = (wordFrequency[w] || 0) + 1;
-    });
-    
-    // Filter out candidates that appear 2+ times (likely correct, not typos)
-    const filteredCandidates = languageToolIssues.filter(issue => {
-      const word = issue.word.toLowerCase();
-      return wordFrequency[word] < 2;
-    });
-    
-    console.log('[audit] After frequency filter:', filteredCandidates.length, 'candidates');
-    
-    // PASS 2: Filter with Groq classification
-    const validTypos = await filterWithGroq(filteredCandidates, textToCheck, apiKey);
+    // PASS 2: Filter with Groq classification (Groq's contextual judgment handles duplicates)
+    const validTypos = await filterWithGroq(languageToolIssues, textToCheck);
     console.log('[audit] Groq-confirmed typos:', validTypos.length);
     console.log('[audit] Groq-confirmed words:', validTypos.map(i => i.word));
     
@@ -373,10 +358,12 @@ function getContext(text, offset, length) {
 }
 
 // Filter LanguageTool candidates with Groq (PASS 2)
-async function filterWithGroq(candidates, fullText, apiKey) {
+async function filterWithGroq(candidates, fullText) {
   const validTypos = [];
   
-  console.log('[audit] filterWithGroq called with', candidates.length, 'candidates');
+  const apiKey = (process.env.GROQ_API_KEY || '').trim();
+  
+  console.log('[audit] filterWithGroq called with', candidates.length, 'candidates and apiKey:', !!apiKey);
   
   for (const candidate of candidates) {
     try {
@@ -391,7 +378,7 @@ async function filterWithGroq(candidates, fullText, apiKey) {
           messages: [
             {
               role: 'system',
-              content: 'You are a spelling classifier. Your ONLY job is to determine if a word is a genuine misspelling. Given a word and its context, answer YES if it is a genuine spelling error/typo, or NO if it is a proper noun, brand/business name, foreign-language word (especially Spanish), industry term, or acceptable abbreviation. Answer ONLY "YES" or "NO" - nothing else.'
+              content: 'You are a spelling classifier. Determine if a word is a genuine misspelling. Context: "Appetizier" appears twice (nav + header) but is still a typo. "Cheese Cheese" repeated in one context is likely a copy-paste error. Answer YES if genuine spelling error/typo, NO if proper noun, brand/business name, foreign-language word (especially Spanish), industry term, or acceptable abbreviation. Consider context - words repeated in different page sections (nav + content) might be intentional menu names, but repeated within the same text block suggests a typo. Answer ONLY "YES" or "NO".'
             },
             {
               role: 'user',
