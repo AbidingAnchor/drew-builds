@@ -27,6 +27,8 @@ async function fetchHTML(url) {
 function extractContent(html) {
   const $ = cheerio.load(html);
   
+  console.log('[audit] extractContent called, HTML length:', html.length);
+  
   // Remove script, style, noscript, and other non-content elements
   $('script, style, noscript, iframe, svg, head').remove();
   
@@ -34,7 +36,7 @@ function extractContent(html) {
   $('[style*="display:none"], [style*="display: none"], [style*="visibility:hidden"], [style*="visibility: hidden"]').remove();
   
   // Add spaces around block elements to prevent text concatenation
-  $('p, div, h1, h2, h3, h4, h5, h6, li, span, a, button, strong, em, b, i').each((_, element) => {
+  $('p, div, h1, h2, h3, h4, h5, h6, li, span, a, button, strong, em, b, i, nav, header, footer').each((_, element) => {
     $(element).prepend(' ').append(' ');
   });
   
@@ -49,6 +51,9 @@ function extractContent(html) {
     .replace(/\s+/g, ' ')  // Clean up any double spaces created
     .trim();
   
+  console.log('[audit] Extracted visible text length:', visibleText.length);
+  console.log('[audit] Extracted text sample (first 300 chars):', visibleText.substring(0, 300));
+  
   // Extract all links
   const links = [];
   $('a[href]').each((_, element) => {
@@ -58,6 +63,8 @@ function extractContent(html) {
       links.push({ url: href, text });
     }
   });
+  
+  console.log('[audit] Extracted', links.length, 'links');
   
   return { visibleText, links };
 }
@@ -341,6 +348,9 @@ async function checkSpelling(text, url) {
 }
 
 export default async function handler(req, res) {
+  console.log('[audit] AUDIT ENDPOINT CALLED - REQUEST METHOD:', req.method);
+  console.log('[audit] REQUEST BODY:', JSON.stringify(req.body));
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
