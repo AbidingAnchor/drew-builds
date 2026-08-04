@@ -3617,6 +3617,18 @@ Style rules:
             resultsView.classList.add('active');
             resultsUrl.textContent = url;
             
+            // Check if audit data indicates an error or is invalid
+            if (!auditData || auditData.error || auditData.code) {
+                renderError(auditData?.error || 'Couldn\'t fully scan this site — try again or a different URL');
+                return;
+            }
+            
+            // Check if it was a partial scan (HTML fetch failed)
+            if (auditData.auditMeta?.partialScan) {
+                renderError(`Partially scanned — ${auditData.auditMeta.htmlError || 'Site blocked access'}. Try a different URL.`);
+                return;
+            }
+            
             const translatedData = translateAuditData(auditData);
             renderResults(translatedData);
         }
@@ -3628,8 +3640,13 @@ Style rules:
                 good: []
             };
 
+            // Validate data structure
+            if (!data || typeof data !== 'object') {
+                return results;
+            }
+
             // Broken links - critical
-            if (data.brokenLinks?.count > 0) {
+            if (data.brokenLinks?.count > 0 && Array.isArray(data.brokenLinks.links)) {
                 data.brokenLinks.links.forEach(link => {
                     results.critical.push({
                         title: 'Broken link found',
@@ -3639,7 +3656,7 @@ Style rules:
             }
 
             // Spelling issues - critical
-            if (data.spellingIssues?.count > 0) {
+            if (data.spellingIssues?.count > 0 && Array.isArray(data.spellingIssues.issues)) {
                 data.spellingIssues.issues.forEach(issue => {
                     results.critical.push({
                         title: 'Spelling or grammar issue',
@@ -3649,15 +3666,15 @@ Style rules:
             }
 
             // Missing HTTPS - critical
-            if (!data.technicalChecks?.isHttps) {
+            if (data.technicalChecks && data.technicalChecks.isHttps === false) {
                 results.critical.push({
                     title: 'Site not secure',
                     description: 'The site is not using HTTPS encryption'
                 });
             }
 
-            // PageSpeed score - warning if below 70
-            if (data.pageSpeed?.mobileScore !== null) {
+            // PageSpeed score - warning if below 70 (only if we have valid data)
+            if (data.pageSpeed && typeof data.pageSpeed.mobileScore === 'number') {
                 if (data.pageSpeed.mobileScore < 70) {
                     results.warnings.push({
                         title: 'Mobile performance needs improvement',
@@ -3669,15 +3686,21 @@ Style rules:
                         description: `Mobile score is ${data.pageSpeed.mobileScore}/100`
                     });
                 }
+            } else if (data.pageSpeed?.error) {
+                // PageSpeed check failed
+                results.warnings.push({
+                    title: 'Performance check unavailable',
+                    description: 'Could not retrieve PageSpeed data'
+                });
             }
 
             // Missing viewport - warning
-            if (!data.technicalChecks?.hasViewport) {
+            if (data.technicalChecks && data.technicalChecks.hasViewport === false) {
                 results.warnings.push({
                     title: 'Missing mobile viewport',
                     description: 'Site may not display properly on mobile devices'
                 });
-            } else {
+            } else if (data.technicalChecks?.hasViewport === true) {
                 results.good.push({
                     title: 'Mobile-ready viewport',
                     description: 'Site has proper mobile viewport settings'
@@ -3685,12 +3708,12 @@ Style rules:
             }
 
             // Missing tel: link - warning
-            if (!data.technicalChecks?.hasTelLink) {
+            if (data.technicalChecks && data.technicalChecks.hasTelLink === false) {
                 results.warnings.push({
                     title: 'No tap-to-call phone link',
                     description: 'Consider adding a tel: link for easy mobile calling'
                 });
-            } else {
+            } else if (data.technicalChecks?.hasTelLink === true) {
                 results.good.push({
                     title: 'Tap-to-call enabled',
                     description: 'Site has phone links for mobile users'
@@ -3788,6 +3811,21 @@ Style rules:
                 `;
             }
 
+            resultsContent.innerHTML = html;
+        }
+
+        function renderError(errorMessage) {
+            const html = `
+                <div class="results-section">
+                    <div class="results-section-title yellow">
+                        <span class="results-section-icon">⚠️</span>
+                        Scan Issue
+                    </div>
+                    <div class="results-item">
+                        ${errorMessage}
+                    </div>
+                </div>
+            `;
             resultsContent.innerHTML = html;
         }
     </script>

@@ -328,29 +328,97 @@ export default async function handler(req, res) {
   }
   
   try {
-    // Step 1: Fetch HTML
-    const html = await fetchHTML(url);
+    // Step 1: Fetch HTML (with individual error handling)
+    let html, visibleText, links;
+    let htmlError = null;
     
-    // Step 2: Extract content
-    const { visibleText, links } = extractContent(html);
+    try {
+      html = await fetchHTML(url);
+      const content = extractContent(html);
+      visibleText = content.visibleText;
+      links = content.links;
+    } catch (error) {
+      console.error('[audit] HTML fetch failed:', error);
+      htmlError = error.message;
+      // Set defaults for failed HTML fetch
+      visibleText = '';
+      links = [];
+    }
     
-    // Step 3: Check broken links (limit to first 20 for performance)
-    const brokenLinks = await checkBrokenLinks(links.slice(0, 20), url);
+    // Step 2: Check broken links (only if HTML fetch succeeded)
+    let brokenLinks = [];
+    let linksError = null;
     
-    // Step 4: Get PageSpeed data
-    const pageSpeed = await getPageSpeedData(url);
+    if (!htmlError && links.length > 0) {
+      try {
+        brokenLinks = await checkBrokenLinks(links.slice(0, 20), url);
+      } catch (error) {
+        console.error('[audit] Link check failed:', error);
+        linksError = error.message;
+      }
+    }
     
-    // Step 5: Perform technical checks
-    const technicalChecks = performTechnicalChecks(html, url);
+    // Step 3: Get PageSpeed data (independent of HTML fetch)
+    let pageSpeed;
+    try {
+      pageSpeed = await getPageSpeedData(url);
+    } catch (error) {
+      console.error('[audit] PageSpeed check failed:', error);
+      pageSpeed = {
+        mobileScore: null,
+        loadTime: null,
+        issues: [],
+        error: error.message
+      };
+    }
     
-    // Step 6: Check spelling/grammar
-    const spellingIssues = await checkSpelling(visibleText);
+    // Step 4: Perform technical checks (only if HTML fetch succeeded)
+    let technicalChecks;
+    if (!htmlError && html) {
+      try {
+        technicalChecks = performTechnicalChecks(html, url);
+      } catch (error) {
+        console.error('[audit] Technical checks failed:', error);
+        technicalChecks = {
+          isHttps: url.startsWith('https://'),
+          hasTelLink: false,
+          hasViewport: false
+        };
+      }
+    } else {
+      // Fallback technical checks based on URL only
+      technicalChecks = {
+        isHttps: url.startsWith('https://'),
+        hasTelLink: false,
+        hasViewport: false
+      };
+    }
     
-    // Return structured response
+    // Step 5: Check spelling/grammar (only if HTML fetch succeeded)
+    let spellingIssues;
+    if (!htmlError && visibleText) {
+      try {
+        spellingIssues = await checkSpelling(visibleText);
+      } catch (error) {
+        console.error('[audit] Spelling check failed:', error);
+        spellingIssues = {
+          issues: [],
+          error: error.message
+        };
+      }
+    } else {
+      spellingIssues = {
+        issues: [],
+        error: htmlError || 'No content to check'
+      };
+    }
+    
+    // Return structured response with partial data if some checks failed
     return res.status(200).json({
       brokenLinks: {
         count: brokenLinks.length,
-        links: brokenLinks
+        links: brokenLinks,
+        error: linksError
       },
       pageSpeed: {
         mobileScore: pageSpeed.mobileScore,
@@ -372,7 +440,9 @@ export default async function handler(req, res) {
         url,
         timestamp: new Date().toISOString(),
         linksChecked: links.slice(0, 20).length,
-        totalLinksFound: links.length
+        totalLinksFound: links.length,
+        partialScan: !!htmlError,
+        htmlError: htmlError
       }
     });
     
