@@ -266,7 +266,7 @@ async function checkSpelling(text) {
         messages: [
           {
             role: 'system',
-            content: 'You are a spelling checker for website content. Find ONLY genuine spelling errors - misspelled words that should be corrected. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish), industry terms, local place names, technical vocabulary, abbreviations, and style/formatting issues (like missing commas, ampersands vs "and", etc.). Focus ONLY on actual misspellings like "Appetizier" should be "Appetizers", "recieve" should be "receive", "Stake" should be "Steak". Do NOT flag grammatical or style issues. Return only spelling errors with correct spelling. If no spelling errors found, return empty list. JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
+            content: 'You are a spelling checker for website content. Find spelling errors - words that are genuinely misspelled. CHECK: navigation links, menu labels, headings, short phrases. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish like "queso", "pollo"), industry terms, local place names, technical vocabulary, and abbreviations like "Gr." or "Dr.". STYLE ISSUES TO IGNORE: missing commas, using "&" instead of "and", ampersands, formatting choices. GENUINE TYPOS TO FLAG: "Appetizier" should be "Appetizers", "recieve" should be "receive", "Stake" should be "Steak", "Strombo" should be "Stromboli". Return only genuine spelling errors with correct spelling. JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
           },
           {
             role: 'user',
