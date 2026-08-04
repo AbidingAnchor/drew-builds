@@ -239,8 +239,16 @@ function performTechnicalChecks(html, url) {
 }
 
 // Check spelling using Groq LLM instead of LanguageTool
-async function checkSpelling(text) {
+async function checkSpelling(text, url) {
   console.log('[audit] checkSpelling called with text length:', text.length);
+  console.log('[audit] checkSpelling URL:', url);
+  
+  // Debug: Log full extracted text for torresdalepizzabeer.com
+  if (url && url.includes('torresdalepizzabeer.com')) {
+    console.log('[audit] FULL EXTRACTED TEXT for torresdalepizzabeer.com:', text);
+    console.log('[audit] Does text contain "Appetizier"?', text.includes('Appetizier'));
+    console.log('[audit] Does text contain "Appetizers"?', text.includes('Appetizers'));
+  }
   
   try {
     const apiKey = (process.env.GROQ_API_KEY || '').trim();
@@ -288,18 +296,25 @@ async function checkSpelling(text) {
     
     clearTimeout(timeoutId);
     
+    console.log('[audit] Groq API response status:', response.status);
+    
     if (!response.ok) {
       throw new Error(`Groq API error: ${response.status}`);
     }
     
     const data = await response.json();
+    console.log('[audit] RAW Groq API response:', JSON.stringify(data, null, 2));
+    
     const content = data.choices?.[0]?.message?.content;
+    console.log('[audit] Groq response content:', content);
     
     if (!content) {
       return { issues: [], error: 'No response from API' };
     }
     
     const parsedResponse = JSON.parse(content);
+    console.log('[audit] Parsed spelling errors:', parsedResponse);
+    
     const spellingErrors = parsedResponse.errors || [];
     
     // Format the response to match expected structure
@@ -311,6 +326,8 @@ async function checkSpelling(text) {
       length: error.word.length,
       type: 'TYPOS'
     }));
+    
+    console.log('[audit] Final formatted issues:', issues);
     
     return { issues, error: null };
   } catch (error) {
@@ -392,7 +409,7 @@ export default async function handler(req, res) {
     if (!htmlError && links.length > 0) {
       const [linksResult, spellingResult] = await Promise.allSettled([
         checkBrokenLinks(links, url), // Check all links for accuracy
-        checkSpelling(visibleText)
+        checkSpelling(visibleText, url) // Pass URL for debugging
       ]);
       
       // Extract link check result
