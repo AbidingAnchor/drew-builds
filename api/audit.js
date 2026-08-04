@@ -62,10 +62,11 @@ function extractContent(html) {
   return { visibleText, links };
 }
 
-// Check for broken links
+// Check for broken links with timeout
 async function checkBrokenLinks(links, baseUrl) {
   const brokenLinks = [];
   const checkedUrls = new Set();
+  const TIMEOUT_MS = 3000; // 3 second timeout per link
   
   for (const link of links) {
     let absoluteUrl;
@@ -85,6 +86,9 @@ async function checkBrokenLinks(links, baseUrl) {
     if (!absoluteUrl.startsWith('http://') && !absoluteUrl.startsWith('https://')) continue;
     
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+      
       const response = await fetch(absoluteUrl, {
         method: 'HEAD',
         headers: {
@@ -92,8 +96,11 @@ async function checkBrokenLinks(links, baseUrl) {
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.5'
         },
-        redirect: 'follow'
+        redirect: 'follow',
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
       
       if (response.status === 404 || !response.ok) {
         brokenLinks.push({
@@ -103,6 +110,11 @@ async function checkBrokenLinks(links, baseUrl) {
         });
       }
     } catch (error) {
+      if (error.name === 'AbortError') {
+        // Skip timed out links rather than marking as broken
+        console.log('[audit] Link check timeout for:', absoluteUrl);
+        continue;
+      }
       brokenLinks.push({
         url: absoluteUrl,
         status: 'FAILED',
@@ -115,7 +127,7 @@ async function checkBrokenLinks(links, baseUrl) {
   return brokenLinks;
 }
 
-// Call Google PageSpeed Insights API
+// Call Google PageSpeed Insights API with timeout
 async function getPageSpeedData(url) {
   const apiKey = process.env.GOOGLE_PAGESPEED_API_KEY;
   
@@ -136,10 +148,18 @@ async function getPageSpeedData(url) {
     };
   }
   
+  const TIMEOUT_MS = 7000; // 7 second timeout
+  
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    
     const response = await fetch(
-      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${apiKey}&strategy=mobile`
+      `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${apiKey}&strategy=mobile`,
+      { signal: controller.signal }
     );
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       throw new Error(`PageSpeed API error: ${response.status}`);
@@ -174,6 +194,15 @@ async function getPageSpeedData(url) {
       issues: issues.slice(0, 10) // Limit to top 10 issues
     };
   } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error('[audit] PageSpeed API timeout after', TIMEOUT_MS, 'ms');
+      return {
+        error: 'Request timeout',
+        mobileScore: null,
+        loadTime: null,
+        issues: []
+      };
+    }
     console.error('[audit] PageSpeed API error:', error);
     return {
       error: error.message,
@@ -204,10 +233,15 @@ function performTechnicalChecks(html, url) {
   };
 }
 
-// Check spelling/grammar with LanguageTool API
+// Check spelling/grammar with LanguageTool API with timeout
 async function checkSpelling(text) {
   try {
-    const textToCheck = text.substring(0, 5000); // Limit text length
+    const textToCheck = text.substring(0, 2000); // Reduced from 5000 to 2000 for performance
+    
+    const TIMEOUT_MS = 5000; // 5 second timeout
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
     
     // Whitelist of common tech terms and proper nouns to ignore
     const techTermsWhitelist = [
@@ -243,8 +277,11 @@ async function checkSpelling(text) {
         text: textToCheck,
         language: 'en-US',
         enabledOnly: 'false'
-      })
+      }),
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       throw new Error(`LanguageTool API error: ${response.status}`);
@@ -304,6 +341,10 @@ async function checkSpelling(text) {
     
     return { issues: filteredIssues, error: null };
   } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error('[audit] LanguageTool API timeout after', TIMEOUT_MS, 'ms');
+      return { issues: [], error: 'Request timeout' };
+    }
     console.error('[audit] LanguageTool API error:', error);
     return { issues: [], error: error.message };
   }
@@ -328,52 +369,86 @@ export default async function handler(req, res) {
   }
   
   try {
-    // Step 1: Fetch HTML (with individual error handling)
-    let html, visibleText, links;
-    let htmlError = null;
+    const startTime = Date.now();
     
-    try {
-      html = await fetchHTML(url);
-      const content = extractContent(html);
-      visibleText = content.visibleText;
-      links = content.links;
-    } catch (error) {
-      console.error('[audit] HTML fetch failed:', error);
-      htmlError = error.message;
-      // Set defaults for failed HTML fetch
+    // Run independent checks in parallel: HTML fetch and PageSpeed
+    const [htmlResult, pageSpeedResult] = await Promise.allSettled([
+      fetchHTML(url),
+      getPageSpeedData(url)
+    ]);
+    
+    // Extract HTML result
+    let html, visibleText, links, htmlError;
+    if (htmlResult.status === 'fulfilled') {
+      try {
+        html = htmlResult.value;
+        const content = extractContent(html);
+        visibleText = content.visibleText;
+        links = content.links;
+        htmlError = null;
+      } catch (error) {
+        console.error('[audit] HTML extraction failed:', error);
+        htmlError = error.message;
+        visibleText = '';
+        links = [];
+      }
+    } else {
+      console.error('[audit] HTML fetch failed:', htmlResult.reason);
+      htmlError = htmlResult.reason?.message || 'Failed to fetch HTML';
       visibleText = '';
       links = [];
     }
     
-    // Step 2: Check broken links (only if HTML fetch succeeded)
-    let brokenLinks = [];
-    let linksError = null;
-    
-    if (!htmlError && links.length > 0) {
-      try {
-        brokenLinks = await checkBrokenLinks(links.slice(0, 20), url);
-      } catch (error) {
-        console.error('[audit] Link check failed:', error);
-        linksError = error.message;
-      }
-    }
-    
-    // Step 3: Get PageSpeed data (independent of HTML fetch)
+    // Extract PageSpeed result
     let pageSpeed;
-    try {
-      pageSpeed = await getPageSpeedData(url);
-    } catch (error) {
-      console.error('[audit] PageSpeed check failed:', error);
+    if (pageSpeedResult.status === 'fulfilled') {
+      pageSpeed = pageSpeedResult.value;
+    } else {
+      console.error('[audit] PageSpeed check failed:', pageSpeedResult.reason);
       pageSpeed = {
         mobileScore: null,
         loadTime: null,
         issues: [],
-        error: error.message
+        error: pageSpeedResult.reason?.message || 'PageSpeed check failed'
       };
     }
     
-    // Step 4: Perform technical checks (only if HTML fetch succeeded)
-    let technicalChecks;
+    // Run dependent checks in parallel (only if HTML succeeded)
+    let brokenLinks, linksError, spellingIssues, spellingError, technicalChecks;
+    
+    if (!htmlError && links.length > 0) {
+      const [linksResult, spellingResult] = await Promise.allSettled([
+        checkBrokenLinks(links.slice(0, 5), url), // Reduced to 5 for performance
+        checkSpelling(visibleText)
+      ]);
+      
+      // Extract link check result
+      if (linksResult.status === 'fulfilled') {
+        brokenLinks = linksResult.value;
+        linksError = null;
+      } else {
+        console.error('[audit] Link check failed:', linksResult.reason);
+        brokenLinks = [];
+        linksError = linksResult.reason?.message || 'Link check failed';
+      }
+      
+      // Extract spelling result
+      if (spellingResult.status === 'fulfilled') {
+        spellingIssues = spellingResult.value;
+        spellingError = null;
+      } else {
+        console.error('[audit] Spelling check failed:', spellingResult.reason);
+        spellingIssues = { issues: [], error: spellingResult.reason?.message || 'Spelling check failed' };
+        spellingError = spellingResult.reason?.message || 'Spelling check failed';
+      }
+    } else {
+      brokenLinks = [];
+      linksError = htmlError || 'No content to check';
+      spellingIssues = { issues: [], error: htmlError || 'No content to check' };
+      spellingError = htmlError || 'No content to check';
+    }
+    
+    // Perform technical checks (synchronous, no need for parallel)
     if (!htmlError && html) {
       try {
         technicalChecks = performTechnicalChecks(html, url);
@@ -386,7 +461,6 @@ export default async function handler(req, res) {
         };
       }
     } else {
-      // Fallback technical checks based on URL only
       technicalChecks = {
         isHttps: url.startsWith('https://'),
         hasTelLink: false,
@@ -394,24 +468,9 @@ export default async function handler(req, res) {
       };
     }
     
-    // Step 5: Check spelling/grammar (only if HTML fetch succeeded)
-    let spellingIssues;
-    if (!htmlError && visibleText) {
-      try {
-        spellingIssues = await checkSpelling(visibleText);
-      } catch (error) {
-        console.error('[audit] Spelling check failed:', error);
-        spellingIssues = {
-          issues: [],
-          error: error.message
-        };
-      }
-    } else {
-      spellingIssues = {
-        issues: [],
-        error: htmlError || 'No content to check'
-      };
-    }
+    const endTime = Date.now();
+    const totalTime = endTime - startTime;
+    console.log('[audit] Total audit time:', totalTime, 'ms');
     
     // Return structured response with partial data if some checks failed
     return res.status(200).json({
@@ -429,7 +488,7 @@ export default async function handler(req, res) {
       spellingIssues: {
         count: spellingIssues.issues.length,
         issues: spellingIssues.issues,
-        error: spellingIssues.error
+        error: spellingError
       },
       technicalChecks: {
         isHttps: technicalChecks.isHttps,
@@ -439,10 +498,11 @@ export default async function handler(req, res) {
       auditMeta: {
         url,
         timestamp: new Date().toISOString(),
-        linksChecked: links.slice(0, 20).length,
+        linksChecked: links.slice(0, 5).length,
         totalLinksFound: links.length,
         partialScan: !!htmlError,
-        htmlError: htmlError
+        htmlError: htmlError,
+        totalTime: totalTime
       }
     });
     
