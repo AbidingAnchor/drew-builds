@@ -1,7 +1,111 @@
 import * as cheerio from 'cheerio';
 
-const BROWSER_RENDER_TIMEOUT_MS = 5500;
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+// Vercel Hobby hard limit is 10s — stay under with margin for response serialization
+const REQUEST_BUDGET_MS = 9000;
+const BROWSER_RENDER_TIMEOUT_MS = 4000;
+const PAGESPEED_TIMEOUT_MS = 6000;
+
+const PAGESPEED_SKIPPED = {
+  error: 'Unavailable for JS-rendered sites',
+  mobileScore: null,
+  loadTime: null,
+  issues: []
+};
+
+class DeadlineError extends Error {
+  constructor(message = 'Request deadline exceeded') {
+    super(message);
+    this.code = 'DEADLINE_EXCEEDED';
+  }
+}
+
+function createDeadline(startTime, budgetMs = REQUEST_BUDGET_MS) {
+  return {
+    startTime,
+    budgetMs,
+    remaining() {
+      return Math.max(0, budgetMs - (Date.now() - startTime));
+    },
+    expired() {
+      return this.remaining() <= 0;
+    },
+    budgetFor(stepMs) {
+      return Math.min(stepMs, this.remaining());
+    },
+    assertTime(label) {
+      if (this.expired()) {
+        throw new DeadlineError(`${label}: request deadline exceeded`);
+      }
+    }
+  };
+}
+
+function createAuditContext(url) {
+  return {
+    url,
+    html: null,
+    visibleText: '',
+    links: [],
+    htmlError: null,
+    renderMethod: 'fetch',
+    renderWarning: null,
+    pageSpeed: null,
+    brokenLinks: [],
+    linksError: null,
+    linksPartial: false,
+    spellingIssues: { issues: [], error: null },
+    spellingError: null,
+    spellingPartial: false,
+    technicalChecks: {
+      isHttps: url.startsWith('https://'),
+      hasTelLink: false,
+      hasViewport: false
+    },
+    scanIncomplete: false,
+    deadlineExceeded: false
+  };
+}
+
+function buildAuditResponse(ctx, startTime) {
+  const totalTime = Date.now() - startTime;
+  const partialScan = !!ctx.htmlError || ctx.scanIncomplete || ctx.linksPartial || ctx.spellingPartial;
+  const htmlError = ctx.htmlError || (ctx.deadlineExceeded ? 'Scan incomplete — time budget exceeded' : null);
+
+  return {
+    brokenLinks: {
+      count: ctx.brokenLinks.length,
+      links: ctx.brokenLinks,
+      error: ctx.linksError
+    },
+    pageSpeed: {
+      mobileScore: ctx.pageSpeed?.mobileScore ?? null,
+      loadTime: ctx.pageSpeed?.loadTime ?? null,
+      issues: ctx.pageSpeed?.issues ?? [],
+      error: ctx.pageSpeed?.error ?? null
+    },
+    spellingIssues: {
+      count: ctx.spellingIssues.issues?.length ?? 0,
+      issues: ctx.spellingIssues.issues ?? [],
+      error: ctx.spellingError
+    },
+    technicalChecks: ctx.technicalChecks,
+    auditMeta: {
+      url: ctx.url,
+      timestamp: new Date().toISOString(),
+      linksChecked: ctx.links.length,
+      totalLinksFound: ctx.links.length,
+      partialScan,
+      scanIncomplete: ctx.scanIncomplete || ctx.deadlineExceeded,
+      htmlError,
+      renderMethod: ctx.renderMethod || 'fetch',
+      renderWarning: ctx.renderWarning || null,
+      deadlineExceeded: ctx.deadlineExceeded || false,
+      totalTime
+    }
+  };
+}
 
 function getCharsetFromContentType(contentType) {
   const match = contentType?.match(/charset=([^;\s]+)/i);
@@ -111,9 +215,10 @@ function needsBrowserRender(html, { visibleText, links }) {
 }
 
 // Headless browser fallback for JS-rendered sites (Vercel serverless Chromium)
-async function renderHTMLWithBrowser(url) {
+async function renderHTMLWithBrowser(url, timeoutMs = BROWSER_RENDER_TIMEOUT_MS) {
   const timeoutError = "Couldn't fully render this site";
   let browser = null;
+  const browserBudget = Math.max(500, timeoutMs);
 
   const renderWork = async () => {
     const puppeteer = (await import('puppeteer-core')).default;
@@ -131,15 +236,16 @@ async function renderHTMLWithBrowser(url) {
     const page = await browser.newPage();
     await page.setUserAgent(USER_AGENT);
 
+    const gotoTimeout = Math.max(500, browserBudget - 800);
     await page.goto(url, {
       waitUntil: 'domcontentloaded',
-      timeout: BROWSER_RENDER_TIMEOUT_MS - 1000
+      timeout: gotoTimeout
     });
 
-    // Brief wait for client-side hydration without blowing the time budget
+    const hydrationTimeout = Math.min(800, Math.max(200, browserBudget - 1200));
     await page.waitForFunction(
       () => document.querySelectorAll('a[href]').length > 0 || (document.body?.innerText?.length ?? 0) > 200,
-      { timeout: 1500 }
+      { timeout: hydrationTimeout }
     ).catch(() => {});
 
     return page.content();
@@ -149,7 +255,7 @@ async function renderHTMLWithBrowser(url) {
     const html = await Promise.race([
       renderWork(),
       new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Render timeout')), BROWSER_RENDER_TIMEOUT_MS);
+        setTimeout(() => reject(new Error('Render timeout')), browserBudget);
       })
     ]);
     return { html, error: null };
@@ -163,25 +269,17 @@ async function renderHTMLWithBrowser(url) {
   }
 }
 
-// Plain fetch first; headless browser only when content looks suspiciously empty
-async function fetchPageContent(url) {
-  const html = await fetchHTML(url);
-  const content = extractContent(html);
-  let renderMethod = 'fetch';
-  let renderWarning = null;
-
-  if (!needsBrowserRender(html, content)) {
-    return { html, ...content, renderMethod, renderWarning };
-  }
-
-  console.log('[audit] Plain HTML looks like a JS shell, attempting headless render');
-  const { html: renderedHtml, error } = await renderHTMLWithBrowser(url);
+// Browser fallback when plain HTML already fetched and looks like a JS shell
+async function applyBrowserFallback(url, plainHtml, plainContent, deadline) {
+  console.log('[audit] Plain HTML looks like a JS shell, attempting headless render (PageSpeed skipped)');
+  const browserBudget = deadline.budgetFor(BROWSER_RENDER_TIMEOUT_MS);
+  const { html: renderedHtml, error } = await renderHTMLWithBrowser(url, browserBudget);
 
   if (renderedHtml) {
     const renderedContent = extractContent(renderedHtml);
     if (
-      renderedContent.links.length > content.links.length ||
-      renderedContent.visibleText.length > content.visibleText.length
+      renderedContent.links.length > plainContent.links.length ||
+      renderedContent.visibleText.length > plainContent.visibleText.length
     ) {
       return {
         html: renderedHtml,
@@ -191,21 +289,45 @@ async function fetchPageContent(url) {
         renderWarning: null
       };
     }
-    renderWarning = 'Browser render did not improve content; using plain fetch';
-  } else {
-    renderWarning = error;
+    return {
+      html: plainHtml,
+      visibleText: plainContent.visibleText,
+      links: plainContent.links,
+      renderMethod: 'fetch',
+      renderWarning: 'Browser render did not improve content; using plain fetch'
+    };
   }
 
-  return { html, ...content, renderMethod, renderWarning };
+  return {
+    html: plainHtml,
+    visibleText: plainContent.visibleText,
+    links: plainContent.links,
+    renderMethod: 'fetch',
+    renderWarning: error
+  };
 }
 
 // Check for broken links with timeout
-async function checkBrokenLinks(links, baseUrl) {
+async function checkBrokenLinks(links, baseUrl, deadline) {
   const brokenLinks = [];
   const checkedUrls = new Set();
-  const TIMEOUT_MS = 3000; // 3 second timeout per link
+  const TIMEOUT_MS = 2000;
+  let partial = false;
+
+  // Cap link checks so the overall audit stays within the Hobby-tier budget
+  const MAX_LINKS_TO_CHECK = 30;
+  const linksToCheck = links.slice(0, MAX_LINKS_TO_CHECK);
+  if (links.length > MAX_LINKS_TO_CHECK) {
+    partial = true;
+  }
   
-  for (const link of links) {
+  for (const link of linksToCheck) {
+    if (deadline?.expired()) {
+      console.log('[audit] Link check stopped — request deadline reached');
+      partial = true;
+      break;
+    }
+
     let absoluteUrl;
     
     // Convert relative URLs to absolute
@@ -261,11 +383,11 @@ async function checkBrokenLinks(links, baseUrl) {
     }
   }
   
-  return brokenLinks;
+  return { brokenLinks, partial };
 }
 
 // Call Google PageSpeed Insights API with timeout
-async function getPageSpeedData(url) {
+async function getPageSpeedData(url, timeoutMs = PAGESPEED_TIMEOUT_MS) {
   const apiKey = process.env.GOOGLE_PAGESPEED_API_KEY;
   
   console.log('[audit] PageSpeed API key check:', {
@@ -285,7 +407,7 @@ async function getPageSpeedData(url) {
     };
   }
   
-  const TIMEOUT_MS = 8000; // 8 seconds (enough for PageSpeed but not too long)
+  const TIMEOUT_MS = Math.max(500, timeoutMs);
   
   console.log('[audit] PageSpeed API call starting for:', url, 'with timeout:', TIMEOUT_MS, 'ms');
   
@@ -383,13 +505,17 @@ function truncateAtWordBoundary(text, maxLength) {
 }
 
 // Check spelling using two-pass system: LanguageTool + Groq classification
-async function checkSpelling(text) {
+async function checkSpelling(text, deadline) {
   try {
     const apiKey = (process.env.GROQ_API_KEY || '').trim();
     
     if (!apiKey) {
       console.error('[audit] GROQ_API_KEY is missing or empty. Check Vercel environment variables.');
-      return { issues: [], error: 'API key not configured' };
+      return { issues: [], error: 'API key not configured', partial: false };
+    }
+    
+    if (deadline?.expired()) {
+      return { issues: [], error: 'Spelling check incomplete — time budget reached', partial: true };
     }
     
     const textToCheck = truncateAtWordBoundary(text, 3000);
@@ -399,13 +525,13 @@ async function checkSpelling(text) {
     console.log('[audit] LanguageTool candidates found:', languageToolIssues.length);
     
     if (languageToolIssues.length === 0) {
-      return { issues: [], error: null };
+      return { issues: [], error: null, partial: false };
     }
     
     console.log('[audit] LanguageTool candidates:', languageToolIssues.map(i => i.word));
     
     // PASS 2: Filter with Groq classification (Groq's contextual judgment handles duplicates)
-    const validTypos = await filterWithGroq(languageToolIssues, textToCheck);
+    const { typos: validTypos, partial } = await filterWithGroq(languageToolIssues, textToCheck, deadline);
     console.log('[audit] Groq-confirmed typos:', validTypos.length);
     console.log('[audit] Groq-confirmed words:', validTypos.map(i => i.word));
     
@@ -430,10 +556,14 @@ async function checkSpelling(text) {
       type: 'TYPOS'
     }));
     
-    return { issues, error: null };
+    return {
+      issues,
+      error: partial ? 'Spelling check incomplete — time budget reached' : null,
+      partial
+    };
   } catch (error) {
     console.error('[audit] Spelling check error:', error);
-    return { issues: [], error: error.message };
+    return { issues: [], error: error.message, partial: false };
   }
 }
 
@@ -502,14 +632,21 @@ function getContext(text, offset, length) {
 }
 
 // Filter LanguageTool candidates with Groq (PASS 2)
-async function filterWithGroq(candidates, fullText) {
+async function filterWithGroq(candidates, fullText, deadline) {
   const validTypos = [];
+  let partial = false;
   
   const apiKey = (process.env.GROQ_API_KEY || '').trim();
   
   console.log('[audit] filterWithGroq called with', candidates.length, 'candidates and apiKey:', !!apiKey);
   
   for (const candidate of candidates) {
+    if (deadline?.expired()) {
+      console.log('[audit] Groq classification stopped — request deadline reached');
+      partial = true;
+      break;
+    }
+
     try {
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -552,7 +689,89 @@ async function filterWithGroq(candidates, fullText) {
     }
   }
   
-  return validTypos;
+  return { typos: validTypos, partial };
+}
+
+async function runAudit(url, deadline, ctx) {
+  const plainHtml = await fetchHTML(url);
+  deadline.assertTime('after plain fetch');
+
+  const plainContent = extractContent(plainHtml);
+  const willUseBrowser = needsBrowserRender(plainHtml, plainContent);
+
+  let pageContent;
+  if (willUseBrowser) {
+    ctx.pageSpeed = PAGESPEED_SKIPPED;
+    console.log('[audit] Skipping PageSpeed — JS shell detected, saving budget for browser render');
+    pageContent = await applyBrowserFallback(url, plainHtml, plainContent, deadline);
+  } else {
+    const pageSpeedBudget = deadline.budgetFor(PAGESPEED_TIMEOUT_MS);
+    ctx.pageSpeed = await getPageSpeedData(url, pageSpeedBudget);
+    pageContent = {
+      html: plainHtml,
+      visibleText: plainContent.visibleText,
+      links: plainContent.links,
+      renderMethod: 'fetch',
+      renderWarning: null
+    };
+  }
+  deadline.assertTime('after page content');
+
+  ctx.html = pageContent.html;
+  ctx.visibleText = pageContent.visibleText;
+  ctx.links = pageContent.links;
+  ctx.renderMethod = pageContent.renderMethod;
+  ctx.renderWarning = pageContent.renderWarning;
+  ctx.htmlError = null;
+
+  if (!ctx.html) {
+    throw new Error('No HTML content retrieved');
+  }
+
+  if (ctx.visibleText.length > 50 || ctx.links.length > 0) {
+    deadline.assertTime('before dependent checks');
+
+    const [linksResult, spellingResult] = await Promise.allSettled([
+      checkBrokenLinks(ctx.links, url, deadline),
+      checkSpelling(ctx.visibleText, deadline)
+    ]);
+
+    if (linksResult.status === 'fulfilled') {
+      ctx.brokenLinks = linksResult.value.brokenLinks;
+      ctx.linksPartial = linksResult.value.partial;
+      ctx.linksError = linksResult.value.partial ? 'Link check incomplete — time budget reached' : null;
+    } else {
+      console.error('[audit] Link check failed:', linksResult.reason);
+      ctx.brokenLinks = [];
+      ctx.linksError = linksResult.reason?.message || 'Link check failed';
+    }
+
+    if (spellingResult.status === 'fulfilled') {
+      const spellingValue = spellingResult.value;
+      ctx.spellingIssues = { issues: spellingValue.issues, error: null };
+      ctx.spellingPartial = spellingValue.partial || false;
+      ctx.spellingError = spellingValue.partial ? 'Spelling check incomplete — time budget reached' : null;
+    } else {
+      console.error('[audit] Spelling check failed:', spellingResult.reason);
+      ctx.spellingIssues = { issues: [], error: spellingResult.reason?.message || 'Spelling check failed' };
+      ctx.spellingError = spellingResult.reason?.message || 'Spelling check failed';
+    }
+  } else {
+    ctx.linksError = 'No content to check';
+    ctx.spellingIssues = { issues: [], error: 'No content to check' };
+    ctx.spellingError = 'No content to check';
+  }
+
+  try {
+    ctx.technicalChecks = performTechnicalChecks(ctx.html, url);
+  } catch (error) {
+    console.error('[audit] Technical checks failed:', error);
+    ctx.technicalChecks = {
+      isHttps: url.startsWith('https://'),
+      hasTelLink: false,
+      hasViewport: false
+    };
+  }
 }
 
 export default async function handler(req, res) {
@@ -575,144 +794,45 @@ export default async function handler(req, res) {
   
   try {
     const startTime = Date.now();
-    
-    // Run independent checks in parallel: page content fetch and PageSpeed
-    const [htmlResult, pageSpeedResult] = await Promise.allSettled([
-      fetchPageContent(url),
-      getPageSpeedData(url)
-    ]);
-    
-    // Extract HTML result
-    let html, visibleText, links, htmlError, renderMethod, renderWarning;
-    if (htmlResult.status === 'fulfilled') {
-      try {
-        ({ html, visibleText, links, renderMethod, renderWarning } = htmlResult.value);
-        htmlError = null;
-      } catch (error) {
-        console.error('[audit] HTML extraction failed:', error);
-        htmlError = error.message;
-        visibleText = '';
-        links = [];
-        renderMethod = 'fetch';
-        renderWarning = null;
+    const deadline = createDeadline(startTime);
+    const ctx = createAuditContext(url);
+    let responded = false;
+
+    const respond = (statusCode, body) => {
+      if (responded) return;
+      responded = true;
+      return res.status(statusCode).json(body);
+    };
+
+    const safetyTimer = setTimeout(() => {
+      console.error('[audit] Request deadline safety net triggered');
+      ctx.scanIncomplete = true;
+      ctx.deadlineExceeded = true;
+      respond(200, buildAuditResponse(ctx, startTime));
+    }, REQUEST_BUDGET_MS);
+
+    try {
+      await runAudit(url, deadline, ctx);
+      clearTimeout(safetyTimer);
+      if (!responded) {
+        console.log('[audit] Total audit time:', Date.now() - startTime, 'ms');
+        respond(200, buildAuditResponse(ctx, startTime));
       }
-    } else {
-      console.error('[audit] HTML fetch failed:', htmlResult.reason);
-      htmlError = htmlResult.reason?.message || 'Failed to fetch HTML';
-      visibleText = '';
-      links = [];
-      renderMethod = 'fetch';
-      renderWarning = null;
+    } catch (error) {
+      clearTimeout(safetyTimer);
+      if (responded) return;
+
+      if (error.code === 'DEADLINE_EXCEEDED') {
+        ctx.scanIncomplete = true;
+        ctx.deadlineExceeded = true;
+        respond(200, buildAuditResponse(ctx, startTime));
+        return;
+      }
+
+      ctx.htmlError = error.message;
+      ctx.scanIncomplete = true;
+      respond(200, buildAuditResponse(ctx, startTime));
     }
-    
-    // Extract PageSpeed result
-    let pageSpeed;
-    if (pageSpeedResult.status === 'fulfilled') {
-      pageSpeed = pageSpeedResult.value;
-    } else {
-      console.error('[audit] PageSpeed check failed:', pageSpeedResult.reason);
-      pageSpeed = {
-        mobileScore: null,
-        loadTime: null,
-        issues: [],
-        error: pageSpeedResult.reason?.message || 'PageSpeed check failed'
-      };
-    }
-    
-    // Run dependent checks in parallel (only if HTML succeeded)
-    let brokenLinks, linksError, spellingIssues, spellingError, technicalChecks;
-    
-    if (!htmlError && (links.length > 0 || visibleText.length > 50)) {
-      const [linksResult, spellingResult] = await Promise.allSettled([
-        checkBrokenLinks(links, url), // Check all links for accuracy
-        checkSpelling(visibleText) // Remove URL parameter
-      ]);
-      
-      // Extract link check result
-      if (linksResult.status === 'fulfilled') {
-        brokenLinks = linksResult.value;
-        linksError = null;
-      } else {
-        console.error('[audit] Link check failed:', linksResult.reason);
-        brokenLinks = [];
-        linksError = linksResult.reason?.message || 'Link check failed';
-      }
-      
-      // Extract spelling result
-      if (spellingResult.status === 'fulfilled') {
-        spellingIssues = spellingResult.value;
-        spellingError = null;
-      } else {
-        console.error('[audit] Spelling check failed:', spellingResult.reason);
-        spellingIssues = { issues: [], error: spellingResult.reason?.message || 'Spelling check failed' };
-        spellingError = spellingResult.reason?.message || 'Spelling check failed';
-      }
-    } else {
-      brokenLinks = [];
-      linksError = htmlError || 'No content to check';
-      spellingIssues = { issues: [], error: htmlError || 'No content to check' };
-      spellingError = htmlError || 'No content to check';
-    }
-    
-    // Perform technical checks (synchronous, no need for parallel)
-    if (!htmlError && html) {
-      try {
-        technicalChecks = performTechnicalChecks(html, url);
-      } catch (error) {
-        console.error('[audit] Technical checks failed:', error);
-        technicalChecks = {
-          isHttps: url.startsWith('https://'),
-          hasTelLink: false,
-          hasViewport: false
-        };
-      }
-    } else {
-      technicalChecks = {
-        isHttps: url.startsWith('https://'),
-        hasTelLink: false,
-        hasViewport: false
-      };
-    }
-    
-    const endTime = Date.now();
-    const totalTime = endTime - startTime;
-    console.log('[audit] Total audit time:', totalTime, 'ms');
-    
-    // Return structured response with partial data if some checks failed
-    return res.status(200).json({
-      brokenLinks: {
-        count: brokenLinks.length,
-        links: brokenLinks,
-        error: linksError
-      },
-      pageSpeed: {
-        mobileScore: pageSpeed.mobileScore,
-        loadTime: pageSpeed.loadTime,
-        issues: pageSpeed.issues,
-        error: pageSpeed.error
-      },
-      spellingIssues: {
-        count: spellingIssues.issues.length,
-        issues: spellingIssues.issues,
-        error: spellingError
-      },
-      technicalChecks: {
-        isHttps: technicalChecks.isHttps,
-        hasTelLink: technicalChecks.hasTelLink,
-        hasViewport: technicalChecks.hasViewport
-      },
-      auditMeta: {
-        url,
-        timestamp: new Date().toISOString(),
-        linksChecked: links.length,
-        totalLinksFound: links.length,
-        partialScan: !!htmlError,
-        htmlError: htmlError,
-        renderMethod: renderMethod || 'fetch',
-        renderWarning: renderWarning || null,
-        totalTime: totalTime
-      }
-    });
     
   } catch (error) {
     console.error('[audit] Audit error:', error);
