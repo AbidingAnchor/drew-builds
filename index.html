@@ -3658,7 +3658,6 @@ Style rules:
             }
 
             // Spelling issues - critical (from Groq LLM)
-            let typoCount = 0;
             if (data.spellingIssues?.count > 0 && Array.isArray(data.spellingIssues.issues)) {
                 data.spellingIssues.issues.forEach(issue => {
                     results.critical.push({
