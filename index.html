@@ -3645,6 +3645,8 @@ Style rules:
                 return results;
             }
 
+            let typoCount = 0; // Track only actual typos, not grammar issues
+
             // Broken links - critical
             if (data.brokenLinks?.count > 0 && Array.isArray(data.brokenLinks.links)) {
                 data.brokenLinks.links.forEach(link => {
@@ -3655,13 +3657,18 @@ Style rules:
                 });
             }
 
-            // Spelling issues - critical
+            // Spelling issues - critical (only pure misspellings)
             if (data.spellingIssues?.count > 0 && Array.isArray(data.spellingIssues.issues)) {
                 data.spellingIssues.issues.forEach(issue => {
-                    results.critical.push({
-                        title: 'Spelling or grammar issue',
-                        description: `"${issue.word}" — ${issue.message}`
-                    });
+                    // Only flag pure misspellings (TYPOS/MORFOLOGIK_RULE) as critical
+                    // Grammar/style issues are too unreliable for automated flagging
+                    if (issue.type === 'TYPOS' || issue.type === 'MORFOLOGIK_RULE') {
+                        results.critical.push({
+                            title: 'Spelling mistake',
+                            description: `"${issue.word}" — ${issue.message}`
+                        });
+                        typoCount++;
+                    }
                 });
             }
 
@@ -3729,10 +3736,10 @@ Style rules:
             }
 
             // No spelling issues - good
-            if (data.spellingIssues?.count === 0) {
+            if (typoCount === 0) {
                 results.good.push({
-                    title: 'No spelling issues',
-                    description: 'Text content looks clean'
+                    title: 'No obvious spelling mistakes',
+                    description: 'Text content looks clean (only checking for clear misspellings)'
                 });
             }
 

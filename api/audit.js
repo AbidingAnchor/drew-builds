@@ -148,7 +148,9 @@ async function getPageSpeedData(url) {
     };
   }
   
-  const TIMEOUT_MS = 7000; // 7 second timeout
+  const TIMEOUT_MS = 8000; // 8 seconds (enough for PageSpeed but not too long)
+  
+  console.log('[audit] PageSpeed API call starting for:', url, 'with timeout:', TIMEOUT_MS, 'ms');
   
   try {
     const controller = new AbortController();
@@ -161,8 +163,11 @@ async function getPageSpeedData(url) {
     
     clearTimeout(timeoutId);
     
+    console.log('[audit] PageSpeed API response status:', response.status);
+    
     if (!response.ok) {
-      throw new Error(`PageSpeed API error: ${response.status}`);
+      console.error('[audit] PageSpeed API error response:', response.status, response.statusText);
+      throw new Error(`PageSpeed API error: ${response.status} - ${response.statusText}`);
     }
     
     const data = await response.json();
@@ -197,7 +202,7 @@ async function getPageSpeedData(url) {
     if (error.name === 'AbortError') {
       console.error('[audit] PageSpeed API timeout after', TIMEOUT_MS, 'ms');
       return {
-        error: 'Request timeout',
+        error: 'Request timeout (PageSpeed API slow)',
         mobileScore: null,
         loadTime: null,
         issues: []
@@ -319,6 +324,12 @@ async function checkSpelling(text) {
       );
       
       if (isWhitelisted) return false;
+      
+      // Only flag pure misspellings (TYPOS/MORFOLOGIK_RULE) as critical
+      // Grammar/style issues are too unreliable for automated flagging
+      if (issue.type !== 'TYPOS' && issue.type !== 'MORFOLOGIK_RULE') {
+        return false;
+      }
       
       // Skip proper noun casing issues (capitalized words not at sentence start)
       if (issue.type === 'CASING') {
