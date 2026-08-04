@@ -288,7 +288,7 @@ async function checkSpelling(text, url) {
         messages: [
           {
             role: 'system',
-            content: 'You are an aggressive spelling checker for website content. Find ALL spelling errors - typos, misspellings, and obvious mistakes. CRITICAL: Check navigation links, menu labels, headings, and short phrases - typos here are still errors. EXCLUDE ONLY: brand/business names, proper nouns, foreign-language words (especially Spanish), industry terms, local place names, and technical vocabulary. Examples of REAL TYPOS to flag: "Appetizier" should be "Appetizers", "recieve" should be "receive", "thier" should be "their". Do NOT be conservative - if a word is clearly misspelled, flag it. Return errors with correct spelling. If no errors found, return empty list. JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
+            content: 'You are a spelling checker for website content. Find ONLY genuine spelling errors - misspelled words that should be corrected. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish), industry terms, local place names, technical vocabulary, abbreviations, and style/formatting issues (like missing commas, ampersands vs "and", etc.). Focus ONLY on actual misspellings like "Appetizier" should be "Appetizers", "recieve" should be "receive", "Stake" should be "Steak". Do NOT flag grammatical or style issues. Return only spelling errors with correct spelling. If no spelling errors found, return empty list. JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
           },
           {
             role: 'user',
@@ -324,8 +324,19 @@ async function checkSpelling(text, url) {
     
     const spellingErrors = parsedResponse.errors || [];
     
+    // Deduplicate by word (case-insensitive)
+    const seenWords = new Set();
+    const deduplicatedErrors = spellingErrors.filter(error => {
+      const lowerWord = error.word.toLowerCase();
+      if (seenWords.has(lowerWord)) {
+        return false;
+      }
+      seenWords.add(lowerWord);
+      return true;
+    });
+    
     // Format the response to match expected structure
-    const issues = spellingErrors.map(error => ({
+    const issues = deduplicatedErrors.map(error => ({
       word: error.word,
       message: error.message || 'Possible spelling error',
       suggestions: error.correct ? [error.correct] : [],
