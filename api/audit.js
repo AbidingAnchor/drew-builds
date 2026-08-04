@@ -27,8 +27,6 @@ async function fetchHTML(url) {
 function extractContent(html) {
   const $ = cheerio.load(html);
   
-  console.log('[audit] extractContent called, HTML length:', html.length);
-  
   // Remove script, style, noscript, and other non-content elements
   $('script, style, noscript, iframe, svg, head').remove();
   
@@ -51,9 +49,6 @@ function extractContent(html) {
     .replace(/\s+/g, ' ')  // Clean up any double spaces created
     .trim();
   
-  console.log('[audit] Extracted visible text length:', visibleText.length);
-  console.log('[audit] Extracted text sample (first 300 chars):', visibleText.substring(0, 300));
-  
   // Extract all links
   const links = [];
   $('a[href]').each((_, element) => {
@@ -63,8 +58,6 @@ function extractContent(html) {
       links.push({ url: href, text });
     }
   });
-  
-  console.log('[audit] Extracted', links.length, 'links');
   
   return { visibleText, links };
 }
@@ -246,21 +239,9 @@ function performTechnicalChecks(html, url) {
 }
 
 // Check spelling using Groq LLM instead of LanguageTool
-async function checkSpelling(text, url) {
-  console.log('[audit] checkSpelling called with text length:', text.length);
-  console.log('[audit] checkSpelling URL:', url);
-  
-  // Debug: Log full extracted text for torresdalepizzabeer.com
-  if (url && url.includes('torresdalepizzabeer.com')) {
-    console.log('[audit] FULL EXTRACTED TEXT for torresdalepizzabeer.com:', text);
-    console.log('[audit] Does text contain "Appetizier"?', text.includes('Appetizier'));
-    console.log('[audit] Does text contain "Appetizers"?', text.includes('Appetizers'));
-  }
-  
+async function checkSpelling(text) {
   try {
     const apiKey = (process.env.GROQ_API_KEY || '').trim();
-    
-    console.log('[audit] GROQ_API_KEY check:', !!apiKey, 'length:', apiKey.length);
     
     if (!apiKey) {
       console.error('[audit] GROQ_API_KEY is missing or empty. Check Vercel environment variables.');
@@ -268,9 +249,6 @@ async function checkSpelling(text, url) {
     }
     
     const textToCheck = text.substring(0, 3000); // Limit text length for LLM
-    
-    console.log('[audit] Sending text to Groq for spelling check (first 500 chars):', textToCheck.substring(0, 500));
-    console.log('[audit] Full text length:', text.length, 'Sending:', textToCheck.length);
 
     const TIMEOUT_MS = 8000; // 8 second timeout
     
@@ -303,25 +281,18 @@ async function checkSpelling(text, url) {
     
     clearTimeout(timeoutId);
     
-    console.log('[audit] Groq API response status:', response.status);
-    
     if (!response.ok) {
       throw new Error(`Groq API error: ${response.status}`);
     }
     
     const data = await response.json();
-    console.log('[audit] RAW Groq API response:', JSON.stringify(data, null, 2));
-    
     const content = data.choices?.[0]?.message?.content;
-    console.log('[audit] Groq response content:', content);
     
     if (!content) {
       return { issues: [], error: 'No response from API' };
     }
     
     const parsedResponse = JSON.parse(content);
-    console.log('[audit] Parsed spelling errors:', parsedResponse);
-    
     const spellingErrors = parsedResponse.errors || [];
     
     // Deduplicate by word (case-insensitive)
@@ -345,8 +316,6 @@ async function checkSpelling(text, url) {
       type: 'TYPOS'
     }));
     
-    console.log('[audit] Final formatted issues:', issues);
-    
     return { issues, error: null };
   } catch (error) {
     if (error.name === 'AbortError') {
@@ -359,9 +328,6 @@ async function checkSpelling(text, url) {
 }
 
 export default async function handler(req, res) {
-  console.log('[audit] AUDIT ENDPOINT CALLED - REQUEST METHOD:', req.method);
-  console.log('[audit] REQUEST BODY:', JSON.stringify(req.body));
-  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -430,7 +396,7 @@ export default async function handler(req, res) {
     if (!htmlError && links.length > 0) {
       const [linksResult, spellingResult] = await Promise.allSettled([
         checkBrokenLinks(links, url), // Check all links for accuracy
-        checkSpelling(visibleText, url) // Pass URL for debugging
+        checkSpelling(visibleText) // Remove URL parameter
       ]);
       
       // Extract link check result
