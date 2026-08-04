@@ -1816,6 +1816,282 @@ section {
     cursor: not-allowed;
 }
 
+/* Scanning View */
+.scan-view {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(90, 156, 255, 0.08), transparent 50%),
+                linear-gradient(180deg, rgba(10, 10, 15, 0.95) 0%, rgba(6, 6, 10, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10;
+}
+
+.scan-view.active {
+    display: flex;
+}
+
+.scan-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    text-align: center;
+    letter-spacing: -0.02em;
+}
+
+.scan-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.scan-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 0.5px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    opacity: 0.3;
+    transform: translateX(-8px);
+    transition: all 0.4s ease;
+}
+
+.scan-step.active {
+    opacity: 1;
+    transform: translateX(0);
+    border-color: rgba(90, 156, 255, 0.3);
+    background: rgba(90, 156, 255, 0.05);
+}
+
+.scan-step.completed {
+    opacity: 1;
+    transform: translateX(0);
+    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.scan-step-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.scan-step.active .scan-step-icon {
+    border-color: rgba(90, 156, 255, 0.6);
+    background: rgba(90, 156, 255, 0.1);
+}
+
+.scan-step.completed .scan-step-icon {
+    border-color: #22c55e;
+    background: rgba(34, 197, 94, 0.15);
+}
+
+.scan-step.completed .scan-step-icon::after {
+    content: '✓';
+    color: #22c55e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.scan-step.loading .scan-step-icon {
+    border-color: rgba(90, 156, 255, 0.6);
+    border-top-color: transparent;
+    animation: scan-spin 1s linear infinite;
+}
+
+@keyframes scan-spin {
+    to { transform: rotate(360deg); }
+}
+
+.scan-step-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.scan-step.active .scan-step-text {
+    color: var(--text-primary);
+}
+
+.scan-step.completed .scan-step-text {
+    color: rgba(34, 197, 94, 0.9);
+}
+
+/* Results View */
+.results-view {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 20%, rgba(90, 156, 255, 0.06), transparent 45%),
+                linear-gradient(180deg, rgba(10, 10, 15, 0.95) 0%, rgba(6, 6, 10, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10;
+}
+
+.results-view.active {
+    display: flex;
+}
+
+.results-header {
+    padding: 16px;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+}
+
+.results-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.results-url {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    word-break: break-all;
+}
+
+.results-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.results-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.results-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.results-content::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+}
+
+.results-section {
+    margin-bottom: 20px;
+}
+
+.results-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+}
+
+.results-section-title.red {
+    color: #ef4444;
+}
+
+.results-section-title.yellow {
+    color: #f59e0b;
+}
+
+.results-section-title.green {
+    color: #22c55e;
+}
+
+.results-section-icon {
+    font-size: 1rem;
+}
+
+.results-item {
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 0.5px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.results-item:last-child {
+    margin-bottom: 0;
+}
+
+.results-cta {
+    padding: 16px;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+}
+
+.results-cta-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.results-cta-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(90, 156, 255, 0.2), rgba(61, 139, 255, 0.15));
+    border: 0.5px solid rgba(90, 156, 255, 0.3);
+    color: var(--text-primary);
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(90, 156, 255, 0.15);
+}
+
+.results-cta-btn:hover {
+    background: linear-gradient(135deg, rgba(90, 156, 255, 0.3), rgba(61, 139, 255, 0.25));
+    border-color: rgba(90, 156, 255, 0.5);
+    box-shadow: 0 0 30px rgba(90, 156, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.results-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s ease;
+    z-index: 10;
+}
+
+.results-close:hover {
+    color: var(--text-primary);
+}
+
 .loading-indicator {
     display: flex;
     gap: 4px;
@@ -2798,11 +3074,54 @@ section {
             <button class="chat-close" id="chatClose">×</button>
         </div>
         <div class="chat-messages" id="chatMessages">
-            <div class="message assistant">Hey! I'm Vector — ask me anything about pricing, timelines, or what Drew can build for you.</div>
+            <div class="message assistant">Hey! I'm Vector — ask me anything about pricing, timelines, or what Drew can build for you. Paste a URL to scan a website!</div>
         </div>
         <div class="chat-input-container">
-            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message or paste a URL to scan...">
             <button class="chat-send" id="chatSend">Send</button>
+        </div>
+        
+        <!-- Scanning View -->
+        <div class="scan-view" id="scanView">
+            <h3 class="scan-title">Scanning website...</h3>
+            <div class="scan-steps">
+                <div class="scan-step" data-step="1">
+                    <div class="scan-step-icon"></div>
+                    <span class="scan-step-text">Fetching site...</span>
+                </div>
+                <div class="scan-step" data-step="2">
+                    <div class="scan-step-icon"></div>
+                    <span class="scan-step-text">Checking mobile performance...</span>
+                </div>
+                <div class="scan-step" data-step="3">
+                    <div class="scan-step-icon"></div>
+                    <span class="scan-step-text">Scanning for broken links...</span>
+                </div>
+                <div class="scan-step" data-step="4">
+                    <div class="scan-step-icon"></div>
+                    <span class="scan-step-text">Checking spelling & grammar...</span>
+                </div>
+                <div class="scan-step" data-step="5">
+                    <div class="scan-step-icon"></div>
+                    <span class="scan-step-text">Reviewing technical setup...</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results View -->
+        <div class="results-view" id="resultsView">
+            <button class="results-close" id="resultsClose">×</button>
+            <div class="results-header">
+                <h3 class="results-title">Site Audit Results</h3>
+                <p class="results-url" id="resultsUrl"></p>
+            </div>
+            <div class="results-content" id="resultsContent">
+                <!-- Results will be dynamically inserted here -->
+            </div>
+            <div class="results-cta">
+                <p class="results-cta-text">Want help fixing this? That's exactly what Drew Builds does.</p>
+                <a href="#contact" class="results-cta-btn" id="resultsCtaBtn">Get in touch</a>
+            </div>
         </div>
     </div>
 
@@ -3039,6 +3358,12 @@ section {
         const chatInput = document.getElementById('chatInput');
         const chatSend = document.getElementById('chatSend');
         const chatMessages = document.getElementById('chatMessages');
+        const scanView = document.getElementById('scanView');
+        const resultsView = document.getElementById('resultsView');
+        const resultsClose = document.getElementById('resultsClose');
+        const resultsUrl = document.getElementById('resultsUrl');
+        const resultsContent = document.getElementById('resultsContent');
+        const resultsCtaBtn = document.getElementById('resultsCtaBtn');
 
         const SYSTEM_PROMPT = `You're Vector — Drew's AI sidekick for Drew Builds. Talk like a sharp, chill friend who knows the business cold. Keep answers short (usually 2–4 sentences). Sound natural, not corporate. A little personality is good; gimmicks and slang-spam aren't. Be helpful, confident, and honest — never pushy.
 
@@ -3084,10 +3409,23 @@ Style rules:
             chatWindow.classList.remove('open');
         });
 
+        // URL detection
+        function isURL(text) {
+            const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+            return urlPattern.test(text.trim());
+        }
+
         // Send message function
         async function sendMessage() {
             const message = chatInput.value.trim();
             if (!message) return;
+
+            // Check if message is a URL
+            if (isURL(message)) {
+                await startSiteScan(message);
+                chatInput.value = '';
+                return;
+            }
 
             // Add user message to chat
             addMessage(message, 'user');
@@ -3191,6 +3529,267 @@ Style rules:
                 sendMessage();
             }
         });
+
+        // Results close button
+        resultsClose.addEventListener('click', () => {
+            resultsView.classList.remove('active');
+            chatMessages.style.display = 'flex';
+            chatInput.parentElement.style.display = 'flex';
+        });
+
+        // Results CTA button
+        resultsCtaBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            resultsView.classList.remove('active');
+            chatWindow.classList.remove('open');
+            
+            // Scroll to contact section
+            const contactSection = document.querySelector('#contact');
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        // Site scanning functionality
+        async function startSiteScan(url) {
+            // Ensure URL has protocol
+            let scanUrl = url.trim();
+            if (!scanUrl.startsWith('http://') && !scanUrl.startsWith('https://')) {
+                scanUrl = 'https://' + scanUrl;
+            }
+
+            // Hide chat messages and input, show scan view
+            chatMessages.style.display = 'none';
+            chatInput.parentElement.style.display = 'none';
+            scanView.classList.add('active');
+
+            // Start animation and API call in parallel
+            let auditData = null;
+            let auditError = null;
+            
+            const animationPromise = runScanAnimation();
+            const auditPromise = fetch('/api/audit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: scanUrl })
+            });
+
+            try {
+                const auditResponse = await auditPromise;
+                auditData = await auditResponse.json();
+            } catch (error) {
+                auditError = error;
+            }
+
+            // Wait for animation to complete
+            await animationPromise;
+
+            // Handle results or error
+            if (auditError) {
+                console.error('Audit failed:', auditError);
+                scanView.classList.remove('active');
+                chatMessages.style.display = 'flex';
+                chatInput.parentElement.style.display = 'flex';
+                addMessage(`Sorry — couldn't scan that site (${auditError.message}). Please try again.`, 'assistant');
+            } else {
+                showResults(scanUrl, auditData);
+            }
+        }
+
+        async function runScanAnimation() {
+            const steps = document.querySelectorAll('.scan-step');
+            const stepDelay = 2000; // 2 seconds between steps
+
+            for (let i = 0; i < steps.length; i++) {
+                const step = steps[i];
+                step.classList.add('active');
+                step.classList.add('loading');
+                
+                await new Promise(resolve => setTimeout(resolve, stepDelay));
+                
+                step.classList.remove('loading');
+                step.classList.add('completed');
+            }
+        }
+
+        function showResults(url, auditData) {
+            scanView.classList.remove('active');
+            resultsView.classList.add('active');
+            resultsUrl.textContent = url;
+            
+            const translatedData = translateAuditData(auditData);
+            renderResults(translatedData);
+        }
+
+        function translateAuditData(data) {
+            const results = {
+                critical: [],
+                warnings: [],
+                good: []
+            };
+
+            // Broken links - critical
+            if (data.brokenLinks?.count > 0) {
+                data.brokenLinks.links.forEach(link => {
+                    results.critical.push({
+                        title: 'Broken link found',
+                        description: `Link to "${link.url}" is not working (${link.status || 'failed'})`
+                    });
+                });
+            }
+
+            // Spelling issues - critical
+            if (data.spellingIssues?.count > 0) {
+                data.spellingIssues.issues.forEach(issue => {
+                    results.critical.push({
+                        title: 'Spelling or grammar issue',
+                        description: `"${issue.word}" — ${issue.message}`
+                    });
+                });
+            }
+
+            // Missing HTTPS - critical
+            if (!data.technicalChecks?.isHttps) {
+                results.critical.push({
+                    title: 'Site not secure',
+                    description: 'The site is not using HTTPS encryption'
+                });
+            }
+
+            // PageSpeed score - warning if below 70
+            if (data.pageSpeed?.mobileScore !== null) {
+                if (data.pageSpeed.mobileScore < 70) {
+                    results.warnings.push({
+                        title: 'Mobile performance needs improvement',
+                        description: `Mobile score is ${data.pageSpeed.mobileScore}/100 (aim for 70+)`
+                    });
+                } else {
+                    results.good.push({
+                        title: 'Good mobile performance',
+                        description: `Mobile score is ${data.pageSpeed.mobileScore}/100`
+                    });
+                }
+            }
+
+            // Missing viewport - warning
+            if (!data.technicalChecks?.hasViewport) {
+                results.warnings.push({
+                    title: 'Missing mobile viewport',
+                    description: 'Site may not display properly on mobile devices'
+                });
+            } else {
+                results.good.push({
+                    title: 'Mobile-ready viewport',
+                    description: 'Site has proper mobile viewport settings'
+                });
+            }
+
+            // Missing tel: link - warning
+            if (!data.technicalChecks?.hasTelLink) {
+                results.warnings.push({
+                    title: 'No tap-to-call phone link',
+                    description: 'Consider adding a tel: link for easy mobile calling'
+                });
+            } else {
+                results.good.push({
+                    title: 'Tap-to-call enabled',
+                    description: 'Site has phone links for mobile users'
+                });
+            }
+
+            // No broken links - good
+            if (data.brokenLinks?.count === 0) {
+                results.good.push({
+                    title: 'All links working',
+                    description: 'No broken links found on the page'
+                });
+            }
+
+            // No spelling issues - good
+            if (data.spellingIssues?.count === 0) {
+                results.good.push({
+                    title: 'No spelling issues',
+                    description: 'Text content looks clean'
+                });
+            }
+
+            return results;
+        }
+
+        function renderResults(data) {
+            let html = '';
+
+            // Critical issues (red)
+            if (data.critical.length > 0) {
+                html += `
+                    <div class="results-section">
+                        <div class="results-section-title red">
+                            <span class="results-section-icon">🔴</span>
+                            Critical Issues (${data.critical.length})
+                        </div>
+                        ${data.critical.map(item => `
+                            <div class="results-item">
+                                <strong>${item.title}</strong><br>
+                                ${item.description}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Warnings (yellow)
+            if (data.warnings.length > 0) {
+                html += `
+                    <div class="results-section">
+                        <div class="results-section-title yellow">
+                            <span class="results-section-icon">🟡</span>
+                            Warnings (${data.warnings.length})
+                        </div>
+                        ${data.warnings.map(item => `
+                            <div class="results-item">
+                                <strong>${item.title}</strong><br>
+                                ${item.description}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Good (green)
+            if (data.good.length > 0) {
+                html += `
+                    <div class="results-section">
+                        <div class="results-section-title green">
+                            <span class="results-section-icon">🟢</span>
+                            Working Well (${data.good.length})
+                        </div>
+                        ${data.good.map(item => `
+                            <div class="results-item">
+                                <strong>${item.title}</strong><br>
+                                ${item.description}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // If no issues at all
+            if (data.critical.length === 0 && data.warnings.length === 0) {
+                html += `
+                    <div class="results-section">
+                        <div class="results-section-title green">
+                            <span class="results-section-icon">🟢</span>
+                            All checks passed!
+                        </div>
+                        <div class="results-item">
+                            This site looks great — no major issues found.
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultsContent.innerHTML = html;
+        }
     </script>
 
     <script type="importmap">
