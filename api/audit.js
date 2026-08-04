@@ -260,8 +260,23 @@ async function checkSpelling(text) {
     
     console.log('[audit] LanguageTool candidates:', languageToolIssues.map(i => i.word));
     
+    // Calculate word frequency in the original text
+    const words = textToCheck.toLowerCase().match(/\b\w+\b/g) || [];
+    const wordFrequency = {};
+    words.forEach(w => {
+      wordFrequency[w] = (wordFrequency[w] || 0) + 1;
+    });
+    
+    // Filter out candidates that appear 2+ times (likely correct, not typos)
+    const filteredCandidates = languageToolIssues.filter(issue => {
+      const word = issue.word.toLowerCase();
+      return wordFrequency[word] < 2;
+    });
+    
+    console.log('[audit] After frequency filter:', filteredCandidates.length, 'candidates');
+    
     // PASS 2: Filter with Groq classification
-    const validTypos = await filterWithGroq(languageToolIssues, textToCheck, apiKey);
+    const validTypos = await filterWithGroq(filteredCandidates, textToCheck, apiKey);
     console.log('[audit] Groq-confirmed typos:', validTypos.length);
     console.log('[audit] Groq-confirmed words:', validTypos.map(i => i.word));
     
