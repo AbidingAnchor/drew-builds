@@ -488,7 +488,13 @@ export default async function handler(req, res) {
       spellingIssues: {
         count: spellingIssues.issues.length,
         issues: spellingIssues.issues,
-        error: spellingError
+        error: spellingError,
+        debug: {
+          textLength: visibleText.length,
+          textSample: visibleText.substring(0, 500),
+          containsAppetizier: visibleText.includes('Appetizier'),
+          containsAppetizers: visibleText.includes('Appetizers')
+        }
       },
       technicalChecks: {
         isHttps: technicalChecks.isHttps,
