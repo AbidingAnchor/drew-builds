@@ -1,5 +1,8 @@
 import * as cheerio from 'cheerio';
 
+const BROWSER_RENDER_TIMEOUT_MS = 5500;
+const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
 function getCharsetFromContentType(contentType) {
   const match = contentType?.match(/charset=([^;\s]+)/i);
   return match ? match[1].replace(/['"]/g, '') : 'utf-8';
@@ -10,7 +13,7 @@ async function fetchHTML(url) {
   try {
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': USER_AGENT,
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.5'
       },
@@ -79,6 +82,121 @@ function extractContent(html) {
   });
   
   return { visibleText, links };
+}
+
+// Detect plain fetches that likely need JS rendering (SPA shells, empty body, etc.)
+function needsBrowserRender(html, { visibleText, links }) {
+  const $ = cheerio.load(html, { decodeEntities: true });
+  const metaCount = $('head meta').length;
+  const bodyTextLen = visibleText.length;
+  const linkCount = links.length;
+
+  if (linkCount >= 3 && bodyTextLen >= 300) return false;
+  if (bodyTextLen >= 600) return false;
+
+  let suspiciousScore = 0;
+  if (linkCount === 0) suspiciousScore += 2;
+  else if (linkCount < 3 && bodyTextLen < 200) suspiciousScore += 1;
+
+  if (metaCount === 0) suspiciousScore += 2;
+  if (bodyTextLen < 100) suspiciousScore += 2;
+  else if (bodyTextLen < 250) suspiciousScore += 1;
+
+  const hasEmptySpaRoot = $('#root, #__next, #app').toArray().some((el) => {
+    return $(el).text().replace(/\s+/g, '').length < 80;
+  });
+  if (hasEmptySpaRoot) suspiciousScore += 2;
+
+  return suspiciousScore >= 3;
+}
+
+// Headless browser fallback for JS-rendered sites (Vercel serverless Chromium)
+async function renderHTMLWithBrowser(url) {
+  const timeoutError = "Couldn't fully render this site";
+  let browser = null;
+
+  const renderWork = async () => {
+    const puppeteer = (await import('puppeteer-core')).default;
+    const chromium = (await import('@sparticuz/chromium')).default;
+
+    chromium.setGraphicsMode = false;
+
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: { width: 1280, height: 800 },
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless
+    });
+
+    const page = await browser.newPage();
+    await page.setUserAgent(USER_AGENT);
+
+    await page.goto(url, {
+      waitUntil: 'domcontentloaded',
+      timeout: BROWSER_RENDER_TIMEOUT_MS - 1000
+    });
+
+    // Brief wait for client-side hydration without blowing the time budget
+    await page.waitForFunction(
+      () => document.querySelectorAll('a[href]').length > 0 || (document.body?.innerText?.length ?? 0) > 200,
+      { timeout: 1500 }
+    ).catch(() => {});
+
+    return page.content();
+  };
+
+  try {
+    const html = await Promise.race([
+      renderWork(),
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Render timeout')), BROWSER_RENDER_TIMEOUT_MS);
+      })
+    ]);
+    return { html, error: null };
+  } catch (error) {
+    console.error('[audit] Browser render failed:', error.message);
+    return { html: null, error: timeoutError };
+  } finally {
+    if (browser) {
+      await browser.close().catch(() => {});
+    }
+  }
+}
+
+// Plain fetch first; headless browser only when content looks suspiciously empty
+async function fetchPageContent(url) {
+  const html = await fetchHTML(url);
+  const content = extractContent(html);
+  let renderMethod = 'fetch';
+  let renderWarning = null;
+
+  if (!needsBrowserRender(html, content)) {
+    return { html, ...content, renderMethod, renderWarning };
+  }
+
+  console.log('[audit] Plain HTML looks like a JS shell, attempting headless render');
+  const { html: renderedHtml, error } = await renderHTMLWithBrowser(url);
+
+  if (renderedHtml) {
+    const renderedContent = extractContent(renderedHtml);
+    if (
+      renderedContent.links.length > content.links.length ||
+      renderedContent.visibleText.length > content.visibleText.length
+    ) {
+      return {
+        html: renderedHtml,
+        visibleText: renderedContent.visibleText,
+        links: renderedContent.links,
+        renderMethod: 'browser',
+        renderWarning: null
+      };
+    }
+    renderWarning = 'Browser render did not improve content; using plain fetch';
+  } else {
+    renderWarning = error;
+  }
+
+  return { html, ...content, renderMethod, renderWarning };
 }
 
 // Check for broken links with timeout
@@ -458,32 +576,33 @@ export default async function handler(req, res) {
   try {
     const startTime = Date.now();
     
-    // Run independent checks in parallel: HTML fetch and PageSpeed
+    // Run independent checks in parallel: page content fetch and PageSpeed
     const [htmlResult, pageSpeedResult] = await Promise.allSettled([
-      fetchHTML(url),
+      fetchPageContent(url),
       getPageSpeedData(url)
     ]);
     
     // Extract HTML result
-    let html, visibleText, links, htmlError;
+    let html, visibleText, links, htmlError, renderMethod, renderWarning;
     if (htmlResult.status === 'fulfilled') {
       try {
-        html = htmlResult.value;
-        const content = extractContent(html);
-        visibleText = content.visibleText;
-        links = content.links;
+        ({ html, visibleText, links, renderMethod, renderWarning } = htmlResult.value);
         htmlError = null;
       } catch (error) {
         console.error('[audit] HTML extraction failed:', error);
         htmlError = error.message;
         visibleText = '';
         links = [];
+        renderMethod = 'fetch';
+        renderWarning = null;
       }
     } else {
       console.error('[audit] HTML fetch failed:', htmlResult.reason);
       htmlError = htmlResult.reason?.message || 'Failed to fetch HTML';
       visibleText = '';
       links = [];
+      renderMethod = 'fetch';
+      renderWarning = null;
     }
     
     // Extract PageSpeed result
@@ -503,7 +622,7 @@ export default async function handler(req, res) {
     // Run dependent checks in parallel (only if HTML succeeded)
     let brokenLinks, linksError, spellingIssues, spellingError, technicalChecks;
     
-    if (!htmlError && links.length > 0) {
+    if (!htmlError && (links.length > 0 || visibleText.length > 50)) {
       const [linksResult, spellingResult] = await Promise.allSettled([
         checkBrokenLinks(links, url), // Check all links for accuracy
         checkSpelling(visibleText) // Remove URL parameter
@@ -589,6 +708,8 @@ export default async function handler(req, res) {
         totalLinksFound: links.length,
         partialScan: !!htmlError,
         htmlError: htmlError,
+        renderMethod: renderMethod || 'fetch',
+        renderWarning: renderWarning || null,
         totalTime: totalTime
       }
     });
