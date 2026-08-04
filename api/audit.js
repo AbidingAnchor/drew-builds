@@ -1,5 +1,10 @@
 import * as cheerio from 'cheerio';
 
+function getCharsetFromContentType(contentType) {
+  const match = contentType?.match(/charset=([^;\s]+)/i);
+  return match ? match[1].replace(/['"]/g, '') : 'utf-8';
+}
+
 // Helper function to fetch HTML content
 async function fetchHTML(url) {
   try {
@@ -16,7 +21,9 @@ async function fetchHTML(url) {
       throw new Error(`Failed to fetch HTML: ${response.status}`);
     }
     
-    return await response.text();
+    const buffer = await response.arrayBuffer();
+    const charset = getCharsetFromContentType(response.headers.get('content-type'));
+    return new TextDecoder(charset).decode(buffer);
   } catch (error) {
     console.error('[audit] HTML fetch error:', error);
     throw error;
@@ -25,7 +32,7 @@ async function fetchHTML(url) {
 
 // Extract visible text and links from HTML
 function extractContent(html) {
-  const $ = cheerio.load(html);
+  const $ = cheerio.load(html, { decodeEntities: true });
   
   // Remove script, style, noscript, and other non-content elements
   $('script, style, noscript, iframe, svg, head').remove();
@@ -33,20 +40,32 @@ function extractContent(html) {
   // Remove elements with display:none or visibility:hidden
   $('[style*="display:none"], [style*="display: none"], [style*="visibility:hidden"], [style*="visibility: hidden"]').remove();
   
-  // Add spaces around block elements to prevent text concatenation
-  $('p, div, h1, h2, h3, h4, h5, h6, li, span, a, button, strong, em, b, i, nav, header, footer').each((_, element) => {
-    $(element).prepend(' ').append(' ');
+  const blockSelector = 'p, h1, h2, h3, h4, h5, h6, li, td, th, figcaption, dt, dd, blockquote, label';
+  const segments = [];
+  
+  // Collect text from leaf block elements to preserve boundaries between adjacent items
+  $(blockSelector).each((_, el) => {
+    if ($(el).find(blockSelector).length > 0) return;
+    const text = $(el).text().replace(/\s+/g, ' ').trim();
+    if (text) segments.push(text);
   });
   
-  // Get visible text from body only
-  let visibleText = $('body').text()
-    .replace(/\s+/g, ' ')  // Replace multiple whitespace with single space
-    .replace(/([a-z])([A-Z])/g, '$1 $2')  // Add space between camelCase
-    .replace(/([.!?])([A-Z])/g, '$1 $2')  // Add space after sentence endings
-    .replace(/([a-z])([0-9])/g, '$1 $2')  // Add space between letters and numbers
-    .replace(/([0-9])([a-z])/g, '$1 $2')  // Add space between numbers and letters
-    .replace(/[^\x20-\x7E\n]/g, '')  // Remove non-ASCII characters that might cause encoding issues
-    .replace(/\s+/g, ' ')  // Clean up any double spaces created
+  // Standalone nav/menu links not already inside a collected block
+  $('a, button').each((_, el) => {
+    const $el = $(el);
+    if ($el.closest(blockSelector).length > 0) return;
+    const text = $el.text().replace(/\s+/g, ' ').trim();
+    if (text) segments.push(text);
+  });
+  
+  let visibleText = segments
+    .join('\n')
+    .split('\n')
+    .map(line => line.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+    .join('\n')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([.!?])([A-Z])/g, '$1 $2')
     .trim();
   
   // Extract all links
@@ -238,6 +257,13 @@ function performTechnicalChecks(html, url) {
   };
 }
 
+function truncateAtWordBoundary(text, maxLength) {
+  if (text.length <= maxLength) return text;
+  const slice = text.substring(0, maxLength);
+  const lastBreak = Math.max(slice.lastIndexOf('\n'), slice.lastIndexOf(' '));
+  return lastBreak > 0 ? slice.substring(0, lastBreak) : slice;
+}
+
 // Check spelling using two-pass system: LanguageTool + Groq classification
 async function checkSpelling(text) {
   try {
@@ -248,7 +274,7 @@ async function checkSpelling(text) {
       return { issues: [], error: 'API key not configured' };
     }
     
-    const textToCheck = text.substring(0, 3000); // Limit text length
+    const textToCheck = truncateAtWordBoundary(text, 3000);
     
     // PASS 1: Get LanguageTool candidates
     const languageToolIssues = await getLanguageToolCandidates(textToCheck);
@@ -265,7 +291,7 @@ async function checkSpelling(text) {
     console.log('[audit] Groq-confirmed typos:', validTypos.length);
     console.log('[audit] Groq-confirmed words:', validTypos.map(i => i.word));
     
-    // Deduplicate by word (case-insensitive)
+    // Deduplicate by word (case-insensitive) — one report per unique typo, not a frequency filter
     const seenWords = new Set();
     const deduplicatedTypos = validTypos.filter(issue => {
       const lowerWord = issue.word.toLowerCase();
