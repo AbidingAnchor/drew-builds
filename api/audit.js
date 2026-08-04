@@ -280,7 +280,7 @@ async function checkSpelling(text) {
       },
       body: new URLSearchParams({
         text: textToCheck,
-        language: 'en-US',
+        language: 'auto', // Auto-detect language for bilingual content support
         enabledOnly: 'false'
       }),
       signal: controller.signal
