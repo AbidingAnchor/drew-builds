@@ -238,50 +238,43 @@ function performTechnicalChecks(html, url) {
   };
 }
 
-// Check spelling/grammar with LanguageTool API with timeout
+// Check spelling using Groq LLM instead of LanguageTool
 async function checkSpelling(text) {
   try {
-    const textToCheck = text.substring(0, 2000); // Reduced from 5000 to 2000 for performance
+    const apiKey = process.env.GROQ_API_KEY;
     
-    const TIMEOUT_MS = 5000; // 5 second timeout
+    if (!apiKey) {
+      console.warn('[audit] GROQ_API_KEY not configured, skipping spelling check');
+      return { issues: [], error: 'API key not configured' };
+    }
+    
+    const textToCheck = text.substring(0, 3000); // Limit text length for LLM
+    
+    const TIMEOUT_MS = 8000; // 8 second timeout
     
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
     
-    // Whitelist of common tech terms and proper nouns to ignore
-    const techTermsWhitelist = [
-      'GitHub', 'Git Hub', 'git', 'GitHub', 'Codespaces', 'DevOps', 'Dev Ops',
-      'toolchain', 'tool chain', 'Autofix', 'Autofit', 'API', 'APIs', 'SDK',
-      'UI', 'UX', 'CSS', 'HTML', 'JavaScript', 'JS', 'Python', 'React',
-      'Vue', 'Angular', 'Node', 'npm', 'yarn', 'Docker', 'Kubernetes',
-      'AWS', 'Azure', 'GCP', 'CI', 'CD', 'SaaS', 'PaaS', 'IaaS',
-      'REST', 'GraphQL', 'SQL', 'NoSQL', 'MongoDB', 'PostgreSQL',
-      'Redis', 'Elasticsearch', 'GitLab', 'Bitbucket', 'Jira',
-      'Slack', 'Discord', 'Trello', 'Asana', 'Figma', 'Sketch',
-      'Webpack', 'Babel', 'TypeScript', 'TS', 'Vercel', 'Netlify',
-      'Heroku', 'Firebase', 'Supabase', 'Stripe', 'PayPal',
-      'OAuth', 'JWT', 'JSON', 'XML', 'CSV', 'PDF', 'HTTP', 'HTTPS',
-      'TCP', 'IP', 'DNS', 'URL', 'URI', 'CLI', 'GUI', 'IDE',
-      'VS Code', 'Visual Studio', 'IntelliJ', 'Eclipse', 'Xcode',
-      'Android', 'iOS', 'Windows', 'Mac', 'Linux', 'Unix',
-      'AI', 'ML', 'NLP', 'IoT', 'AR', 'VR', 'XR', 'UX',
-      'Agile', 'Scrum', 'Kanban', 'Waterfall', 'Lean', 'DevSecOps',
-      'MVP', 'POC', 'ROI', 'KPI', 'SLA', 'TOS', 'GDPR', 'CCPA',
-      'SEO', 'SEM', 'CRM', 'CMS', 'ERP', 'SME', 'B2B', 'B2C',
-      'Freelance', 'fullstack', 'full-stack', 'frontend', 'front-end',
-      'backend', 'back-end', 'database', 'framework', 'library',
-      'deployment', 'container', 'microservice', 'monolith', 'serverless'
-    ];
-    
-    const response = await fetch('https://api.languagetool.org/v2/check', {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
       },
-      body: new URLSearchParams({
-        text: textToCheck,
-        language: 'auto', // Auto-detect language for bilingual content support
-        enabledOnly: 'false'
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a spelling checker for website content. Identify ONLY genuine spelling errors - typos, misspellings, and obvious mistakes. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish, common on menus), industry terms, local place names, and technical vocabulary. Return only real mistakes with the correct spelling. If no genuine errors found, return an empty list. Respond in JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
+          },
+          {
+            role: 'user',
+            content: `Check this text for spelling errors:\n\n${textToCheck}`
+          }
+        ],
+        temperature: 0.1,
+        response_format: { type: 'json_object' }
       }),
       signal: controller.signal
     });
@@ -289,97 +282,36 @@ async function checkSpelling(text) {
     clearTimeout(timeoutId);
     
     if (!response.ok) {
-      throw new Error(`LanguageTool API error: ${response.status}`);
+      throw new Error(`Groq API error: ${response.status}`);
     }
     
     const data = await response.json();
+    const content = data.choices?.[0]?.message?.content;
     
-    const issues = data.matches?.map(match => {
-      // Extract the actual word from the original text using offset and length
-      let word = 'unknown';
-      const start = match.offset || 0;
-      const end = start + (match.length || 0);
-      
-      if (start >= 0 && end <= textToCheck.length) {
-        word = textToCheck.substring(start, end);
-      }
-      
-      return {
-        word: word,
-        message: match.message,
-        suggestions: match.replacements?.slice(0, 3).map(r => r.value) || [],
-        offset: match.offset,
-        length: match.length,
-        type: match.rule?.category?.id || 'unknown'
-      };
-    }) || [];
+    if (!content) {
+      return { issues: [], error: 'No response from API' };
+    }
     
-    // Calculate word frequency in the original text
-    const words = textToCheck.toLowerCase().match(/\b\w+\b/g) || [];
-    const wordFrequency = {};
-    words.forEach(w => {
-      wordFrequency[w] = (wordFrequency[w] || 0) + 1;
-    });
+    const parsedResponse = JSON.parse(content);
+    const spellingErrors = parsedResponse.errors || [];
     
-    // Filter out whitelisted terms and proper nouns
-    const filteredIssues = issues.filter(issue => {
-      const word = issue.word.toLowerCase();
-      
-      // Check if word is in whitelist (case-insensitive)
-      const isWhitelisted = techTermsWhitelist.some(term => 
-        term.toLowerCase() === word || term.toLowerCase().includes(word)
-      );
-      
-      if (isWhitelisted) return false;
-      
-      // Only flag pure misspellings (TYPOS/MORFOLOGIK_RULE) as critical
-      // Grammar/style issues are too unreliable for automated flagging
-      if (issue.type !== 'TYPOS' && issue.type !== 'MORFOLOGIK_RULE') {
-        return false;
-      }
-      
-      // Skip words that appear 2+ times (likely correct, not typos)
-      if (wordFrequency[word] >= 2) {
-        return false;
-      }
-      
-      // Skip proper noun casing issues (capitalized words not at sentence start)
-      if (issue.type === 'CASING') {
-        // Check if the word is just a casing issue on a capitalized word
-        const isCapitalized = issue.word[0] === issue.word[0].toUpperCase() &&
-                             issue.word.slice(1) === issue.word.slice(1).toLowerCase();
-        
-        if (isCapitalized && issue.word.length > 1) {
-          return false; // Skip likely proper nouns
-        }
-      }
-      
-      // Skip style suggestions (too subjective)
-      if (issue.type === 'REPETITIONS_STYLE' || issue.type === 'STYLE') {
-        return false;
-      }
-      
-      return true;
-    });
+    // Format the response to match expected structure
+    const issues = spellingErrors.map(error => ({
+      word: error.word,
+      message: error.message || 'Possible spelling error',
+      suggestions: error.correct ? [error.correct] : [],
+      offset: textToCheck.indexOf(error.word),
+      length: error.word.length,
+      type: 'TYPOS'
+    }));
     
-    // Deduplicate issues by word (only report each word once)
-    const seenWords = new Set();
-    const deduplicatedIssues = filteredIssues.filter(issue => {
-      const lowerWord = issue.word.toLowerCase();
-      if (seenWords.has(lowerWord)) {
-        return false;
-      }
-      seenWords.add(lowerWord);
-      return true;
-    });
-    
-    return { issues: deduplicatedIssues, error: null };
+    return { issues, error: null };
   } catch (error) {
     if (error.name === 'AbortError') {
-      console.error('[audit] LanguageTool API timeout after', TIMEOUT_MS, 'ms');
+      console.error('[audit] Groq API timeout after', TIMEOUT_MS, 'ms');
       return { issues: [], error: 'Request timeout' };
     }
-    console.error('[audit] LanguageTool API error:', error);
+    console.error('[audit] Groq API error:', error);
     return { issues: [], error: error.message };
   }
 }
@@ -452,7 +384,7 @@ export default async function handler(req, res) {
     
     if (!htmlError && links.length > 0) {
       const [linksResult, spellingResult] = await Promise.allSettled([
-        checkBrokenLinks(links.slice(0, 5), url), // Reduced to 5 for performance
+        checkBrokenLinks(links, url), // Check all links for accuracy
         checkSpelling(visibleText)
       ]);
       
@@ -532,7 +464,7 @@ export default async function handler(req, res) {
       auditMeta: {
         url,
         timestamp: new Date().toISOString(),
-        linksChecked: links.slice(0, 5).length,
+        linksChecked: links.length,
         totalLinksFound: links.length,
         partialScan: !!htmlError,
         htmlError: htmlError,

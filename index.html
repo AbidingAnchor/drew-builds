@@ -3657,18 +3657,15 @@ Style rules:
                 });
             }
 
-            // Spelling issues - critical (only pure misspellings)
+            // Spelling issues - critical (from Groq LLM)
+            let typoCount = 0;
             if (data.spellingIssues?.count > 0 && Array.isArray(data.spellingIssues.issues)) {
                 data.spellingIssues.issues.forEach(issue => {
-                    // Only flag pure misspellings (TYPOS/MORFOLOGIK_RULE) as critical
-                    // Grammar/style issues are too unreliable for automated flagging
-                    if (issue.type === 'TYPOS' || issue.type === 'MORFOLOGIK_RULE') {
-                        results.critical.push({
-                            title: 'Possible spelling issue — verify',
-                            description: `"${issue.word}" — ${issue.message}`
-                        });
-                        typoCount++;
-                    }
+                    results.critical.push({
+                        title: 'Possible spelling issue — verify',
+                        description: `"${issue.word}" — ${issue.message}`
+                    });
+                    typoCount++;
                 });
             }
 
@@ -3729,10 +3726,20 @@ Style rules:
 
             // No broken links - good
             if (data.brokenLinks?.count === 0) {
-                results.good.push({
-                    title: 'All links working',
-                    description: 'No broken links found on the page'
-                });
+                const linksChecked = data.auditMeta?.linksChecked || 0;
+                const totalLinks = data.auditMeta?.totalLinksFound || 0;
+                
+                if (linksChecked === totalLinks) {
+                    results.good.push({
+                        title: 'All links working',
+                        description: `Checked all ${linksChecked} links — no broken links found`
+                    });
+                } else {
+                    results.good.push({
+                        title: 'No broken links in sample',
+                        description: `Checked ${linksChecked} of ${totalLinks} links — no issues found in this sample`
+                    });
+                }
             }
 
             // No spelling issues - good
