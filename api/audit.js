@@ -252,13 +252,18 @@ async function checkSpelling(text) {
     
     // PASS 1: Get LanguageTool candidates
     const languageToolIssues = await getLanguageToolCandidates(textToCheck);
+    console.log('[audit] LanguageTool candidates found:', languageToolIssues.length);
     
     if (languageToolIssues.length === 0) {
       return { issues: [], error: null };
     }
     
+    console.log('[audit] LanguageTool candidates:', languageToolIssues.map(i => i.word));
+    
     // PASS 2: Filter with Groq classification
-    const validTypos = await filterWithGroq(languageToolIssues, textToCheck);
+    const validTypos = await filterWithGroq(languageToolIssues, textToCheck, apiKey);
+    console.log('[audit] Groq-confirmed typos:', validTypos.length);
+    console.log('[audit] Groq-confirmed words:', validTypos.map(i => i.word));
     
     // Deduplicate by word (case-insensitive)
     const seenWords = new Set();
@@ -356,6 +361,8 @@ function getContext(text, offset, length) {
 async function filterWithGroq(candidates, fullText, apiKey) {
   const validTypos = [];
   
+  console.log('[audit] filterWithGroq called with', candidates.length, 'candidates');
+  
   for (const candidate of candidates) {
     try {
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -388,6 +395,8 @@ async function filterWithGroq(candidates, fullText, apiKey) {
       
       const data = await response.json();
       const answer = data.choices?.[0]?.message?.content?.trim().toUpperCase();
+      
+      console.log('[audit] Groq classification for', candidate.word, ':', answer);
       
       if (answer === 'YES') {
         validTypos.push(candidate);
