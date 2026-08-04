@@ -238,7 +238,7 @@ function performTechnicalChecks(html, url) {
   };
 }
 
-// Check spelling using Groq LLM instead of LanguageTool
+// Check spelling using two-pass system: LanguageTool + Groq classification
 async function checkSpelling(text) {
   try {
     const apiKey = (process.env.GROQ_API_KEY || '').trim();
@@ -248,57 +248,22 @@ async function checkSpelling(text) {
       return { issues: [], error: 'API key not configured' };
     }
     
-    const textToCheck = text.substring(0, 3000); // Limit text length for LLM
-
-    const TIMEOUT_MS = 8000; // 8 second timeout
+    const textToCheck = text.substring(0, 3000); // Limit text length
     
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    // PASS 1: Get LanguageTool candidates
+    const languageToolIssues = await getLanguageToolCandidates(textToCheck);
     
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a spelling checker for website content. Find spelling errors - words that are genuinely misspelled. CHECK: navigation links, menu labels, headings, short phrases. EXCLUDE: brand/business names, proper nouns, foreign-language words (especially Spanish like "queso", "pollo"), industry terms, local place names, technical vocabulary, and abbreviations like "Gr." or "Dr.". STYLE ISSUES TO IGNORE: missing commas, using "&" instead of "and", ampersands, formatting choices. GENUINE TYPOS TO FLAG: "Appetizier" should be "Appetizers", "recieve" should be "receive", "Stake" should be "Steak", "Strombo" should be "Stromboli". Return only genuine spelling errors with correct spelling. JSON format: [{"word": "incorrect", "correct": "correct", "message": "brief explanation"}]'
-          },
-          {
-            role: 'user',
-            content: `Check this text for spelling errors:\n\n${textToCheck}`
-          }
-        ],
-        temperature: 0.1,
-        response_format: { type: 'json_object' }
-      }),
-      signal: controller.signal
-    });
-    
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      throw new Error(`Groq API error: ${response.status}`);
+    if (languageToolIssues.length === 0) {
+      return { issues: [], error: null };
     }
     
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
-    
-    if (!content) {
-      return { issues: [], error: 'No response from API' };
-    }
-    
-    const parsedResponse = JSON.parse(content);
-    const spellingErrors = parsedResponse.errors || [];
+    // PASS 2: Filter with Groq classification
+    const validTypos = await filterWithGroq(languageToolIssues, textToCheck);
     
     // Deduplicate by word (case-insensitive)
     const seenWords = new Set();
-    const deduplicatedErrors = spellingErrors.filter(error => {
-      const lowerWord = error.word.toLowerCase();
+    const deduplicatedTypos = validTypos.filter(issue => {
+      const lowerWord = issue.word.toLowerCase();
       if (seenWords.has(lowerWord)) {
         return false;
       }
@@ -306,25 +271,133 @@ async function checkSpelling(text) {
       return true;
     });
     
-    // Format the response to match expected structure
-    const issues = deduplicatedErrors.map(error => ({
-      word: error.word,
-      message: error.message || 'Possible spelling error',
-      suggestions: error.correct ? [error.correct] : [],
-      offset: textToCheck.indexOf(error.word),
-      length: error.word.length,
+    // Format the response
+    const issues = deduplicatedTypos.map(issue => ({
+      word: issue.word,
+      message: 'Possible spelling error',
+      suggestions: issue.suggestions || [],
+      offset: issue.offset,
+      length: issue.length,
       type: 'TYPOS'
     }));
     
     return { issues, error: null };
   } catch (error) {
-    if (error.name === 'AbortError') {
-      console.error('[audit] Groq API timeout after', TIMEOUT_MS, 'ms');
-      return { issues: [], error: 'Request timeout' };
-    }
-    console.error('[audit] Groq API error:', error);
+    console.error('[audit] Spelling check error:', error);
     return { issues: [], error: error.message };
   }
+}
+
+// Get LanguageTool candidates (PASS 1)
+async function getLanguageToolCandidates(text) {
+  try {
+    const TIMEOUT_MS = 5000;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    
+    const response = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({
+        text: text,
+        language: 'auto', // Auto-detect for bilingual content
+        enabledOnly: 'false'
+      }),
+      signal: controller.signal
+    });
+    
+    clearTimeout(timeoutId);
+    
+    if (!response.ok) {
+      throw new Error(`LanguageTool API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    const issues = data.matches?.map(match => {
+      let word = 'unknown';
+      const start = match.offset || 0;
+      const end = start + (match.length || 0);
+      
+      if (start >= 0 && end <= text.length) {
+        word = text.substring(start, end);
+      }
+      
+      return {
+        word: word,
+        suggestions: match.replacements?.slice(0, 3).map(r => r.value) || [],
+        offset: match.offset,
+        length: match.length,
+        context: getContext(text, match.offset, match.length)
+      };
+    }) || [];
+    
+    return issues;
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error('[audit] LanguageTool timeout');
+      return [];
+    }
+    console.error('[audit] LanguageTool error:', error);
+    return [];
+  }
+}
+
+// Get surrounding context for a word
+function getContext(text, offset, length) {
+  const start = Math.max(0, offset - 50);
+  const end = Math.min(text.length, offset + length + 50);
+  return text.substring(start, end);
+}
+
+// Filter LanguageTool candidates with Groq (PASS 2)
+async function filterWithGroq(candidates, fullText, apiKey) {
+  const validTypos = [];
+  
+  for (const candidate of candidates) {
+    try {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            {
+              role: 'system',
+              content: 'You are a spelling classifier. Your ONLY job is to determine if a word is a genuine misspelling. Given a word and its context, answer YES if it is a genuine spelling error/typo, or NO if it is a proper noun, brand/business name, foreign-language word (especially Spanish), industry term, or acceptable abbreviation. Answer ONLY "YES" or "NO" - nothing else.'
+            },
+            {
+              role: 'user',
+              content: `Context: "${candidate.context}"\nWord: "${candidate.word}"\n\nIs this a genuine spelling error? Answer YES or NO.`
+            }
+          ],
+          temperature: 0.1,
+          max_tokens: 10
+        })
+      });
+      
+      if (!response.ok) {
+        console.error('[audit] Groq classification error for:', candidate.word);
+        continue;
+      }
+      
+      const data = await response.json();
+      const answer = data.choices?.[0]?.message?.content?.trim().toUpperCase();
+      
+      if (answer === 'YES') {
+        validTypos.push(candidate);
+      }
+    } catch (error) {
+      console.error('[audit] Error classifying word:', candidate.word, error);
+    }
+  }
+  
+  return validTypos;
 }
 
 export default async function handler(req, res) {
