@@ -1,3 +1,4 @@
+import { groqCompletion } from '../lib/groq.js';
 const SYSTEM_PROMPT = `You're Vector — Drew's AI sidekick for Drew Builds. Talk like a sharp, chill friend who knows the business cold. Keep answers short (usually 2–4 sentences). Sound natural, not corporate. A little personality is good; gimmicks and slang-spam aren't. Be helpful, confident, and honest — never pushy.
 
 Facts about Drew Builds:
@@ -29,7 +30,6 @@ Style rules:
 - If they're interested, casually point them to email or IG DM to get rolling
 - End with a short question when it keeps the chat going, not every single time like a script`;
 
-const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
 
 function extractGroqError(data, status) {
   if (!data) return `Groq request failed with status ${status}`;
@@ -69,18 +69,10 @@ export default async function handler(req, res) {
     : [{ role: 'system', content: SYSTEM_PROMPT }, ...messages];
 
   try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: messagesWithSystem,
-        temperature: 0.7,
-        max_tokens: 500
-      })
+    const { response, model } = await groqCompletion(apiKey, {
+      messages: messagesWithSystem,
+      temperature: 0.7,
+      max_completion_tokens: 2048
     });
 
     const raw = await response.text();
@@ -103,7 +95,7 @@ export default async function handler(req, res) {
       const message = extractGroqError(data, response.status);
       console.error('[chat] Groq API error:', {
         status: response.status,
-        model: GROQ_MODEL,
+        model,
         message,
         errorType: data?.error?.type || null,
         errorCode: data?.error?.code || null

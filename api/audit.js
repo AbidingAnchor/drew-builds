@@ -1,3 +1,4 @@
+import { groqCompletion } from '../lib/groq.js';
 import * as cheerio from 'cheerio';
 
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
@@ -705,27 +706,19 @@ async function filterWithGroq(candidates, fullText, deadline) {
     }
 
     try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a spelling classifier. Determine if a word is a genuine misspelling. Context: "Appetizier" appears twice (nav + header) but is still a typo. "Cheese Cheese" repeated in one context is likely a copy-paste error. Answer YES if genuine spelling error/typo, NO if proper noun, brand/business name, foreign-language word (especially Spanish), industry term, or acceptable abbreviation. Consider context - words repeated in different page sections (nav + content) might be intentional menu names, but repeated within the same text block suggests a typo. Answer ONLY "YES" or "NO".'
-            },
-            {
-              role: 'user',
-              content: `Context: "${candidate.context}"\nWord: "${candidate.word}"\n\nIs this a genuine spelling error? Answer YES or NO.`
-            }
-          ],
-          temperature: 0.1,
-          max_tokens: 10
-        })
+      const { response } = await groqCompletion(apiKey, {
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a spelling classifier. Determine if a word is a genuine misspelling. Context: "Appetizier" appears twice (nav + header) but is still a typo. "Cheese Cheese" repeated in one context is likely a copy-paste error. Answer YES if genuine spelling error/typo, NO if proper noun, brand/business name, foreign-language word (especially Spanish), industry term, or acceptable abbreviation. Consider context - words repeated in different page sections (nav + content) might be intentional menu names, but repeated within the same text block suggests a typo. Answer ONLY "YES" or "NO".'
+          },
+          {
+            role: 'user',
+            content: `Context: "${candidate.context}"\nWord: "${candidate.word}"\n\nIs this a genuine spelling error? Answer YES or NO.`
+          }
+        ],
+        temperature: 0.1,
+        max_completion_tokens: 1024
       });
       
       if (!response.ok) {
